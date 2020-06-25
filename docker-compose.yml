@@ -1,0 +1,67 @@
+version: "3"
+services:
+  researcher-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    ports:
+      - ${RESEARCHER_HTTP_PORT}:${RESEARCHER_HTTP_PORT}
+      - ${RESEARCHER_ADMIN_PORT}:${RESEARCHER_ADMIN_PORT}
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+        "
+          aca-py start \
+          --inbound-transport http '0.0.0.0' ${RESEARCHER_HTTP_PORT} \
+          --outbound-transport http \
+          --endpoint ${RESEARCHER_AGENT_ENDPOINT} \
+          --webhook-url ${RESEARCHER_WEBHOOK_URL} \
+          --wallet-type 'indy' \
+          --seed '${RESEARCHER_WALLET_SEED}' \
+          --admin '0.0.0.0' ${RESEARCHER_ADMIN_PORT} \
+          --admin-insecure-mode \
+          --log-level info \
+          --label ${RESEARCHER_AGENT_NAME}",
+        ]
+  data-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    ports:
+      - ${DATA_HTTP_PORT}:${DATA_HTTP_PORT}
+      - ${DATA_ADMIN_PORT}:${DATA_ADMIN_PORT}
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "aca-py start \
+      --inbound-transport http '0.0.0.0' ${DATA_HTTP_PORT} \
+      --outbound-transport http \
+      --endpoint ${DATA_AGENT_ENDPOINT} \
+      --webhook-url ${DATA_WEBHOOK_URL} \
+      --wallet-type 'indy' \
+      --seed '${DATA_WALLET_SEED}' \
+      --admin '0.0.0.0' ${DATA_ADMIN_PORT} \
+      --admin-insecure-mode \
+      --log-level info \
+      --label ${DATA_AGENT_NAME}",
+    ]
+  data-notebook:
+    build:
+      context: ./docker-images/pysyft-notebook
+      args:
+        - jupyter_port=${DATA_JUPYTER_PORT}
+    depends_on:
+      - data-agent
+    volumes:
+      - ./demo/data_owner:/workspace
+    ports:
+      - "8888:8888"
+      - ${DATA_WEBHOOK_PORT}:${DATA_WEBHOOK_PORT}
+  researcher-notebook:
+    build:
+      context: ./docker-images/pysyft-notebook
+      args:
+        - jupyter_port=${RESEARCHER_JUPYTER_PORT}
+    depends_on:
+      - researcher-agent
+    volumes:
+      - ./demo/researcher:/workspace
+    ports:
+      - "8889:8888"
+      - ${RESEARCHER_WEBHOOK_PORT}:${RESEARCHER_WEBHOOK_PORT}
