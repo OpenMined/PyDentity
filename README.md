@@ -8,6 +8,8 @@
 
 ![Endgame](./images/endgame.png)
 
+In this repo, we're building a [Distributed Trust System for Privacy Preserving Machine Learning](https://arxiv.org/abs/2006.02456). We're using HL-Aries Agents to establish an end-end encrypted channel which will facilitate syft communications. We can then extend this with credentials and governance systems.
+
 # Requirements
 
 * Docker
