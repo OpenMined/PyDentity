@@ -18,4 +18,10 @@ Navigate to [data notebook](http://localhost:8888), you will find the token for 
 
 Both juypeter instances should have a notebook, either researcher or data_owner. Open these up and follow the tutorial contianed within the notebooks.
 
+# Sequence Diagram
 
+# Sequence Diagram
+
+Built using [Sequence Diagram](https://sequencediagram.org)
+
+![Sequence Diagram](./sequence_diagrams/controller_basic_messaging.svg)
