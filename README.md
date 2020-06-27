@@ -29,6 +29,7 @@ Navigate to [data notebook](http://localhost:8888), you will find the token for 
 Both jupyter instances should have a notebook, either researcher or data_owner. Open these up and follow the tutorial contained within the notebooks. You can view these notebooks from this repo in the demo folder.
 
 # Sequence Diagram
+=======
 
 Built using [Sequence Diagram](https://sequencediagram.org)
 
