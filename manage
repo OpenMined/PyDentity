@@ -248,6 +248,9 @@ shift || COMMAND=usage
 case "${COMMAND}" in
 start | up)
   echoYellow "Starting up... This can take a couple of minutes."
+
+  cp -vr aries_basic_controller docker-images/pysyft-notebook
+
   _startupParams=$(getStartupParams $@)
   configureEnvironment "$@"
   docker-compose\
