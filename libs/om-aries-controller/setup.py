@@ -9,8 +9,8 @@ PACKAGE_NAME = "aries_basic_controller"
 # VERSION = version_meta["__version__"]
 
 
-# with open(os.path.abspath("/README.md"), "r") as fh:
-#     long_description = fh.read()
+with open(os.path.abspath("./README.md"), "r") as fh:
+    long_description = fh.read()
 
 
 def parse_requirements(filename):
@@ -24,14 +24,14 @@ if __name__ == "__main__":
         name=PACKAGE_NAME,
         version="0.0.1",
         author="Will Abramson",
-        description="A simple python package for controlling an aries agent through the admin-api interface",
-        # long_description=long_description,
-        # long_description_content_type="text/markdown",
-        # url="https://github.com/OpenMined/PyDentity/",
+        description="A python package for an OpenMined specific Aries Controller",
+        long_description=long_description,
+        long_description_content_type="text/markdown",
+        # url="https://github.com/wip-abramson/aries-basic-controller-python",
         packages=find_packages(),
         include_package_data=True,
-        package_data={"aries_basic_controller": ["requirements.txt"]},
-        install_requires=parse_requirements("/aries_basic_controller/requirements.txt"),
+        package_data={"om_aries_controller": ["requirements.txt"]},
+        install_requires=parse_requirements("requirements.txt"),
         python_requires=">=3.6.3",
         classifiers=[
             "Programming Language :: Python :: 3",

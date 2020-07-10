@@ -1,0 +1,163 @@
+version: "3"
+services:
+  bob-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    ports:
+      - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
+      - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
+    depends_on:
+      - ledger-nodes
+    networks:
+      - indy_demo
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+          "echo Waiting for ledger to be ready...;
+          sleep 60;
+          curl -d '{\"seed\":\"${BOB_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${BOB_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
+          sleep 2; \
+            aca-py start \
+          --inbound-transport http '0.0.0.0' ${BOB_HTTP_PORT} \
+          --outbound-transport http \
+          --endpoint ${BOB_AGENT_ENDPOINT} \
+          --webhook-url ${BOB_WEBHOOK_URL} \
+          --wallet-type 'indy' \
+          --seed '${BOB_WALLET_SEED}' \
+          --admin '0.0.0.0' ${BOB_ADMIN_PORT} \
+          --admin-insecure-mode \
+          --log-level info \
+          --genesis-url '${LEDGER_URL}/genesis'
+          --label ${BOB_AGENT_NAME}",
+        ]
+  alice-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    ports:
+      - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
+      - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
+    depends_on:
+      - ledger-nodes
+    networks:
+      - indy_demo
+#    volumes:
+#      - alice-wallet:/indy/home/.indy_client/default
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+        "echo Waiting for ledger to be ready...;
+        sleep 60;
+        curl -d '{\"seed\":\"${ALICE_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${ALICE_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
+        sleep 2; \
+        aca-py start \
+        --inbound-transport http '0.0.0.0' ${ALICE_HTTP_PORT} \
+        --outbound-transport http \
+        --endpoint ${ALICE_AGENT_ENDPOINT} \
+        --webhook-url ${ALICE_WEBHOOK_URL} \
+        --wallet-type 'indy' \
+        --seed '${ALICE_WALLET_SEED}' \
+        --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
+        --admin-insecure-mode \
+        --log-level info \
+        --genesis-url '${LEDGER_URL}/genesis'
+        --label ${ALICE_AGENT_NAME}",
+    ]
+  setup:
+    build:
+      context: .
+      dockerfile: Dockerfile.setup
+    networks:
+      - indy_demo
+    depends_on:
+      - alice-agent
+      - bob-agent
+#    ports:
+#      - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
+#      - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
+    environment:
+      - ALICE_ADMIN_URL=http://alice-agent:${ALICE_ADMIN_PORT}
+      - ALICE_WEBHOOK_PORT=${ALICE_WEBHOOK_PORT}
+      - ALICE_WEBHOOK_HOST=0.0.0.0
+      - BOB_ADMIN_URL=http://bob-agent:${BOB_ADMIN_PORT}
+      - BOB_WEBHOOK_PORT=${BOB_WEBHOOK_PORT}
+      - BOB_WEBHOOK_HOST=0.0.0.0
+    entrypoint: /bin/bash
+    command:
+      [
+        "-c",
+        "sleep 80;
+        python ./create_connection.py"
+      ]
+  alice-notebook:
+    build:
+      context: .
+      args:
+        - jupyter_port=${ALICE_JUPYTER_PORT}
+    depends_on:
+      - alice-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./demo/alice:/workspace
+    ports:
+      - "8888:8888"
+      - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
+  bob-notebook:
+    build:
+      context: .
+      args:
+        - jupyter_port=${BOB_JUPYTER_PORT}
+    depends_on:
+      - bob-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/demo/bob:/workspace
+    ports:
+      - "8889:8888"
+      - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
+  ledger-browser:
+    build:
+      context: https://github.com/bcgov/von-network.git
+      dockerfile: Dockerfile
+    command: "bash -c 'sleep 10; ./scripts/start_webserver.sh;'"
+    environment:
+      - DOCKERHOST=${DOCKERHOST}
+      - MAX_FETCH=50000
+      - RESYNC_TIME=120
+      - REGISTER_NEW_DIDS=True
+      - LEDGER_INSTANCE_NAME=localhost
+    ports:
+      - ${WEB_SERVER_HOST_PORT:-9000}:8000
+    volumes:
+      - webserver-cli:/home/indy/.indy-cli
+      - webserver-ledger:/home/indy/ledger
+    networks:
+      - indy_demo
+
+  ledger-nodes:
+    build:
+      context: https://github.com/bcgov/von-network.git
+      dockerfile: Dockerfile
+    command: "bash -c './scripts/start_nodes.sh'"
+    ports:
+      - 9701:9701
+      - 9702:9702
+      - 9703:9703
+      - 9704:9704
+      - 9705:9705
+      - 9706:9706
+      - 9707:9707
+      - 9708:9708
+    environment:
+      - DOCKERHOST=${DOCKERHOST}
+    volumes:
+      - nodes-data:/home/indy/ledger
+    networks:
+      - indy_demo
+
+networks:
+  indy_demo:
+volumes:
+  webserver-cli:
+  webserver-ledger:
+  nodes-data:
+  alice-agent:
