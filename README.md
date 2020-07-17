@@ -28,6 +28,11 @@ Navigate to [data notebook](http://localhost:8888), you will find the token for 
 
 Both jupyter instances should have a notebook, either researcher or data_owner. Open these up and follow the tutorial contained within the notebooks. You can view these notebooks from this repo in the demo folder.
 
+To get the token for the juypter notebook run:
+
+* Alice : `docker logs om-aries-controller_alice-notebook_1`
+* Bob : `docker logs om-aries-controller_bob-notebook_1`
+
 # Sequence Diagram
 =======
 

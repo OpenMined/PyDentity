@@ -160,4 +160,3 @@ volumes:
   webserver-cli:
   webserver-ledger:
   nodes-data:
-  alice-agent:

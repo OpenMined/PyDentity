@@ -20,8 +20,8 @@ To view the tutorials navigate to:
 * [Bob notebook](http://localhost:8888) - Bob plays the other half of the protocols when needed.
 
 Both notebooks require a token that can be found in the logs. Fetch the logs for the relevant container using these commands:
-* docker logs aries-basic-controller-python_alice-notebook_1
-* docker logs aries-basic-controller-python_bob-notebook_1
+* docker logs aries-basic-controller_alice-notebook_1
+* docker logs aries-basic-controller_bob-notebook_1
 
 
 

@@ -57,6 +57,8 @@ async def start_agent():
     print(response)
 
 
+    time.sleep(2)
+
     connection = await bob_agent_controller.connections.accept_request(bob_connection_id)
     print("ACCEPT REQUEST")
     print(connection)
