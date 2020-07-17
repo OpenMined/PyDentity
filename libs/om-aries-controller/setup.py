@@ -4,7 +4,7 @@ import os
 import runpy
 from setuptools import setup, find_packages
 
-PACKAGE_NAME = "aries_basic_controller"
+PACKAGE_NAME = "om_aries_controller"
 # version_meta = runpy.run_path("./{}/version.py".format(PACKAGE_NAME))
 # VERSION = version_meta["__version__"]
 

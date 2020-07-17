@@ -14,6 +14,7 @@ services:
     command: [
         "-c",
         "
+          sleep 5;
           aca-py start \
           --inbound-transport http '0.0.0.0' ${ALICE_HTTP_PORT} \
           --outbound-transport http \
@@ -40,7 +41,8 @@ services:
     entrypoint: /bin/bash
     command: [
       "-c",
-      "aca-py start \
+      "sleep 5;
+      aca-py start \
          --inbound-transport http '0.0.0.0' ${BOB_HTTP_PORT} \
          --outbound-transport http \
          --endpoint ${BOB_AGENT_ENDPOINT} \
