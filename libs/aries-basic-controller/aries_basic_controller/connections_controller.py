@@ -1,13 +1,8 @@
 from .base_controller import BaseController
-from .connection import Connection
+from .models.connection import Connection
 
 from aiohttp import (
-    web,
     ClientSession,
-    ClientRequest,
-    ClientResponse,
-    ClientError,
-    ClientTimeout,
 )
 import logging
 import asyncio

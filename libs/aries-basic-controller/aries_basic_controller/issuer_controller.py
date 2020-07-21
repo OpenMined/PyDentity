@@ -1,7 +1,6 @@
 from .base_controller import BaseController
 from aiohttp import ClientSession, ClientResponseError
 import logging
-import json
 from.utils import extract_did, get_schema_details
 logger = logging.getLogger("aries_controller.issuer")
 
