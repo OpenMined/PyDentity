@@ -17,6 +17,6 @@ class ProtocolController(BaseController):
             "response_requested": response_requested,
             "example": example
         }
-        path = f"/connections/{connection_id}/test-protocolexample"
+        path = f"/connections/{connection_id}/test-attachmentprotocol"
         return await self.admin_POST(path, data=body)
 
