@@ -10,11 +10,11 @@ class ProtocolController(BaseController):
         super().__init__(admin_url, client_session)
         self.connections = connections_controller
 
-    async def test_protocol(self, connection_id, response_requested, example):
+    async def test_protocol(self, connection_id, example):
 
         await self.connections.is_active(connection_id)
         body = {
-            "response_requested": response_requested,
+            
             "example": example
         }
         path = f"/connections/{connection_id}/test-attachmentprotocol"
