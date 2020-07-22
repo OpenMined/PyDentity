@@ -7,9 +7,9 @@ def parse_requirements(filename):
     lineiter = (line.strip() for line in open(filename))
     return [line for line in lineiter if line and not line.startswith("#")]
 
-# if __name__ == '__main__':
-#     with open('README.md', 'r') as fh:
-#         LONG_DESCRIPTION = fh.read()
+if __name__ == '__main__':
+    # with open('README.md', 'r') as fh:
+    #     LONG_DESCRIPTION = fh.read()
 
     setup(
         name='attachment-protocol',

@@ -7,7 +7,7 @@ NEW_PROTOCOL_URI ="https://didcomm.org/attachmentprotocol/1.0"
 
 NEW_ATTACHMENT_PROTOCOL = f"{NEW_PROTOCOL_URI}/attachmentprotocol"
 
-PROTOCOL_PACKAGE ="attachment_protocol.v1_0"
+PROTOCOL_PACKAGE ="attach_protocol.attachment_protocol.v1_0"
 
 MESSAGE_TYPES = {
     ATTACHMENT_PROTOCOL: f"{PROTOCOL_PACKAGE}.messaging.attachmentprotocol.AttachmentProtocol",

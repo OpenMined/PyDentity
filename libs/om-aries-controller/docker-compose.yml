@@ -25,7 +25,7 @@ services:
           --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
           --admin-insecure-mode \
           --log-level info \
-          --plugin attachment_protocol \
+          --plugin attach_protocol.attachment_protocol \
           --label ${ALICE_AGENT_NAME}",
       ]
   bob-agent:
@@ -52,7 +52,7 @@ services:
          --admin '0.0.0.0' ${BOB_ADMIN_PORT} \
          --admin-insecure-mode \
          --log-level info \
-         --plugin attachment_protocol \
+         --plugin attach_protocol.attachment_protocol \
          --label ${BOB_AGENT_NAME}",
     ]
   setup:
