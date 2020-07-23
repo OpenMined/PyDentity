@@ -13,6 +13,9 @@ class ProofController(BaseController):
         super().__init__(admin_url, client_session)
         self.base_url = "/present-proof"
 
+    def default_handler(self, payload):
+        logger.debug("Present Proof Message received", payload)
+
     async def get_records(self, connection_id: str = None, thread_id: str = None, state: str = None, role: str = None):
         params = {}
         if connection_id:
