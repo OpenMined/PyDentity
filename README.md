@@ -14,8 +14,23 @@ In this repo, we're extending a [Distributed Trust System for Privacy Preserving
 
 * Docker
 * Docker Compose v1.24
+* [S2i](https://computingforgeeks.com/install-source-to-image-toolkit-on-linux/)
 
-# Getting Started
+# Structure
+
+This repository contains a series of libraries each with their own README and demos under the libs folder:
+
+* [aries-basic-controller](./libs/aries-basic-controller) - This is a generic python wrapper for an [aries aca-py](https://github.com/hyperledger/aries-cloudagent-python) admin-api.
+* [acapy-protocol-example](./libs/acapy-protocol-example) - This is an example library showing how you can extend the core aca-py functionality by writing custom protocols and including them as a plugin to the agent.
+* [om-aries-controller](./libs/om-aries-controller) - This library currently extends the basic controller functionality to handle the custom protocol.
+
+The objective is to develop a om-aries-controller for an aca-py instance with protocols specifically designed for sending privacy preserving machine learning messages. The [demo folder](./demo) in the root directory acts as our sketch pad for demonstrating this functionality as it is developed.
+
+
+
+# Running the demo
+
+## Note this is incomplete: Try the demo's within the individual libraries.
 
 From root directory run:
 ```
@@ -32,10 +47,3 @@ To get the token for the juypter notebook run:
 
 * Alice : `docker logs om-aries-controller_alice-notebook_1`
 * Bob : `docker logs om-aries-controller_bob-notebook_1`
-
-# Sequence Diagram
-=======
-
-Built using [Sequence Diagram](https://sequencediagram.org)
-
-![Sequence Diagram](./sequence_diagrams/controller_basic_messaging.svg)
