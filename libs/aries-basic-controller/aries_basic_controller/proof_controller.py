@@ -73,5 +73,42 @@ class ProofController(BaseController):
         return await self.admin_POST(f"{self.base_url}/create-request", data=body)
 
 
-    def build_proof_request(self, name, version, requested_attributes, requested_predicates):
+    # Sends a free presentation request not bound to any proposal
+    async def send_request(self, connection_id, proof_request, comment: str = "", trace: bool = False):
+
+        body = {
+            "connection_id": connection_id,
+            "proof_request": proof_request,
+            "comment": comment,
+            "trace": trace
+        }
+        return await self.admin_POST(f"{self.base_url}/send-request", data=body)
+
+    async def send_request_for_proposal(self, connection_id, pres_ex_id, proof_request, comment: str = "", trace: bool = False):
+        body = {
+            "connection_id": connection_id,
+            "proof_request": proof_request,
+            "comment": comment,
+            "trace": trace
+        }
+        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-request", data=body)
+
+    # Send a proof presentation
+    async def send_presentation(self, pres_ex_id, attrs, self_attested_attrs, predicates, trace: bool = False):
+        body = {
+            "requested_attributes": attrs,
+            "self_attested_attributes": self_attested_attrs,
+            "requested_predicates": predicates,
+            "trace": trace
+        }
+        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-presentation", data=body)
+
+    # Verify a received presentation
+    async def verify_presentation(self, pres_ex_id):
+        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/verify-presentation")
+
+    async def remove_presentation_record(self, pres_ex_id):
+        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/remove")
+
+    # def build_proof_request(self, name, version, requested_attributes, requested_predicates):
 

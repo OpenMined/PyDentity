@@ -55,7 +55,7 @@ class AriesAgentController:
             if self.connections:
                 pub.subscribe(self.connections.default_handler, "connections")
             if self.messaging:
-                pub.subscribe(self.messaging.default_handler, "basic_messages")
+                pub.subscribe(self.messaging.default_handler, "basicmessages")
 
 
         for listener in listeners:
