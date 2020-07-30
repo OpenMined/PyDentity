@@ -9,7 +9,7 @@ from aries_cloudagent.storage.error import StorageNotFoundError
 
 from .messages.attachmentprotocol import AttachmentProtocol
 
-class SendMessageSchema(Schema):
+class AttachmentMessageSchema(Schema):
     content = fields.Str(description="Message content", example="What UP!")
 
 class ConnIdMatchInfoSchema(Schema):
@@ -21,7 +21,7 @@ class ConnIdMatchInfoSchema(Schema):
 
 @docs(tags=["attachment protocol routes"], summary= "Sending message")
 @match_info_schema(ConnIdMatchInfoSchema())
-@request_schema(SendMessageSchema())
+@request_schema(AttachmentMessageSchema())
 
 async def connections_send_message(request: web.BaseRequest):
     """
@@ -36,14 +36,17 @@ async def connections_send_message(request: web.BaseRequest):
     except StorageNotFoundError:
         raise web.HTTPNotFound()
 
-    if connection.is_ready:
-        msg = AttachmentProtocol(
-            content=params["content"]
-            )
-        
-        await outbound_handler(msg, connection_id=connection_id)
+    if not connection.is_ready:
+        raise web.HTTPBadRequest()
 
-    return web.json_response({})   
+    content = params.get("content")
+    msg = AttachmentProtocol(
+        content=content
+        )
+        
+    await outbound_handler(msg, connection_id=connection_id)
+
+    return web.json_response({"thread_id": msg._thread_id})
 
 async def register(app: web.Application):
     """Register routes."""

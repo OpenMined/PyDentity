@@ -17,6 +17,7 @@ services:
           --inbound-transport http '0.0.0.0' ${ALICE_HTTP_PORT} \
           --outbound-transport http \
           --endpoint ${ALICE_AGENT_ENDPOINT} \
+          --webhook-url ${ALICE_WEBHOOK_URL} \
           --wallet-type 'indy' \
           --seed '${ALICE_WALLET_SEED}' \
           --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
@@ -41,6 +42,7 @@ services:
         --inbound-transport http '0.0.0.0' ${BOB_HTTP_PORT} \
         --outbound-transport http \
         --endpoint ${BOB_AGENT_ENDPOINT} \
+        --webhook-url ${ALICE_WEBHOOK_URL} \
         --wallet-type 'indy' \
         --seed '${BOB_WALLET_SEED}' \
         --admin '0.0.0.0' ${BOB_ADMIN_PORT} \

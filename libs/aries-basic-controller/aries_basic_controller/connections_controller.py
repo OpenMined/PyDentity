@@ -129,22 +129,23 @@ class ConnectionsController(BaseController):
         response = await self.admin_POST(f"/connections/{connection_id}")
         return response
 
+    # TODO this needs refactoring/revisiting
     async def check_connection_ready(self, connection_id, state):
         stored = False
         for connection in self.connections:
             if connection.id == connection_id:
                 try:
-                    await asyncio.wait_for(connection.detect_state_ready(state), 5)
+                    await asyncio.wait_for(connection.detect_state_ready(state), 10)
                     return True
                 except asyncio.TimeoutError:
-                    response = await self.get_connection(connection_id)
-                    return state == response["state"]
+                    connection = await self.get_connection(connection_id)
+                    return state == connection["state"]
         if not stored:
             try:
                 response = await self.get_connection(connection_id)
                 connection = Connection(response["connection_id"], response["state"])
                 self.connections.append(connection)
-                await asyncio.wait_for(connection.detect_state_ready(state), 5)
+                await asyncio.wait_for(connection.detect_state_ready(state), 10)
                 return True
             except asyncio.TimeoutError:
                 return False

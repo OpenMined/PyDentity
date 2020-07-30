@@ -2,6 +2,9 @@ version: "3"
 services:
   bob-agent:
     image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    build:
+      context: ../attachment-protocol
+      dockerfile: Dockerfile
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
@@ -31,6 +34,9 @@ services:
         ]
   alice-agent:
     image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    build:
+      context: ../attachment-protocol
+      dockerfile: Dockerfile
     ports:
       - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
       - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}

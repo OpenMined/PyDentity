@@ -23,8 +23,7 @@ usage() {
 
       Commands:
 
-      u
-       -  Builds the images, creates the application containers
+      up -  Builds the images, creates the application containers
             and starts the services based on the docker-compose.yml file.
 
             You can pass in a list of containers to start.
