@@ -23,6 +23,7 @@ services:
           --wallet-type 'indy' \
           --seed '${ALICE_WALLET_SEED}' \
           --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
+          --plugin attach_protocol.attachment_protocol \
           --admin-insecure-mode \
           --log-level info \
           --label ${ALICE_AGENT_NAME}",
