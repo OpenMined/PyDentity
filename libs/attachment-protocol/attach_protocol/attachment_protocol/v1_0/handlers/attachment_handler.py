@@ -1,4 +1,4 @@
-#Attachment Protocol Handler
+#Attachment Handler
 
 from aries_cloudagent.messaging.base_handler import (
     BaseHandler,
@@ -12,13 +12,21 @@ class AttachmentHandler(BaseHandler):
 
     async def handle(self, context: RequestContext, responder: BaseResponder):
 
-        self._logger.info(f"AttachmentProtocolHandler called")
+        self._logger.info(f"AttachmentHandler called")
         assert isinstance(context.message, Attachment)
 
         self._logger.info("Received attached message %s", context.message)
 
-        body = context.message
-        meta ={"content": body}
+        attachment = context.message
+        attachment_message = attachment.message
+        attach_decorator = attachment.files_attach[0]
+        filename = attach_decorator.filename
+        content = attach_decorator.data.base64
+
+        print("Filename", filename)
+        print("Content", content)
+
+        # meta ={"content": body}
         
         self._logger.info("Send Webhook with topic attached message")
         await responder.send_webhook(
@@ -26,7 +34,9 @@ class AttachmentHandler(BaseHandler):
             {
                 "connection_id": context.connection_record.connection_id,
                 "message_id": context.message._id,
-                "content": body,
+                "attachment_message": attachment_message,
+                "content": content,
+                "filename": filename,
                 "state": "received",
             },
         )

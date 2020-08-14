@@ -32,7 +32,7 @@ class IssuerController(BaseController):
 
         body = await self.create_credential_body(connection_id, schema_id, cred_def_id, attributes, comment,
                                                  auto_remove, trace)
-        return await self.admin_POST(f"{self.base_url}/send", data=body)
+        return await self.admin_POST(f"{self.base_url}/send", json_data=body)
 
 
     # Send Issuer a credential proposal
@@ -41,7 +41,7 @@ class IssuerController(BaseController):
 
         body = await self.create_credential_body(connection_id, schema_id, cred_def_id, attributes, comment,
                                                  auto_remove, trace)
-        return await self.admin_POST(f"{self.base_url}/send-proposal", data=body)
+        return await self.admin_POST(f"{self.base_url}/send-proposal", json_data=body)
 
     async def send_offer(self, connection_id, cred_def_id, attributes, comment: str = "",
                          auto_issue: bool = True, auto_remove: bool = True, trace: bool = False):
@@ -58,7 +58,7 @@ class IssuerController(BaseController):
             },
             "connection_id": connection_id
         }
-        return await self.admin_POST(f"{self.base_url}/send-offer", data=offer_body)
+        return await self.admin_POST(f"{self.base_url}/send-offer", json_data=offer_body)
 
     # Send holder a credential offer in reference to a proposal with preview
     async def send_offer_for_record(self, cred_ex_id):
@@ -77,14 +77,14 @@ class IssuerController(BaseController):
                 "attributes": attributes
             }
         }
-        return await self.admin_POST(f"{self.base_url}/records/{cred_ex_id}/issue", data=body)
+        return await self.admin_POST(f"{self.base_url}/records/{cred_ex_id}/issue", json_data=body)
 
     # Store a received credential
     async def store_credential(self, cred_ex_id, credential_id):
         body = {
             "credential_id": credential_id
         }
-        return await self.admin_POST(f"{self.base_url}/records/{cred_ex_id}/store", data=body)
+        return await self.admin_POST(f"{self.base_url}/records/{cred_ex_id}/store", json_data=body)
 
     # Revoke and issued credential
     async def revoke_credential(self, rev_reg_id, cred_rev_id, publish: bool = False):
@@ -109,7 +109,7 @@ class IssuerController(BaseController):
             "explain_ltxt": explanation
         }
 
-        return await self.admin_POST(f"{self.base_url}/records/{cred_ex_id}/problem-report", data=body)
+        return await self.admin_POST(f"{self.base_url}/records/{cred_ex_id}/problem-report", json_data=body)
 
     # Used for both send and send-proposal bodies
     async def create_credential_body(self, connection_id, schema_id, cred_def_id, attributes, comment: str = "",

@@ -10,6 +10,6 @@ NEW_ATTACHMENT_PROTOCOL = f"{NEW_PROTOCOL_URI}/attachmentprotocol"
 PROTOCOL_PACKAGE ="attach_protocol.attachment_protocol.v1_0"
 
 MESSAGE_TYPES = {
-    ATTACHMENT: f"{PROTOCOL_PACKAGE}.messaging.attachmentprotocol.AttachmentProtocol",
-    NEW_ATTACHMENT_PROTOCOL: f"{PROTOCOL_PACKAGE}.messages.attachmentprotocol.AttachmentProtocol",
+    ATTACHMENT: f"{PROTOCOL_PACKAGE}.messages.attachment.Attachment",
+    NEW_ATTACHMENT_PROTOCOL: f"{PROTOCOL_PACKAGE}.messages.attachment.Attachment",
 }

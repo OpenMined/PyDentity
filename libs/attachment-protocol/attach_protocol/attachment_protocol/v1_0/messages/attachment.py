@@ -30,17 +30,30 @@ class Attachment(AgentMessage):
     def __init__(
 
         self,
-        *, 
-        content_type: str = None,
+        *,
+        message: str = None,
         localization: str = None,
         files_attach: Sequence[AttachDecorator] = None,
         **kwargs,
     ):
         super(Attachment, self).__init__(**kwargs)
-        self.content_type = content_type
+        self.message = message
         self.files_attach = list(files_attach) if files_attach else []
         if localization:
             self._decorators["l10n"] = localization
+
+    @classmethod
+    def wrap_file(cls, content, filename, mime_type, description=None) -> AttachDecorator:
+        return AttachDecorator(
+            ident=str(uuid.uuid4()),
+            filename=filename,
+            mime_type=mime_type,
+            data=AttachDecoratorData(
+                base64_=bytes_to_b64(content)
+            ),
+            description=description
+
+        )
 
         
 class AttachmentSchema(AgentMessageSchema):
@@ -51,19 +64,8 @@ class AttachmentSchema(AgentMessageSchema):
 
         model_class = Attachment
     
-    content_type = fields.Str(required=True, description="Content Type", example="image/jpg")
+    message = fields.Str(required=True, description="A message about the file", example="Hey, check out this image")
     files_attach = fields.Nested(
         AttachDecoratorSchema, required=True, many=True, data_key="files~attach"
     )
 
-    @classmethod
-    def wrap_file(cls, content, filename, mime_type, description) -> AttachDecorator:
-        return AttachDecorator(
-            ident=str(uuid.uuid4()),
-            filename=filename,
-            mime_type=mime_type,
-            data=AttachDecoratorData(
-                base64_=bytes_to_b64(content)
-            ),
-
-        )

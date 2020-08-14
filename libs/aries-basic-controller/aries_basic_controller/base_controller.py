@@ -54,11 +54,11 @@ class BaseController:
 
 
     async def admin_request(
-        self, method, path, data=None, text=False, params=None
+        self, method, path, json_data=None, text=False, params=None, data=None
     ) -> ClientResponse:
         params = {k: v for (k, v) in (params or {}).items() if v is not None}
         async with self.client_session.request(
-            method, self.admin_url + path, json=data, params=params
+            method, self.admin_url + path, json=json_data, params=params, data=data
         ) as resp:
             resp.raise_for_status()
             resp_text = await resp.text()
@@ -85,15 +85,15 @@ class BaseController:
             raise
 
     async def admin_POST(
-            self, path, data=None, text=False, params=None
+            self, path, json_data=None, text=False, params=None, data=None
     ) -> ClientResponse:
         try:
             EVENT_LOGGER.debug(
                 "Controller POST %s request to Agent%s",
                 path,
-                (" with data: \n{}".format(repr_json(data)) if data else ""),
+                (" with data: \n{}".format(repr_json(json_data)) if json_data else ""),
             )
-            response = await self.admin_request("POST", path, data, text, params)
+            response = await self.admin_request("POST", path, json_data, text, params, data)
             EVENT_LOGGER.debug(
                 "Response from POST %s received: \n%s", path, repr_json(response),
             )
