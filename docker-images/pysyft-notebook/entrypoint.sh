@@ -9,5 +9,5 @@ else
 fi
 
 cd $WORKSPACE
-# echo "HELLO THIS IS PORT $1"
+echo "HELLO THIS IS PORT $1"
 jupyter notebook --ip=0.0.0.0 --port="$1" --allow-root
