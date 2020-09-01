@@ -121,7 +121,7 @@ class ConnectionsController(BaseController):
         return response
 
     async def remove_connection(self, connection_id):
-        response = await self.admin_POST(f"/connections/{connection_id}")
+        response = await self.admin_POST(f"/connections/{connection_id}/remove")
         return response
 
     async def check_connection_ready(self, connection_id, state):
