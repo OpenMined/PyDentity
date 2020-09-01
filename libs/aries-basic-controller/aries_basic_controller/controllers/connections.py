@@ -124,7 +124,7 @@ class ConnectionsController(BaseController):
         response = await self.admin_POST(f"/connections/{connection_id}/remove")
         return response
 
-    async def create_static(self, their_seed, their_label, their_verkey, their_role, my_seed, my_did, their_endpoint, alias, their_did, params = params):
+    async def create_static(self, their_seed, their_label, their_verkey, their_role, my_seed, my_did, their_endpoint, alias, their_did):
         params = {}
         if their_seed:
             params["their_seed"] = their_seed
