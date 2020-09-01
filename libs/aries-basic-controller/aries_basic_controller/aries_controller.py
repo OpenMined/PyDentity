@@ -2,24 +2,19 @@ from aiohttp import (
     web,
     ClientSession,
     ClientRequest,
-    ClientResponse,
-    ClientError,
-    ClientTimeout,
 )
 from pubsub import pub
-import asyncio
 
-from .utils import log_msg
-from .connections_controller import ConnectionsController
-from .messaging_controller import MessagingController
-from .schema_controller import SchemaController
-from .wallet_controller import WalletController
-from .definitions_controller import DefinitionsController
-from .issuer_controller import IssuerController
-from .proof_controller import ProofController
-from .ledger_controller import LedgerController
-from .credential_controller import CredentialController
-from.server_controller import ServerController
+from .controllers.connections import ConnectionsController
+from .controllers.messaging import MessagingController
+from .controllers.schema import SchemaController
+from .controllers.wallet import WalletController
+from .controllers.definitions import DefinitionsController
+from .controllers.issuer import IssuerController
+from .controllers.proof import ProofController
+from .controllers.ledger import LedgerController
+from .controllers.credential import CredentialController
+from .controllers.server import ServerController
 
 import logging
 

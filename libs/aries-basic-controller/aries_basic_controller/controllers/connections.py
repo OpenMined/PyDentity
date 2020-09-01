@@ -1,5 +1,5 @@
-from .base_controller import BaseController
-from .models.connection import Connection
+from .base import BaseController
+from ..models.connection import Connection
 
 from aiohttp import (
     ClientSession,

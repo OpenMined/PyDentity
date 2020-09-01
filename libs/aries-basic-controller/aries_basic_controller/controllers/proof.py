@@ -1,4 +1,4 @@
-from .base_controller import BaseController
+from .base import BaseController
 from aiohttp import ClientSession
 import logging
 from typing import List
@@ -49,62 +49,30 @@ class ProofController(BaseController):
         return await self.admin_GET(f"{self.base_url}/records/{pres_ex_id}/credentials", params=params)
 
     # Sends a presentation proposal
-    async def send_proposal(self, connection_id, attributes: List = [], predicates: List = [], comment: str = "", auto_present: bool = True, trace: bool = False):
-        body = {
-            "presentation_proposal": {
-                "@type": PRES_PREVIEW,
-                "attributes": attributes,
-                "predicates": predicates
-            },
-            "connection_id": connection_id,
-            "comment": comment,
-            "auto_present": auto_present,
-            "trace": trace
-        }
+    async def send_proposal(self, proposal):
 
-        return await self.admin_POST(f"{self.base_url}/send-proposal", data=body)
+        return await self.admin_POST(f"{self.base_url}/send-proposal", data=proposal)
 
     # Creates a presentation request not bound to any proposal or existing connection
-    async def create_request(self, proof_request, comment: str = "", trace: bool = False):
+    async def create_request(self, request):
         # TODO How should proof request object be broken up? Complex.
         #  Do we want user to have to know how to build this object?
-        body = {
-            "trace": trace,
-            "proof_request": proof_request,
-            "comment": comment
-        }
-        return await self.admin_POST(f"{self.base_url}/create-request", data=body)
+
+        return await self.admin_POST(f"{self.base_url}/create-request", data=request)
 
 
     # Sends a free presentation request not bound to any proposal
-    async def send_request(self, connection_id, proof_request, comment: str = "", trace: bool = False):
+    async def send_request(self, request):
+        return await self.admin_POST(f"{self.base_url}/send-request", data=request)
 
-        body = {
-            "connection_id": connection_id,
-            "proof_request": proof_request,
-            "comment": comment,
-            "trace": trace
-        }
-        return await self.admin_POST(f"{self.base_url}/send-request", data=body)
+    async def send_request_for_proposal(self, pres_ex_id, proposal_request):
 
-    async def send_request_for_proposal(self, connection_id, pres_ex_id, proof_request, comment: str = "", trace: bool = False):
-        body = {
-            "connection_id": connection_id,
-            "proof_request": proof_request,
-            "comment": comment,
-            "trace": trace
-        }
-        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-request", data=body)
+        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-request", data=proposal_request)
 
     # Send a proof presentation
-    async def send_presentation(self, pres_ex_id, attrs, self_attested_attrs, predicates, trace: bool = False):
-        body = {
-            "requested_attributes": attrs,
-            "self_attested_attributes": self_attested_attrs,
-            "requested_predicates": predicates,
-            "trace": trace
-        }
-        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-presentation", data=body)
+    async def send_presentation(self, pres_ex_id, presentation):
+
+        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-presentation", data=presentation)
 
     # Verify a received presentation
     async def verify_presentation(self, pres_ex_id):
