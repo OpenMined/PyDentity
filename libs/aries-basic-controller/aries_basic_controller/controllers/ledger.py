@@ -10,6 +10,19 @@ class LedgerController(BaseController):
         super().__init__(admin_url, client_session)
         self.base_url = "/ledger"
 
+    async def register_nym(self, did, verkey, role: str = None, alias: str = None):
+        params = {
+            "did": did,
+            "verkey": verkey
+        }
+        if role:
+            params["role"] = role
+        if alias:
+            params["alias"] = alias
+
+        return await self.admin_POST(f"{self.base_url}/register-nym", params=params)
+
+
     async def get_did_verkey(self, did):
         params = {
             "did": did
