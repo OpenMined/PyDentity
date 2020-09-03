@@ -1,13 +1,8 @@
-from .base_controller import BaseController
-from .connection import Connection
+from .base import BaseController
+from ..models.connection import Connection
 
 from aiohttp import (
-    web,
     ClientSession,
-    ClientRequest,
-    ClientResponse,
-    ClientError,
-    ClientTimeout,
 )
 import logging
 import asyncio
@@ -126,8 +121,33 @@ class ConnectionsController(BaseController):
         return response
 
     async def remove_connection(self, connection_id):
-        response = await self.admin_POST(f"/connections/{connection_id}")
+        response = await self.admin_POST(f"/connections/{connection_id}/remove")
         return response
+
+    async def create_static(self, their_seed, their_label, their_verkey, their_role, my_seed, my_did, their_endpoint, alias, their_did):
+        params = {}
+        if their_seed:
+            params["their_seed"] = their_seed
+        if their_label:
+            params["their_label"] = their_label
+        if their_verkey:
+            params["their_verkey"] = their_verkey
+        if their_role:
+            params["their_role"] = their_role
+        if my_seed:
+            params["my_seed"] = my_seed
+        if my_did:
+            params["my_did"] = my_did
+        if their_endpoint:
+            params["their_endpoint"] = their_endpoint
+        if alias:
+            params["alias"] = alias
+        if their_did:
+            params["their_did"] = their_did
+
+        response = await self.admin_POST(f"/connections/create-static",data = params)
+        return response
+
 
     async def check_connection_ready(self, connection_id, state):
         stored = False

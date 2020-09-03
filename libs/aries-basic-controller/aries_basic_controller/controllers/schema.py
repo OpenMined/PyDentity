@@ -1,4 +1,4 @@
-from .base_controller import BaseController
+from .base import BaseController
 from aiohttp import ClientSession
 import logging
 
