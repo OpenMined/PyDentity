@@ -1,6 +1,0 @@
-aiohttp~=3.6.2
-asyncio
-prompt_toolkit
-pygments
-PyPubSub
-python-dotenv
