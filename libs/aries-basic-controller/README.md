@@ -17,7 +17,7 @@ This spins up an aries agent and a notebook for both Alice and Bob. Additionally
 
 To view the tutorials navigate to:
 * [Alice notebook](http://localhost:8888) - this contains the majority of the tutorials
-* [Bob notebook](http://localhost:8880) - Bob plays the other half of the protocols when needed.
+* [Bob notebook](http://localhost:8889) - Bob plays the other half of the protocols when needed.
 
 Both notebooks require a token that can be found in the logs. Fetch the logs for the relevant container using these commands:
 * docker logs aries-basic-controller_alice-notebook_1
@@ -31,7 +31,3 @@ Both notebooks require a token that can be found in the logs. Fetch the logs for
 Built using [Sequence Diagram](https://sequencediagram.org)
 
 ![Sequence Diagram](./sequence_diagrams/controller_basic_messaging.svg)
-
-# Contributing
-
-This is a part of a project being developed within the [Open Mined](https://openmined.org) open source community. We welcome new contributors, either join our slack channel or just comment on an issue.
