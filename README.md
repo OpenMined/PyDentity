@@ -6,36 +6,26 @@
 
 # PyDentity
 
+In this repo we are creating a set of libraries to facilitate education and experimentation with the Hyperledger Aries framework for implementing secure identification and authentication procedures using Decentralised Identifiers(DIDs) and Verifiable Credentials (VCs).
+
+Ultimately we are exploring how to create a [Distributed Trust System for Privacy Preserving Machine Learning](https://arxiv.org/abs/2006.02456) that can work with PySyft. We're using HL-Aries Agents to establish an end-end encrypted channel which will facilitate syft communications. We can then extend this with credentials and governance systems.
+
 ![Endgame](./images/endgame.png)
 
-In this repo, we're extending a [Distributed Trust System for Privacy Preserving Machine Learning](https://arxiv.org/abs/2006.02456) to work with PySyft. We're using HL-Aries Agents to establish an end-end encrypted channel which will facilitate syft communications. We can then extend this with credentials and governance systems.
+**This is very experimental at this stage.**
 
-# Requirements
+## Libraries
 
-* Docker
-* Docker Compose v1.24
+Each library has it's own Readme and set of Juypter Notebook tutorials documenting how it can be used.
 
-# Getting Started
+### [aries-basic-controller](./libs/aries-basic-controller)
 
-From root directory run:
-```
-./manage up
-```
+This is the core library in this repository. It is a simple python wrapper for the swagger api interface to an [aca-py ssi agent](https://github.com/hyperledger/aries-cloudagent-python). This is a great place to start.
 
-Navigate to [researcher notebook](http://localhost:8889), you will find the token for this in the terminal you ran ./manage up from.
+### [acapy-protocol-example](./libs/acapy-protocol-example)
 
-Navigate to [data notebook](http://localhost:8888), you will find the token for this in the terminal you ran ./manage up from.
+This library gives a very basic example of how to extend the core set of protocols that an aca-py agent understand with a custom protocol.
 
-Both jupyter instances should have a notebook, either researcher or data_owner. Open these up and follow the tutorial contained within the notebooks. You can view these notebooks from this repo in the demo folder.
+### [om-aries-controller](./libs/om-aries-controller)
 
-To get the token for the juypter notebook run:
-
-* Alice : `docker logs om-aries-controller_alice-notebook_1`
-* Bob : `docker logs om-aries-controller_bob-notebook_1`
-
-# Sequence Diagram
-=======
-
-Built using [Sequence Diagram](https://sequencediagram.org)
-
-![Sequence Diagram](./sequence_diagrams/controller_basic_messaging.svg)
+This library shows how the basic controller can easily be extended to control an agent with custom protocols.
