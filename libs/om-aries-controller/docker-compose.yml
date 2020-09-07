@@ -64,9 +64,9 @@ services:
     depends_on:
       - alice-agent
       - bob-agent
-    ports:
-      - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
-      - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
+    # ports:
+    #   - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
+    #   - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
     environment:
       - ALICE_ADMIN_URL=http://alice-agent:${ALICE_ADMIN_PORT}
       - ALICE_WEBHOOK_PORT=${ALICE_WEBHOOK_PORT}
