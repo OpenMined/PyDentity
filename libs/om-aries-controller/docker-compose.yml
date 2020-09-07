@@ -95,7 +95,7 @@ services:
       - ./demo/alice:/workspace
     ports:
       - "8888:8888"
-      - 5001:${ALICE_WEBHOOK_PORT}
+      - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
   bob-notebook:
     build:
       context: ..
@@ -110,7 +110,7 @@ services:
       - ./demo/bob:/workspace
     ports:
       - "8889:8888"
-      - 5000:${BOB_WEBHOOK_PORT}
+      - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
 
 networks:
   indy_demo:
