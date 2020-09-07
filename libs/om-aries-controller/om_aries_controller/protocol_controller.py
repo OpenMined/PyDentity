@@ -17,3 +17,10 @@ class ProtocolController(BaseController):
         path = f"/connections/{connection_id}/send-attachment"
         return await self.admin_POST(path, data=data)
 
+ # async def store_attachment(self,data):
+
+    async def send_message(self, connection_id, msg):
+        response = await self.admin_POST(f"/connections/{connection_id}/send-message", {
+            "content": msg,
+        })
+        return response
