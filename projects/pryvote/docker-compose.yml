@@ -5,28 +5,23 @@ services:
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
-    depends_on:
-      - ledger-nodes
     networks:
       - indy_demo
     entrypoint: /bin/bash
     command: [
         "-c",
-          "echo Waiting for ledger to be ready...;
-          sleep 60;
-          curl -d '{\"seed\":\"${BOB_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${BOB_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
-          sleep 2; \
+          "echo Bob Agent Connecting to Sovrin Stagingnet ...;
             aca-py start \
           --inbound-transport http '0.0.0.0' ${BOB_HTTP_PORT} \
           --outbound-transport http \
           --endpoint ${BOB_AGENT_ENDPOINT} \
           --webhook-url ${BOB_WEBHOOK_URL} \
           --wallet-type 'indy' \
-          --seed '${BOB_WALLET_SEED}' \
           --admin '0.0.0.0' ${BOB_ADMIN_PORT} \
+          --log-level debug \
           --admin-insecure-mode \
           --log-level info \
-          --genesis-url '${LEDGER_URL}/genesis'
+          --genesis-url https://raw.githubusercontent.com/sovrin-foundation/sovrin/master/sovrin/pool_transactions_sandbox_genesis \
           --label ${BOB_AGENT_NAME}",
         ]
   alice-agent:
@@ -34,8 +29,6 @@ services:
     ports:
       - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
       - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
-    depends_on:
-      - ledger-nodes
     networks:
       - indy_demo
 #    volumes:
@@ -43,21 +36,17 @@ services:
     entrypoint: /bin/bash
     command: [
         "-c",
-        "echo Waiting for ledger to be ready...;
-        sleep 60;
-        curl -d '{\"seed\":\"${ALICE_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${ALICE_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
-        sleep 2; \
+        "echo Alice Agent Connecting to Sovrin Stagingnet ...;
         aca-py start \
         --inbound-transport http '0.0.0.0' ${ALICE_HTTP_PORT} \
         --outbound-transport http \
         --endpoint ${ALICE_AGENT_ENDPOINT} \
         --webhook-url ${ALICE_WEBHOOK_URL} \
         --wallet-type 'indy' \
-        --seed '${ALICE_WALLET_SEED}' \
         --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
         --admin-insecure-mode \
         --log-level info \
-        --genesis-url '${LEDGER_URL}/genesis'
+        --genesis-url https://raw.githubusercontent.com/sovrin-foundation/sovrin/master/sovrin/pool_transactions_sandbox_genesis \
         --label ${ALICE_AGENT_NAME}",
     ]
   setup:
@@ -69,9 +58,6 @@ services:
     depends_on:
       - alice-agent
       - bob-agent
-#    ports:
-#      - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
-#      - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
     environment:
       - ALICE_ADMIN_URL=http://alice-agent:${ALICE_ADMIN_PORT}
       - ALICE_WEBHOOK_PORT=${ALICE_WEBHOOK_PORT}
@@ -114,49 +100,6 @@ services:
     ports:
       - "8889:8888"
       - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
-  ledger-browser:
-    build:
-      context: https://github.com/bcgov/von-network.git
-      dockerfile: Dockerfile
-    command: "bash -c 'sleep 10; ./scripts/start_webserver.sh;'"
-    environment:
-      - DOCKERHOST=${DOCKERHOST}
-      - MAX_FETCH=50000
-      - RESYNC_TIME=120
-      - REGISTER_NEW_DIDS=True
-      - LEDGER_INSTANCE_NAME=localhost
-    ports:
-      - ${WEB_SERVER_HOST_PORT:-9000}:8000
-    volumes:
-      - webserver-cli:/home/indy/.indy-cli
-      - webserver-ledger:/home/indy/ledger
-    networks:
-      - indy_demo
-
-  ledger-nodes:
-    build:
-      context: https://github.com/bcgov/von-network.git
-      dockerfile: Dockerfile
-    command: "bash -c './scripts/start_nodes.sh'"
-    ports:
-      - 9701:9701
-      - 9702:9702
-      - 9703:9703
-      - 9704:9704
-      - 9705:9705
-      - 9706:9706
-      - 9707:9707
-      - 9708:9708
-    environment:
-      - DOCKERHOST=${DOCKERHOST}
-    volumes:
-      - nodes-data:/home/indy/ledger
-    networks:
-      - indy_demo
 
 networks:
   indy_demo:
-volumes:
-  webserver-cli:
-  webserver-ledger:
-  nodes-data:
