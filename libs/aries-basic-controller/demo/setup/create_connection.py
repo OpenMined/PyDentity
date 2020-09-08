@@ -11,6 +11,7 @@ ALICE_ADMIN_URL = os.getenv('ALICE_ADMIN_URL')
 ALICE_WEBHOOK_PORT = os.getenv('ALICE_WEBHOOK_PORT')
 ALICE_WEBHOOK_HOST = os.getenv('ALICE_WEBHOOK_HOST')
 ALICE_WEBHOOK_BASE = os.getenv('ALICE_WEBHOOK_BASE')
+ALICE_API_KEY = os.getenv('ALICE_API_KEY')
 
 BOB_ADMIN_URL = os.getenv('BOB_ADMIN_URL')
 BOB_WEBHOOK_PORT = os.getenv('BOB_WEBHOOK_PORT')
@@ -26,12 +27,12 @@ async def start_agent():
     time.sleep(6)
 
     bob_agent_controller = AriesAgentController(webhook_host=BOB_WEBHOOK_HOST, webhook_port=BOB_WEBHOOK_PORT,
-                                               webhook_base=BOB_WEBHOOK_BASE, admin_url=BOB_ADMIN_URL, connections=True)
+                                               webhook_base=BOB_WEBHOOK_BASE, admin_url=BOB_ADMIN_URL)
 
 
 
     alice_agent_controller = AriesAgentController(webhook_host=ALICE_WEBHOOK_HOST, webhook_port=ALICE_WEBHOOK_PORT,
-                                               webhook_base=ALICE_WEBHOOK_BASE, admin_url=ALICE_ADMIN_URL, connections=True)
+                                               webhook_base=ALICE_WEBHOOK_BASE, admin_url=ALICE_ADMIN_URL, api_key=ALICE_API_KEY)
 
 
     await alice_agent_controller.listen_webhooks()
