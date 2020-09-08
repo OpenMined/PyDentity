@@ -110,7 +110,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ${PWD}/demo/bob:/workspace
+      - ${PWD}/demo/opus:/workspace
     ports:
       - "8889:8888"
       - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
