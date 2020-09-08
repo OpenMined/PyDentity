@@ -1,6 +1,6 @@
-# PryVote
+# Opus
 
-Opus is a SSI-driven Credentialing project.
+Opus is a SSI-driven third party data onboarding project.
 The project is in early development.
 
 ## Pre-requisites
