@@ -25,4 +25,4 @@ In the terminal output you'll find the tokens for your notebooks;
 
 <img src="images/instructions1.png" alt="drawing" width="300"/>
 
-Begin the tutorials from the Opus Notebook. Notebooks mount their respective directories in './demo'. Enjoy!
+Begin the tutorials from the Opus Notebook. Notebooks mount their respective directories in './demo'. Method 2 has been completed. Enjoy!
