@@ -3,6 +3,8 @@
 Opus is a SSI-driven third party data onboarding project.
 The project is in early development.
 
+<img src="images/opus_2B.PNG" alt="drawing" width="300"/>
+
 ## Pre-requisites
 
 1. Docker
