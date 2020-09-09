@@ -7,20 +7,11 @@ to implement logic for holding voting sessions
 and casting votes.
 
 The project is in early development.
-We are implementing minimal examples
-to demonstrate how to use PryVote.
 
 Building something with PryVote?
 Let us know!
 
 ## Examples
-
-#### Login and parsing
-
-This notebook, in the "Alice" folder,
-demonstrates a method for validating a GitHub account.
-This can be used to issue credentials
-of GitHub community membership.
 
 #### OpenMined community / voter
 
@@ -30,10 +21,17 @@ show a simple method for self-attested votes.
 They should be followed concurrently;
 section numbers indicate the flow of information.
 
-
 ### Pre-requisites
 
 - Docker
+
+### Environment
+
+- Voter (Bob) Notebook:8889
+- Bob Agent:8051
+- Vote holder (Alice) Notebook:8888
+- Alice Agent:8021
+- Ledger Browser:9000
 
 ### How to run
 
@@ -43,9 +41,8 @@ Alice acts as a vote/credential issuer,
 and Bob is a voter.
 
 Lots of information will get posted to your terminal.
-Scroll up to find links to connect to the Alice and Bob agents,
-or go to both localhost `8888` and `8889`
-in a browser of your choice.
+Scroll up to find the tokens needed to access
+the Alice and Bob notebooks.
 
 Quit the notebooks
 and run `bash ./manage down`
