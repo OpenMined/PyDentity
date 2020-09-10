@@ -16,5 +16,5 @@ aca-py start \
     --debug-credentials \
     --debug-presentations \
     --enable-undelivered-queue \
-#    --webhook-url ${BOB_WEBHOOK_URL:-$ENDPOINT:$BOB_WEBHOOK_PORT}${ALICE_WEBHOOK_URL} \
+    --webhook-url $WEBHOOK_URL \
     "$@"
