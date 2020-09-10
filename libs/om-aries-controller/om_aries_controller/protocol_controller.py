@@ -19,8 +19,4 @@ class ProtocolController(BaseController):
 
  # async def store_attachment(self,data):
 
-    async def send_message(self, connection_id, msg):
-        response = await self.admin_POST(f"/connections/{connection_id}/send-message", {
-            "content": msg,
-        })
-        return response
+ 
