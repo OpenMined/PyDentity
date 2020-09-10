@@ -13,6 +13,15 @@ Let us know!
 
 ## Examples
 
+#### secure_multi_party_voting
+
+POC of secure multi-party voting.
+No credential verification in place at the moment.
+To run this,
+open the notebook.
+You do not need to spin up
+containers with `manage`.
+
 #### OpenMined community / voter
 
 These notebooks
