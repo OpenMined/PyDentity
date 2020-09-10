@@ -1,70 +1,70 @@
 version: "3"
 services:
-  ngrok-bob:
+  ngrok-verifier:
     image: wernight/ngrok
-    command: ngrok http bob-agent:${BOB_HTTP_PORT} --log stdout
+    command: ngrok http verifier-agent:${VERIFIER_HTTP_PORT} --log stdout
     networks:
       - indy_demo
-  bob-agent:
+  verifier-agent:
     build: .
     environment:
-      NGROK_NAME: ngrok-bob
-      AGENT_NAME: Bob
-      PORT: ${BOB_HTTP_PORT}
-      ADMIN_PORT: ${BOB_ADMIN_PORT}
-      WEBHOOK_URL: ${BOB_WEBHOOK_URL}
+      NGROK_NAME: ngrok-verifier
+      AGENT_NAME: Verifier
+      PORT: ${VERIFIER_HTTP_PORT}
+      ADMIN_PORT: ${VERIFIER_ADMIN_PORT}
+      WEBHOOK_URL: ${VERIFIER_WEBHOOK_URL}
     ports:
-      - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
-      - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
+      - ${VERIFIER_HTTP_PORT}:${VERIFIER_HTTP_PORT}
+      - ${VERIFIER_ADMIN_PORT}:${VERIFIER_ADMIN_PORT}
     networks:
       - indy_demo
 
-  ngrok-alice:
+  ngrok-issuer:
     image: wernight/ngrok
-    command: ngrok http alice-agent:${ALICE_HTTP_PORT} --log stdout
+    command: ngrok http issuer-agent:${ISSUER_HTTP_PORT} --log stdout
     networks:
       - indy_demo
-  alice-agent:
+  issuer-agent:
     build: .
     environment:
-      NGROK_NAME: ngrok-alice
-      AGENT_NAME: Alice
-      PORT: ${ALICE_HTTP_PORT}
-      ADMIN_PORT: ${ALICE_ADMIN_PORT}
-      WEBHOOK_URL: ${ALICE_WEBHOOK_URL}
+      NGROK_NAME: ngrok-issuer
+      AGENT_NAME: Issuer
+      PORT: ${ISSUER_HTTP_PORT}
+      ADMIN_PORT: ${ISSUER_ADMIN_PORT}
+      WEBHOOK_URL: ${ISSUER_WEBHOOK_URL}
     ports:
-      - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
-      - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
+      - ${ISSUER_HTTP_PORT}:${ISSUER_HTTP_PORT}
+      - ${ISSUER_ADMIN_PORT}:${ISSUER_ADMIN_PORT}
     networks:
       - indy_demo
-  alice-notebook:
+  issuer-notebook:
     build:
       context: ../../libs/aries-basic-controller
       args:
-        - jupyter_port=${ALICE_JUPYTER_PORT}
+        - jupyter_port=${ISSUER_JUPYTER_PORT}
     depends_on:
-      - alice-agent
+      - issuer-agent
     networks:
       - indy_demo
     volumes:
-      - ./demo/alice:/workspace
+      - ./demo/issuer:/workspace
     ports:
       - "8888:8888"
-      - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
-  bob-notebook:
+      - ${ISSUER_WEBHOOK_PORT}:${ISSUER_WEBHOOK_PORT}
+  verifier-notebook:
     build:
       context: ../../libs/aries-basic-controller
       args:
-        - jupyter_port=${BOB_JUPYTER_PORT}
+        - jupyter_port=${VERIFIER_JUPYTER_PORT}
     depends_on:
-      - bob-agent
+      - verifier-agent
     networks:
       - indy_demo
     volumes:
-      - ${PWD}/demo/bob:/workspace
+      - ${PWD}/demo/verifier:/workspace
     ports:
       - "8889:8888"
-      - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
+      - ${VERIFIER_WEBHOOK_PORT}:${VERIFIER_WEBHOOK_PORT}
 
 networks:
   indy_demo:
