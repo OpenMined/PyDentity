@@ -12,6 +12,7 @@ services:
       AGENT_NAME: Bob
       PORT: ${BOB_HTTP_PORT}
       ADMIN_PORT: ${BOB_ADMIN_PORT}
+      WEBHOOK_URL: ${BOB_WEBHOOK_URL}
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
@@ -30,6 +31,7 @@ services:
       AGENT_NAME: Alice
       PORT: ${ALICE_HTTP_PORT}
       ADMIN_PORT: ${ALICE_ADMIN_PORT}
+      WEBHOOK_URL: ${ALICE_WEBHOOK_URL}
     ports:
       - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
       - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
