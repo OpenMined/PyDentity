@@ -5,4 +5,9 @@ dist
 build
 .env
 .ipynb_checkpoints/
-libs/om-aries-controller/demo/bob/test.txt
+libs/om-aries-controller/demo/bob/received_files/*
+
+
+
+# exception to the rule
+!libs/om-aries-controller/demo/bob/received_files/.gitkeep
