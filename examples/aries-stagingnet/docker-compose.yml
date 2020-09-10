@@ -1,77 +1,40 @@
 version: "3"
 services:
+  ngrok-bob:
+    image: wernight/ngrok
+    command: ngrok http bob-agent:${BOB_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
   bob-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    build: .
+    environment:
+      NGROK_NAME: ngrok-bob
+      AGENT_NAME: Bob
+      PORT: ${BOB_HTTP_PORT}
+      ADMIN_PORT: ${BOB_ADMIN_PORT}
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
     networks:
       - indy_demo
-    entrypoint: /bin/bash
-    command: [
-        "-c",
-          "echo Bob Agent Connecting to Sovrin Stagingnet ...;
-            aca-py start \
-          --inbound-transport http '0.0.0.0' ${BOB_HTTP_PORT} \
-          --outbound-transport http \
-          --endpoint ${BOB_AGENT_ENDPOINT} \
-          --webhook-url ${BOB_WEBHOOK_URL} \
-          --wallet-type 'indy' \
-          --admin '0.0.0.0' ${BOB_ADMIN_PORT} \
-          --log-level debug \
-          --admin-insecure-mode \
-          --log-level info \
-          --genesis-url https://raw.githubusercontent.com/sovrin-foundation/sovrin/master/sovrin/pool_transactions_sandbox_genesis \
-          --label ${BOB_AGENT_NAME}",
-        ]
+
+  ngrok-alice:
+    image: wernight/ngrok
+    command: ngrok http alice-agent:${ALICE_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
   alice-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    build: .
+    environment:
+      NGROK_NAME: ngrok-alice
+      AGENT_NAME: Alice
+      PORT: ${ALICE_HTTP_PORT}
+      ADMIN_PORT: ${ALICE_ADMIN_PORT}
     ports:
       - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
       - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
     networks:
       - indy_demo
-#    volumes:
-#      - alice-wallet:/indy/home/.indy_client/default
-    entrypoint: /bin/bash
-    command: [
-        "-c",
-        "echo Alice Agent Connecting to Sovrin Stagingnet ...;
-        aca-py start \
-        --inbound-transport http '0.0.0.0' ${ALICE_HTTP_PORT} \
-        --outbound-transport http \
-        --endpoint ${ALICE_AGENT_ENDPOINT} \
-        --webhook-url ${ALICE_WEBHOOK_URL} \
-        --wallet-type 'indy' \
-        --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
-        --admin-insecure-mode \
-        --log-level info \
-        --genesis-url https://raw.githubusercontent.com/sovrin-foundation/sovrin/master/sovrin/pool_transactions_sandbox_genesis \
-        --label ${ALICE_AGENT_NAME}",
-    ]
-  setup:
-    build:
-      context: ../../libs/aries-basic-controller
-      dockerfile: Dockerfile.setup
-    networks:
-      - indy_demo
-    depends_on:
-      - alice-agent
-      - bob-agent
-    environment:
-      - ALICE_ADMIN_URL=http://alice-agent:${ALICE_ADMIN_PORT}
-      - ALICE_WEBHOOK_PORT=${ALICE_WEBHOOK_PORT}
-      - ALICE_WEBHOOK_HOST=0.0.0.0
-      - BOB_ADMIN_URL=http://bob-agent:${BOB_ADMIN_PORT}
-      - BOB_WEBHOOK_PORT=${BOB_WEBHOOK_PORT}
-      - BOB_WEBHOOK_HOST=0.0.0.0
-    entrypoint: /bin/bash
-    command:
-      [
-        "-c",
-        "sleep 80;
-        python ./create_connection.py"
-      ]
   alice-notebook:
     build:
       context: ../../libs/aries-basic-controller
