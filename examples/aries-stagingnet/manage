@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="bob-agent alice-agent setup alice-notebook bob-notebook"
+DEFAULT_CONTAINERS="ngrok-bob bob-agent ngrok-alice alice-agent alice-notebook bob-notebook"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
