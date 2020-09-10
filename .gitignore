@@ -5,3 +5,4 @@ dist
 build
 .env
 .ipynb_checkpoints/
+libs/om-aries-controller/demo/bob/test.txt
