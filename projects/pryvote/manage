@@ -33,7 +33,7 @@ usage() {
 
             Examples:
             $0 start
-            $0 start bob-agent
+            $0 start red-agent
 
       start - Same as up
 
@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="bob-agent alice-agent setup ledger-nodes ledger-browser alice-notebook bob-notebook"
+DEFAULT_CONTAINERS="red-agent blue-agent yellow-agent setup ledger-nodes ledger-browser blue-notebook red-notebook yellow-notebook"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -116,27 +116,35 @@ configureEnvironment() {
   export LEDGER_URL=${LEDGER_URL-http://$DOCKERHOST:9000}
   export WALLET_TYPE="indy"
 
-  # bob-agent
-  export BOB_AGENT_NAME="Bob"
-  export BOB_ADMIN_PORT=8051
-  export BOB_HTTP_PORT=8050
-  export BOB_WEBHOOK_PORT=8052
-  export BOB_WEBHOOK_URL=${BOB_WEBHOOK_URL:-http://$DOCKERHOST:$BOB_WEBHOOK_PORT}
-  export BOB_AGENT_ENDPOINT=${BOB_AGENT_ENDPOINT:-http://$DOCKERHOST:$BOB_HTTP_PORT}
-  export BOB_WALLET_SEED="bob_seed_00000000000000000000000"
-  export BOB_JUPYTER_PORT="8889"
+  # vote counter 1 - red
+  export RED_AGENT_NAME="Red"
+  export RED_ADMIN_PORT=8051
+  export RED_HTTP_PORT=8050
+  export RED_WEBHOOK_PORT=8052
+  export RED_WEBHOOK_URL=${RED_WEBHOOK_URL:-http://$DOCKERHOST:$RED_WEBHOOK_PORT}
+  export RED_AGENT_ENDPOINT=${RED_AGENT_ENDPOINT:-http://$DOCKERHOST:$RED_HTTP_PORT}
+  export RED_WALLET_SEED="red_seed_00000000000000000000000"
+  export RED_JUPYTER_PORT="8889"
 
+  # vote counter 2 - blue
+  export BLUE_AGENT_NAME="Blue"
+  export BLUE_ADMIN_PORT=8021
+  export BLUE_HTTP_PORT=8020
+  export BLUE_WEBHOOK_PORT=8022
+  export BLUE_WEBHOOK_URL=${BLUE_WEBHOOK_URL:-http://$DOCKERHOST:$BLUE_WEBHOOK_PORT}
+  export BLUE_AGENT_ENDPOINT=${BLUE_AGENT_ENDPOINT:-http://$DOCKERHOST:$BLUE_HTTP_PORT}
+  export BLUE_WALLET_SEED="blue_seed_000000000000000000000"
+  export BLUE_JUPYTER_PORT="8888"
 
-  # alice-agent
-  export ALICE_AGENT_NAME="Alice"
-  export ALICE_ADMIN_PORT=8021
-  export ALICE_HTTP_PORT=8020
-  export ALICE_WEBHOOK_PORT=8022
-  export ALICE_WEBHOOK_URL=${ALICE_WEBHOOK_URL:-http://$DOCKERHOST:$ALICE_WEBHOOK_PORT}
-  export ALICE_AGENT_ENDPOINT=${ALICE_AGENT_ENDPOINT:-http://$DOCKERHOST:$ALICE_HTTP_PORT}
-  export ALICE_WALLET_SEED="alice_seed_000000000000000000000"
-  export ALICE_JUPYTER_PORT="8888"
-
+  # vote counter 3 - yellow
+  export YELLOW_AGENT_NAME="Yellow"
+  export YELLOW_ADMIN_PORT=8071
+  export YELLOW_HTTP_PORT=8070
+  export YELLOW_WEBHOOK_PORT=8072
+  export YELLOW_WEBHOOK_URL=${YELLOW_WEBHOOK_URL:-http://$DOCKERHOST:$YELLOW_WEBHOOK_PORT}
+  export YELLOW_AGENT_ENDPOINT=${YELLOW_AGENT_ENDPOINT:-http://$DOCKERHOST:$YELLOW_HTTP_PORT}
+  export YELLOW_WALLET_SEED="yellow_seed_000000000000000000000"
+  export YELLOW_JUPYTER_PORT=8900
 
 }
 

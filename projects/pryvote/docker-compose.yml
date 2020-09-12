@@ -1,10 +1,10 @@
 version: "3"
 services:
-  bob-agent:
+  red-agent:
     image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
     ports:
-      - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
-      - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
+      - ${RED_HTTP_PORT}:${RED_HTTP_PORT}
+      - ${RED_ADMIN_PORT}:${RED_ADMIN_PORT}
     depends_on:
       - ledger-nodes
     networks:
@@ -14,51 +14,80 @@ services:
         "-c",
           "echo Waiting for ledger to be ready...;
           sleep 60;
-          curl -d '{\"seed\":\"${BOB_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${BOB_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
+          curl -d '{\"seed\":\"${RED_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${RED_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
           sleep 2; \
             aca-py start \
-          --inbound-transport http '0.0.0.0' ${BOB_HTTP_PORT} \
+          --inbound-transport http '0.0.0.0' ${RED_HTTP_PORT} \
           --outbound-transport http \
-          --endpoint ${BOB_AGENT_ENDPOINT} \
-          --webhook-url ${BOB_WEBHOOK_URL} \
+          --endpoint ${RED_AGENT_ENDPOINT} \
+          --webhook-url ${RED_WEBHOOK_URL} \
           --wallet-type 'indy' \
-          --seed '${BOB_WALLET_SEED}' \
-          --admin '0.0.0.0' ${BOB_ADMIN_PORT} \
+          --seed '${RED_WALLET_SEED}' \
+          --admin '0.0.0.0' ${RED_ADMIN_PORT} \
           --admin-insecure-mode \
           --log-level info \
           --genesis-url '${LEDGER_URL}/genesis'
-          --label ${BOB_AGENT_NAME}",
+          --label ${RED_AGENT_NAME}",
         ]
-  alice-agent:
+  blue-agent:
     image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
     ports:
-      - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
-      - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
+      - ${BLUE_HTTP_PORT}:${BLUE_HTTP_PORT}
+      - ${BLUE_ADMIN_PORT}:${BLUE_ADMIN_PORT}
     depends_on:
       - ledger-nodes
     networks:
       - indy_demo
 #    volumes:
-#      - alice-wallet:/indy/home/.indy_client/default
+#      - blue-wallet:/indy/home/.indy_client/default
     entrypoint: /bin/bash
     command: [
         "-c",
         "echo Waiting for ledger to be ready...;
         sleep 60;
-        curl -d '{\"seed\":\"${ALICE_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${ALICE_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
+        curl -d '{\"seed\":\"${BLUE_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${BLUE_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
         sleep 2; \
         aca-py start \
-        --inbound-transport http '0.0.0.0' ${ALICE_HTTP_PORT} \
+        --inbound-transport http '0.0.0.0' ${BLUE_HTTP_PORT} \
         --outbound-transport http \
-        --endpoint ${ALICE_AGENT_ENDPOINT} \
-        --webhook-url ${ALICE_WEBHOOK_URL} \
+        --endpoint ${BLUE_AGENT_ENDPOINT} \
+        --webhook-url ${BLUE_WEBHOOK_URL} \
         --wallet-type 'indy' \
-        --seed '${ALICE_WALLET_SEED}' \
-        --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
+        --seed '${BLUE_WALLET_SEED}' \
+        --admin '0.0.0.0' ${BLUE_ADMIN_PORT} \
         --admin-insecure-mode \
         --log-level info \
         --genesis-url '${LEDGER_URL}/genesis'
-        --label ${ALICE_AGENT_NAME}",
+        --label ${BLUE_AGENT_NAME}",
+    ]
+  yellow-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    ports:
+      - ${YELLOW_HTTP_PORT}:${YELLOW_HTTP_PORT}
+      - ${YELLOW_ADMIN_PORT}:${YELLOW_ADMIN_PORT}
+    depends_on:
+      - ledger-nodes
+    networks:
+      - indy_demo
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+          "echo Waiting for ledger to be ready...;
+          sleep 60;
+          curl -d '{\"seed\":\"${YELLOW_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${YELLOW_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
+          sleep 2; \
+            aca-py start \
+          --inbound-transport http '0.0.0.0' ${YELLOW_HTTP_PORT} \
+          --outbound-transport http \
+          --endpoint ${YELLOW_AGENT_ENDPOINT} \
+          --webhook-url ${YELLOW_WEBHOOK_URL} \
+          --wallet-type 'indy' \
+          --seed '${YELLOW_WALLET_SEED}' \
+          --admin '0.0.0.0' ${YELLOW_ADMIN_PORT} \
+          --admin-insecure-mode \
+          --log-level info \
+          --genesis-url '${LEDGER_URL}/genesis'
+          --label ${YELLOW_AGENT_NAME}",
     ]
   setup:
     build:
@@ -67,18 +96,22 @@ services:
     networks:
       - indy_demo
     depends_on:
-      - alice-agent
-      - bob-agent
+      - blue-agent
+      - red-agent
+      - yellow-agent
 #    ports:
-#      - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
-#      - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
+#      - ${BLUE_WEBHOOK_PORT}:${BLUE_WEBHOOK_PORT}
+#      - ${RED_WEBHOOK_PORT}:${RED_WEBHOOK_PORT}
     environment:
-      - ALICE_ADMIN_URL=http://alice-agent:${ALICE_ADMIN_PORT}
-      - ALICE_WEBHOOK_PORT=${ALICE_WEBHOOK_PORT}
-      - ALICE_WEBHOOK_HOST=0.0.0.0
-      - BOB_ADMIN_URL=http://bob-agent:${BOB_ADMIN_PORT}
-      - BOB_WEBHOOK_PORT=${BOB_WEBHOOK_PORT}
-      - BOB_WEBHOOK_HOST=0.0.0.0
+      - BLUE_ADMIN_URL=http://blue-agent:${BLUE_ADMIN_PORT}
+      - BLUE_WEBHOOK_PORT=${BLUE_WEBHOOK_PORT}
+      - BLUE_WEBHOOK_HOST=0.0.0.0
+      - RED_ADMIN_URL=http://red-agent:${RED_ADMIN_PORT}
+      - RED_WEBHOOK_PORT=${RED_WEBHOOK_PORT}
+      - RED_WEBHOOK_HOST=0.0.0.0
+      - YELLOW_ADMIN_URL=http://yellow-agent:${YELLOW_ADMIN_PORT}
+      - YELLOW_WEBHOOK_PORT=${YELLOW_WEBHOOK_PORT}
+      - YELLOW_WEBHOOK_HOST=0.0.0.0
     entrypoint: /bin/bash
     command:
       [
@@ -86,34 +119,48 @@ services:
         "sleep 80;
         python ./create_connection.py"
       ]
-  alice-notebook:
+  blue-notebook:
     build:
       context: ../../libs/aries-basic-controller
       args:
-        - jupyter_port=${ALICE_JUPYTER_PORT}
+        - jupyter_port=${BLUE_JUPYTER_PORT}
     depends_on:
-      - alice-agent
+      - blue-agent
     networks:
       - indy_demo
     volumes:
-      - ./demo/alice:/workspace
+      - ./demo:/workspace
     ports:
       - "8888:8888"
-      - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
-  bob-notebook:
+      - ${BLUE_WEBHOOK_PORT}:${BLUE_WEBHOOK_PORT}
+  red-notebook:
     build:
       context: ../../libs/aries-basic-controller
       args:
-        - jupyter_port=${BOB_JUPYTER_PORT}
+        - jupyter_port=${RED_JUPYTER_PORT}
     depends_on:
-      - bob-agent
+      - red-agent
     networks:
       - indy_demo
     volumes:
-      - ${PWD}/demo/bob:/workspace
+      - ${PWD}/demo:/workspace
     ports:
       - "8889:8888"
-      - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
+      - ${RED_WEBHOOK_PORT}:${RED_WEBHOOK_PORT}
+  yellow-notebook:
+    build:
+      context: ../../libs/aries-basic-controller
+      args:
+        - jupyter_port=${YELLOW_JUPYTER_PORT}
+    depends_on:
+      - yellow-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/demo:/workspace
+    ports:
+      - "8900:8888"
+      - ${YELLOW_WEBHOOK_PORT}:${YELLOW_WEBHOOK_PORT}
   ledger-browser:
     build:
       context: https://github.com/bcgov/von-network.git
