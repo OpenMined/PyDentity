@@ -129,7 +129,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ./demo:/workspace
+      - ./demo/blue:/workspace
     ports:
       - "8888:8888"
       - ${BLUE_WEBHOOK_PORT}:${BLUE_WEBHOOK_PORT}
@@ -143,7 +143,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ${PWD}/demo:/workspace
+      - ${PWD}/demo/red:/workspace
     ports:
       - "8889:8888"
       - ${RED_WEBHOOK_PORT}:${RED_WEBHOOK_PORT}
@@ -157,7 +157,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ${PWD}/demo:/workspace
+      - ${PWD}/demo/yellow:/workspace
     ports:
       - "8900:8888"
       - ${YELLOW_WEBHOOK_PORT}:${YELLOW_WEBHOOK_PORT}
