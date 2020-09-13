@@ -8,7 +8,7 @@ from uuid import uuid4, UUID
 from .aries_controller import AriesAgentController
 
 
-class VoterCounterController(AriesAgentController):
+class VoteCounterController(AriesAgentController):
     def __init__(self, Q: int, voting_session, webhook_host: str, webhook_port: int, admin_url: str, webhook_base: str = ) -> None:
         # Voter counters can issue "has voted" credentials
         super().__init__(webhook_host, webhook_port, admin_url, webhook_base, connections=True, messaging=True, issuer=True)
