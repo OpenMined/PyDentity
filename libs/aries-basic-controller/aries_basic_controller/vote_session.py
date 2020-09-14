@@ -20,12 +20,12 @@ class VoteSession:
         self._vote_classes = {v: k for k, v in vote_values.items()}
 
         self._results = None
-        self._vote_title = None
+        self._vote_title = vote_title
 
     @property
     def ongoing(self) -> bool:
         """
-        Whether or not the vote active
+        Whether or not the vote is active
 
         Returns:
             bool : True if no results have been calculated, otherwise False
@@ -46,6 +46,12 @@ class VoteSession:
 
     def calculate_winner(self):
         raise NotImplementedError("calculate_winner must be implemented by base class")
+
+    def __str__(self) -> str:
+        s = f"{self._vote_title}\n"
+        s += f"Vote options are: {', '.join(self._vote_values.keys())}\n"
+        s += f"Vote is {'ongoing' if self.ongoing else 'finished'}"
+        return s
 
 
 class SMPCVoteSession(VoteSession):

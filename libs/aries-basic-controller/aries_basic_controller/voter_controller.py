@@ -8,11 +8,10 @@ from .aries_controller import AriesAgentController
 
 
 class VoterController(AriesAgentController):
-    def __init__(self, Q: int, webhook_host: str, webhook_port: int, admin_url: str, webhook_base: str = "") -> None:
+    def __init__(self, webhook_host: str, webhook_port: int, admin_url: str, webhook_base: str = "") -> None:
         super().__init__(webhook_host, webhook_port, admin_url, webhook_base, connections=True, messaging=True, issuer=False)
 
         self._id = uuid.uuid4()
-        self._Q = Q
         self._vote_shares = None
         self._voting_session = None
 
@@ -38,6 +37,8 @@ class VoterController(AriesAgentController):
             self._vote_shares = None
 
     def _encrypt_vote(self, vote: int):
+        Q = self._voting_session.Q
+
         share_a = random.randint(-Q,Q)
         share_b = random.randint(-Q,Q)
         share_c = (vote - share_a - share_b) % Q
