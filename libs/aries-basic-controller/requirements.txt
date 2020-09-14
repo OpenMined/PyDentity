@@ -5,3 +5,4 @@ pygments
 PyPubSub
 python-dotenv
 beautifulsoup4
+numpy
