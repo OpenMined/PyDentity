@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="red-agent blue-agent yellow-agent setup ledger-nodes ledger-browser blue-notebook red-notebook yellow-notebook"
+DEFAULT_CONTAINERS="red-agent blue-agent yellow-agent alice-agent setup ledger-nodes ledger-browser blue-notebook red-notebook yellow-notebook alice-notebook"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
