@@ -9,4 +9,4 @@ RUN pip3 install --no-cache-dir -e .
 
 
 
-ADD tutorial .
+ADD tutorial/setup/create_connection.py .
