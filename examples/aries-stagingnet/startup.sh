@@ -5,7 +5,7 @@ aca-py start \
     --label "$AGENT_NAME" \
     --auto-accept-requests --auto-ping-connection \
     --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-store-credential \
-    --auto-respond-presentation-proposal --auto-respond-presentation-request --auto-verify-presentation \
+    --auto-respond-presentation-proposal --auto-respond-presentation-request \
     --preserve-exchange-records \
     --genesis-url https://raw.githubusercontent.com/sovrin-foundation/sovrin/master/sovrin/pool_transactions_sandbox_genesis \
     --wallet-type indy \
