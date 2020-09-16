@@ -2,7 +2,7 @@
 Controller for a PryVote voter.
 Will be moved to pryvote dir when basic-controller is pip-installable.
 """
-from uuid import uuid4
+import uuid
 
 from .aries_controller import AriesAgentController
 
