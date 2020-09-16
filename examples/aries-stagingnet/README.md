@@ -6,5 +6,5 @@ In this example, **you** will play the role of holder using a mobile agent of yo
 
 ## Notebooks:
 
-* [Issuer](https://localhost:8888) - run `docker logs aries-stagingnet_issuer-notebook_1` for the token.
-* [Verifier](https://localhost:8889) - run `docker logs aries-stagingnet_verifier-notebook_1` for the token.
+* [Issuer](http://localhost:8888) - run `docker logs aries-stagingnet_issuer-notebook_1` for the token.
+* [Verifier](http://localhost:8889) - run `docker logs aries-stagingnet_verifier-notebook_1` for the token.
