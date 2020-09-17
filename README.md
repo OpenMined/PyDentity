@@ -29,3 +29,9 @@ This library gives a very basic example of how to extend the core set of protoco
 ### [om-aries-controller](./libs/om-aries-controller)
 
 This library shows how the basic controller can easily be extended to control an agent with custom protocols.
+
+## Projects
+
+### [PryVote](./projects/pryvote)
+
+SSI voting system.
