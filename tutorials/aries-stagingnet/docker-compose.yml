@@ -6,7 +6,7 @@ services:
     networks:
       - indy_demo
   verifier-agent:
-    build: .
+    build: ""
     environment:
       NGROK_NAME: ngrok-verifier
       AGENT_NAME: Verifier
@@ -25,7 +25,7 @@ services:
     networks:
       - indy_demo
   issuer-agent:
-    build: .
+    build: ""
     environment:
       NGROK_NAME: ngrok-issuer
       AGENT_NAME: Issuer
@@ -39,7 +39,8 @@ services:
       - indy_demo
   issuer-notebook:
     build:
-      context: ../../libs/aries-basic-controller
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
       args:
         - jupyter_port=${ISSUER_JUPYTER_PORT}
     depends_on:
@@ -47,13 +48,14 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ./demo/issuer:/workspace
+      - ./notebooks/issuer:/workspace
     ports:
       - "8888:8888"
       - ${ISSUER_WEBHOOK_PORT}:${ISSUER_WEBHOOK_PORT}
   verifier-notebook:
     build:
-      context: ../../libs/aries-basic-controller
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
       args:
         - jupyter_port=${VERIFIER_JUPYTER_PORT}
     depends_on:
@@ -61,7 +63,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ${PWD}/demo/verifier:/workspace
+      - ${PWD}/notebooks/verifier:/workspace
     ports:
       - "8889:8888"
       - ${VERIFIER_WEBHOOK_PORT}:${VERIFIER_WEBHOOK_PORT}

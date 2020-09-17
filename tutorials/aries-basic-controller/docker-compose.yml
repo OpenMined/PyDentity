@@ -90,7 +90,7 @@ services:
   alice-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/aries-basic-controller/Dockerfile
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
       args:
         - jupyter_port=${ALICE_JUPYTER_PORT}
         - ALICE_API_KEY=${ALICE_API_KEY}
@@ -106,7 +106,7 @@ services:
   bob-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/aries-basic-controller/Dockerfile
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
       args:
         - jupyter_port=${BOB_JUPYTER_PORT}
     depends_on:
@@ -121,7 +121,7 @@ services:
   ledger-browser:
     build:
       context: https://github.com/bcgov/von-network.git
-      dockerfile: Dockerfile
+      dockerfile: ../dockerfiles/Dockerfile.basiccontroller
     command: "bash -c 'sleep 10; ./scripts/start_webserver.sh;'"
     environment:
       - DOCKERHOST=${DOCKERHOST}
@@ -140,7 +140,7 @@ services:
   ledger-nodes:
     build:
       context: https://github.com/bcgov/von-network.git
-      dockerfile: Dockerfile
+      dockerfile: ../dockerfiles/Dockerfile.basiccontroller
     command: "bash -c './scripts/start_nodes.sh'"
     ports:
       - 9701:9701
