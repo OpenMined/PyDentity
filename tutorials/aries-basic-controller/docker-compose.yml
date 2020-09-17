@@ -62,8 +62,8 @@ services:
     ]
   setup:
     build:
-      context: .
-      dockerfile: Dockerfile.setup
+      context: ../../
+      dockerfile: tutorials/helpers/create_connection/Dockerfile
     networks:
       - indy_demo
     depends_on:
@@ -89,7 +89,8 @@ services:
       ]
   alice-notebook:
     build:
-      context: .
+      context: ../../
+      dockerfile: tutorials/aries-basic-controller/Dockerfile
       args:
         - jupyter_port=${ALICE_JUPYTER_PORT}
         - ALICE_API_KEY=${ALICE_API_KEY}
@@ -98,13 +99,14 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ./tutorial/alice:/workspace
+      - ./notebooks/alice:/workspace
     ports:
       - "8888:8888"
       - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
   bob-notebook:
     build:
-      context: .
+      context: ../../
+      dockerfile: tutorials/aries-basic-controller/Dockerfile
       args:
         - jupyter_port=${BOB_JUPYTER_PORT}
     depends_on:
@@ -112,7 +114,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ${PWD}/tutorial/bob:/workspace
+      - ${PWD}/notebooks/bob:/workspace
     ports:
       - "8889:8888"
       - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}

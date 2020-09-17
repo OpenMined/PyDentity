@@ -35,33 +35,44 @@ async def start_agent():
                                                webhook_base=ALICE_WEBHOOK_BASE, admin_url=ALICE_ADMIN_URL, api_key=ALICE_API_KEY)
 
 
-    await alice_agent_controller.listen_webhooks()
-
-    await bob_agent_controller.listen_webhooks()
-
-
-    bob_agent_controller.register_listeners([], defaults=True)
-    alice_agent_controller.register_listeners([], defaults=True)
+    # await alice_agent_controller.listen_webhooks()
+    #
+    # await bob_agent_controller.listen_webhooks()
+    #
+    #
+    # bob_agent_controller.register_listeners([], defaults=True)
+    # alice_agent_controller.register_listeners([], defaults=True)
 
     invite = await bob_agent_controller.connections.create_invitation()
-    print("Invite", invite)
+    print("Invite from BOB", invite)
 
     bob_connection_id = invite["connection_id"]
+    print("Bob's connection ID for Alice", bob_connection_id)
 
     response = await alice_agent_controller.connections.accept_connection(invite["invitation"])
-    print(response)
 
 
-    print("Alice ID", response["connection_id"])
+    print("Alice's Connection ID for Bob", response["connection_id"])
     alice_id = response["connection_id"]
     print("Invite Accepted")
-    print(response)
+    print("Alice's state for Bob's connection :", response["state"])
 
 
-    time.sleep(2)
+    time.sleep(10)
+
+    # connection = await bob_agent_controller.connections.get_connection(bob_connection_id)
+    # while connection["state"] != "request":
+    #     time.sleep(1)
+    #     connection = await bob_agent_controller.connections.get_connection(bob_connection_id)
+
+    connection = await bob_agent_controller.connections.get_connection(bob_connection_id)
+    print("Bob's Connection State for Alice :", connection["state"])
+
+    all_conns = await bob_agent_controller.connections.get_connections()
+    print("All Conns : ", all_conns)
 
     connection = await bob_agent_controller.connections.accept_request(bob_connection_id)
-    print("ACCEPT REQUEST")
+    print("Request Accepted")
     print(connection)
 
     connection = await bob_agent_controller.connections.get_connection(bob_connection_id)
