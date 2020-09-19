@@ -6,10 +6,11 @@ from typing import List
 from uuid import uuid4, UUID
 
 from .aries_controller import AriesAgentController
+from .vote_session import VoteSession
 
 
 class VoteCounterController(AriesAgentController):
-    def __init__(self, voting_session, webhook_host: str, webhook_port: int, admin_url: str, webhook_base: str) -> None:
+    def __init__(self, voting_session: VoteSession, webhook_host: str, webhook_port: int, admin_url: str, webhook_base: str) -> None:
         # Voter counters can issue "has voted" credentials
         super().__init__(webhook_host, webhook_port, admin_url, webhook_base, connections=True, messaging=True, issuer=True)
 

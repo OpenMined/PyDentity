@@ -2,8 +2,7 @@ import os
 import asyncio
 import time
 
-from aries_basic_controller.voter_controller import VoterController
-from aries_basic_controller.vote_counter_controller import VoteCounterController
+from aries_basic_controller.aries_controller import AriesAgentController
 
 from dotenv import load_dotenv
 
@@ -36,13 +35,13 @@ async def start_agent():
     time.sleep(6)
 
     # Define vote controllers
-    red_agent_controller = VoteCounterController(webhook_host=RED_WEBHOOK_HOST, webhook_port=RED_WEBHOOK_PORT,
+    red_agent_controller = AriesAgentController(webhook_host=RED_WEBHOOK_HOST, webhook_port=RED_WEBHOOK_PORT,
                                                webhook_base=RED_WEBHOOK_BASE, admin_url=RED_ADMIN_URL)
 
-    blue_agent_controller = VoteCounterController(webhook_host=BLUE_WEBHOOK_HOST, webhook_port=BLUE_WEBHOOK_PORT,
+    blue_agent_controller = AriesAgentController(webhook_host=BLUE_WEBHOOK_HOST, webhook_port=BLUE_WEBHOOK_PORT,
                                                webhook_base=BLUE_WEBHOOK_BASE, admin_url=BLUE_ADMIN_URL)
 
-    yellow_agent_controller = VoteCounterController(webhook_host=YELLOW_WEBHOOK_HOST, webhook_port=YELLOW_WEBHOOK_PORT,
+    yellow_agent_controller = AriesAgentController(webhook_host=YELLOW_WEBHOOK_HOST, webhook_port=YELLOW_WEBHOOK_PORT,
                                                webhook_base=YELLOW_WEBHOOK_BASE, admin_url=YELLOW_ADMIN_URL)
 
     await blue_agent_controller.listen_webhooks()
@@ -54,7 +53,7 @@ async def start_agent():
     yellow_agent_controller.register_listeners([], defaults=True)
 
     # Define voters
-    alice_agent_controller = VoterController(webhook_host=ALICE_WEBHOOK_HOST, webook_port=ALICE_WEBHOOK_PORT,
+    alice_agent_controller = AriesAgentController(webhook_host=ALICE_WEBHOOK_HOST, webook_port=ALICE_WEBHOOK_PORT,
                                                 webhook_base=ALICE_WEBHOOK_BASE, admin_url=ALICE_ADMIN_URL)
 
     await alice_agent_controller.listen_webhooks()
