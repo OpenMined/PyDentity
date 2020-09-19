@@ -158,7 +158,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ${PWD}/demo/vote_counter:/workspace
+      - ${PWD}/demo/vote_counter2:/workspace
     ports:
       - "8888:8888"
       - ${BLUE_WEBHOOK_PORT}:${BLUE_WEBHOOK_PORT}
@@ -186,7 +186,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ${PWD}/demo/vote_counter:/workspace
+      - ${PWD}/demo/vote_counter3:/workspace
     ports:
       - "8900:8888"
       - ${YELLOW_WEBHOOK_PORT}:${YELLOW_WEBHOOK_PORT}
