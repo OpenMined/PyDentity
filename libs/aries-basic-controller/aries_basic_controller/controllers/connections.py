@@ -108,7 +108,6 @@ class ConnectionsController(BaseController):
         if my_endpoint:
             params["my_endpoint"] = my_endpoint
         connection_ready = await self.check_connection_ready(connection_id, "request")
-        print(connection_ready)
         if connection_ready:
             response = await self.admin_POST(f"/connections/{connection_id}/accept-request",params = params)
             return response

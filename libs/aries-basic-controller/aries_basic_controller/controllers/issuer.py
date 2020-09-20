@@ -134,5 +134,4 @@ class IssuerController(BaseController):
         }
 
         credential_body = {**body, **schema_details}
-        print(credential_body)
         return credential_body
