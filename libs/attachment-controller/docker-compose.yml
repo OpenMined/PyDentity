@@ -84,7 +84,7 @@ services:
   alice-notebook:
     build:
       context: ..
-      dockerfile: ./om-aries-controller/Dockerfile
+      dockerfile: ./attachment-controller/Dockerfile
       args:
         - jupyter_port=${ALICE_JUPYTER_PORT}
     depends_on:
@@ -99,7 +99,7 @@ services:
   bob-notebook:
     build:
       context: ..
-      dockerfile: ./om-aries-controller/Dockerfile
+      dockerfile: ./attachment-controller/Dockerfile
       args:
         - jupyter_port=${BOB_JUPYTER_PORT}
     depends_on:

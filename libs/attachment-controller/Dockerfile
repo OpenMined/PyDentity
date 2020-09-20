@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -e aries-basic-controller
 
 
 
-ADD om-aries-controller om-aries-controller
+ADD attachment-controller attachment-controller
 
 #ADD setup.py ./om-controller/setup.py
 #
@@ -24,13 +24,13 @@ ADD om-aries-controller om-aries-controller
 #
 #RUN cd om-controller
 
-RUN pip install --no-cache-dir -e om-aries-controller
+RUN pip install --no-cache-dir -e attachment-controller
 
 
 WORKDIR $WORKSPACE
 
 # Make the image start the jupyer notebook
-COPY ./om-aries-controller/entrypoint.sh /
+COPY ./attachment-controller/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
 # ENTRYPOINT ["/entrypoint.sh", "$env_jupyter_port"]
