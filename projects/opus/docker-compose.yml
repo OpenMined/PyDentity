@@ -113,6 +113,7 @@ services:
       - ${PWD}/demo/opus:/workspace
     ports:
       - "8889:8888"
+      - "5000:5000"
       - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
   ledger-browser:
     build:
