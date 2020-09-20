@@ -41,14 +41,29 @@ async def github_openmined_credential(request):
     ownership_token = soup.findAll("div", {"class": "user-profile-bio"})[0].findAll("div")[0].text.strip()
     ownership_token = ownership_token.split("#OPUS ",1)[1].split("==",1)[0]
 
+    # If the ownership proof is present
     if ownership_token == ownership_proof:
         soup = BeautifulSoup(http_response.text)
 
         orgsSection = soup.findAll("div", {"class": "border-top pt-3 mt-3 clearfix hide-sm hide-md"})[0].findAll('img')
         myOrgs = set(tag['alt'] for tag in orgsSection)
 
+        # If the user is a member of OpenMined
         if '@OpenMined' in myOrgs:
-            return web.Response(text="Account Linked to OpenMined.", content_type='text/html')
+
+
+            #Set the credential
+            credential_attributes = [
+                {"name": "Username", "value": user},
+                {"name": "OpenMined Member", "value": "1"}
+            ]
+
+            #Send the credential to the user
+            #TODO: 
+                # - link connection in this session to connection initiated previously
+                # - define credential and scheme on ledger
+            record = await agent_controller.issuer.send_credential(connection_id, schema_id, cred_def_id, credential_attributes, trace=False)
+
         else:
             return web.Response(text="Unable to link to OpenMined.", content_type='text/html')
     else:
