@@ -1,4 +1,5 @@
 aries-basic-controller
-quart
+aiohttp
 qrcode
 asyncio
+async_timeout
