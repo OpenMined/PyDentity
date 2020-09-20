@@ -4,7 +4,7 @@ import os
 import runpy
 from setuptools import setup, find_packages
 
-PACKAGE_NAME = "om_aries_controller"
+PACKAGE_NAME = "attachment_controller"
 # version_meta = runpy.run_path("./{}/version.py".format(PACKAGE_NAME))
 # VERSION = version_meta["__version__"]
 
@@ -30,7 +30,7 @@ if __name__ == "__main__":
         # url="https://github.com/wip-abramson/aries-basic-controller-python",
         packages=find_packages(),
         include_package_data=True,
-        package_data={"om_aries_controller": ["requirements.txt"]},
+        package_data={"attachment_controller": ["requirements.txt"]},
         install_requires=parse_requirements("requirements.txt"),
         python_requires=">=3.6.3",
         classifiers=[
