@@ -1,5 +1,5 @@
-from aries_basic_controller.base_controller import BaseController
-from aries_basic_controller.connections_controller import ConnectionsController
+from aries_basic_controller.controllers.base import BaseController
+from aries_basic_controller.controllers.connections import ConnectionsController
 
 from aiohttp import ClientSession
 
