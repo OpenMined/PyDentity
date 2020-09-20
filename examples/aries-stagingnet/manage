@@ -33,7 +33,7 @@ usage() {
 
             Examples:
             $0 start
-            $0 start bob-agent
+            $0 start VERIFIER-agent
 
       start - Same as up
 
@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="bob-agent alice-agent setup ledger-nodes ledger-browser alice-notebook bob-notebook"
+DEFAULT_CONTAINERS="ngrok-verifier verifier-agent ngrok-issuer issuer-agent issuer-notebook verifier-notebook"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -116,27 +116,26 @@ configureEnvironment() {
   export LEDGER_URL=${LEDGER_URL-http://$DOCKERHOST:9000}
   export WALLET_TYPE="indy"
 
-  # bob-agent
-  export BOB_AGENT_NAME="Bob"
-  export BOB_ADMIN_PORT=8051
-  export BOB_HTTP_PORT=8050
-  export BOB_WEBHOOK_PORT=8052
-  export BOB_WEBHOOK_URL=${BOB_WEBHOOK_URL:-http://$DOCKERHOST:$BOB_WEBHOOK_PORT}
-  export BOB_AGENT_ENDPOINT=${BOB_AGENT_ENDPOINT:-http://$DOCKERHOST:$BOB_HTTP_PORT}
-  export BOB_WALLET_SEED="bob_seed_00000000000000000000000"
-  export BOB_JUPYTER_PORT="8889"
+  # VERIFIER-agent
+  export VERIFIER_AGENT_NAME="VERIFIER"
+  export VERIFIER_ADMIN_PORT=8051
+  export VERIFIER_HTTP_PORT=8050
+  export VERIFIER_WEBHOOK_PORT=8052
+  export VERIFIER_WEBHOOK_URL=${VERIFIER_WEBHOOK_URL:-http://$DOCKERHOST:$VERIFIER_WEBHOOK_PORT}
+  export VERIFIER_AGENT_ENDPOINT=${VERIFIER_AGENT_ENDPOINT:-http://$DOCKERHOST:$VERIFIER_HTTP_PORT}
+  export VERIFIER_WALLET_SEED="VERIFIER_seed_00000000000000000000000"
+  export VERIFIER_JUPYTER_PORT="8889"
 
 
-  # alice-agent
-  export ALICE_AGENT_NAME="Alice"
-  export ALICE_ADMIN_PORT=8021
-  export ALICE_API_KEY="alice_api_123456789"
-  export ALICE_HTTP_PORT=8020
-  export ALICE_WEBHOOK_PORT=8022
-  export ALICE_WEBHOOK_URL=${ALICE_WEBHOOK_URL:-http://$DOCKERHOST:$ALICE_WEBHOOK_PORT}
-  export ALICE_AGENT_ENDPOINT=${ALICE_AGENT_ENDPOINT:-http://$DOCKERHOST:$ALICE_HTTP_PORT}
-  export ALICE_WALLET_SEED="alice_seed_000000000000000000000"
-  export ALICE_JUPYTER_PORT="8888"
+  # ISSUER-agent
+  export ISSUER_AGENT_NAME="ISSUER"
+  export ISSUER_ADMIN_PORT=8021
+  export ISSUER_HTTP_PORT=8020
+  export ISSUER_WEBHOOK_PORT=8022
+  export ISSUER_WEBHOOK_URL=${ISSUER_WEBHOOK_URL:-http://$DOCKERHOST:$ISSUER_WEBHOOK_PORT}
+  export ISSUER_AGENT_ENDPOINT=${ISSUER_AGENT_ENDPOINT:-http://$DOCKERHOST:$ISSUER_HTTP_PORT}
+  export ISSUER_WALLET_SEED="ISSUER_seed_000000000000000000000"
+  export ISSUER_JUPYTER_PORT="8888"
 
 
 }

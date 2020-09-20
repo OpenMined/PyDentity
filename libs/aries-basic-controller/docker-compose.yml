@@ -61,7 +61,7 @@ services:
         --wallet-type 'indy' \
         --seed '${ALICE_WALLET_SEED}' \
         --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
-        --admin-insecure-mode \
+        --admin-api-key ${ALICE_API_KEY} \
         --log-level info \
         --genesis-url '${LEDGER_URL}/genesis'
         --label ${ALICE_AGENT_NAME}",
@@ -81,6 +81,7 @@ services:
     environment:
       - ALICE_ADMIN_URL=http://alice-agent:${ALICE_ADMIN_PORT}
       - ALICE_WEBHOOK_PORT=${ALICE_WEBHOOK_PORT}
+      - ALICE_API_KEY=${ALICE_API_KEY}
       - ALICE_WEBHOOK_HOST=0.0.0.0
       - BOB_ADMIN_URL=http://bob-agent:${BOB_ADMIN_PORT}
       - BOB_WEBHOOK_PORT=${BOB_WEBHOOK_PORT}
@@ -97,6 +98,7 @@ services:
       context: .
       args:
         - jupyter_port=${ALICE_JUPYTER_PORT}
+        - ALICE_API_KEY=${ALICE_API_KEY}
     depends_on:
       - alice-agent
     networks:

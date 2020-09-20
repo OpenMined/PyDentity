@@ -2,20 +2,19 @@ from aiohttp import (
     web,
     ClientSession,
     ClientRequest,
-    ClientResponse,
-    ClientError,
-    ClientTimeout,
 )
 from pubsub import pub
-import asyncio
 
-from .utils import log_msg
-from .connections_controller import ConnectionsController
-from .messaging_controller import MessagingController
-from .schema_controller import SchemaController
-from .wallet_controller import WalletController
-from .definitions_controller import DefinitionsController
-from .issuer_controller import IssuerController
+from .controllers.connections import ConnectionsController
+from .controllers.messaging import MessagingController
+from .controllers.schema import SchemaController
+from .controllers.wallet import WalletController
+from .controllers.definitions import DefinitionsController
+from .controllers.issuer import IssuerController
+from .controllers.proof import ProofController
+from .controllers.ledger import LedgerController
+from .controllers.credential import CredentialController
+from .controllers.server import ServerController
 
 import logging
 
@@ -24,8 +23,9 @@ logger = logging.getLogger("aries_controller")
 class AriesAgentController:
 
     ## TODO rethink how to initialise. Too many args?
+    ## is it important to let users config connections/issuer etc
     def __init__(self, webhook_host: str, webhook_port: int, admin_url: str, webhook_base: str = "",
-                 connections: bool = True, messaging: bool = True, issuer: bool = True):
+                 connections: bool = True, messaging: bool = True, issuer: bool = True, api_key: str = None):
 
         self.webhook_site = None
         self.admin_url = admin_url
@@ -36,12 +36,22 @@ class AriesAgentController:
         self.webhook_host = webhook_host
         self.webhook_port = webhook_port
         self.connections_controller = None
-        self.client_session: ClientSession = ClientSession()
+
+        if api_key:
+            headers = {"X-API-Key": api_key}
+            self.client_session: ClientSession = ClientSession(headers=headers)
+        else:
+            self.client_session: ClientSession = ClientSession()
+
         if connections:
             self.connections = ConnectionsController(self.admin_url, self.client_session)
         if messaging:
             self.messaging = MessagingController(self.admin_url, self.client_session)
-        self.proc = None
+
+        self.proofs = ProofController(self.admin_url, self.client_session)
+        self.ledger = LedgerController(self.admin_url, self.client_session)
+        self.credentials = CredentialController(self.admin_url, self.client_session)
+        self.server = ServerController(self.admin_url, self.client_session)
         if issuer:
             self.schema = SchemaController(self.admin_url, self.client_session)
             self.wallet = WalletController(self.admin_url, self.client_session)
@@ -50,12 +60,15 @@ class AriesAgentController:
                                            self.wallet, self.definitions)
 
 
+
     def register_listeners(self, listeners, defaults=True):
         if defaults:
             if self.connections:
                 pub.subscribe(self.connections.default_handler, "connections")
             if self.messaging:
-                pub.subscribe(self.messaging.default_handler, "basic_messages")
+                pub.subscribe(self.messaging.default_handler, "basicmessages")
+            if self.proofs:
+                pub.subscribe(self.proofs.default_handler, "present_proof")
 
 
         for listener in listeners:
@@ -76,8 +89,6 @@ class AriesAgentController:
         return web.Response(status=200)
 
     async def handle_webhook(self, topic, payload):
-        # log_msg(f"Hanlde {topic}")
-        # log_msg(payload)
         logging.debug(f"Handle Webhook - {topic}", payload)
         pub.sendMessage(topic, payload=payload)
         return web.Response(status=200)

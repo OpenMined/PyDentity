@@ -22,7 +22,7 @@ def parse_requirements(filename):
 if __name__ == "__main__":
     setup(
         name=PACKAGE_NAME,
-        version="0.0.1",
+        version="0.1.0",
         author="Will Abramson",
         description="A simple python package for controlling an aries agent through the admin-api interface",
         long_description=long_description,
