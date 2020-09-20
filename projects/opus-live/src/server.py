@@ -42,7 +42,15 @@ async def github_openmined_credential(request):
     ownership_token = ownership_token.split("#OPUS ",1)[1].split("==",1)[0]
 
     if ownership_token == ownership_proof:
-        return web.Response(text="Account Linked", content_type='text/html')
+        soup = BeautifulSoup(http_response.text)
+
+        orgsSection = soup.findAll("div", {"class": "border-top pt-3 mt-3 clearfix hide-sm hide-md"})[0].findAll('img')
+        myOrgs = set(tag['alt'] for tag in orgsSection)
+
+        if '@OpenMined' in myOrgs:
+            return web.Response(text="Account Linked to OpenMined.", content_type='text/html')
+        else:
+            return web.Response(text="Unable to link to OpenMined.", content_type='text/html')
     else:
         return web.Response(text="Unable to link.", content_type='text/html')
 
