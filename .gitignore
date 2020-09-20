@@ -6,7 +6,7 @@ build
 .env
 .ipynb_checkpoints/
 libs/om-aries-controller/demo/bob/received_files/*
-
+libs/om-aries-controller/demo/bob/image_received.png
 
 
 # exception to the rule
