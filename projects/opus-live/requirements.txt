@@ -1,0 +1,4 @@
+aries-basic-controller
+quart
+qrcode
+asyncio
