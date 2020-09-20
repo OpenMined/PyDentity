@@ -3,3 +3,5 @@ aiohttp
 qrcode
 asyncio
 async_timeout
+requests
+bs4
