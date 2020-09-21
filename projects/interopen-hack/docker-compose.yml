@@ -100,5 +100,38 @@ services:
     ports:
       - "8890:8888"
       - ${GMC_WEBHOOK_PORT}:${GMC_WEBHOOK_PORT}
+  ngrok-hee:
+    image: wernight/ngrok
+    command: ngrok http issuer-agent:${HEE_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  hee-agent:
+    build: ""
+    environment:
+      NGROK_NAME: ngrok-gmc
+      AGENT_NAME: Medical School
+      PORT: ${HEE_HTTP_PORT}
+      ADMIN_PORT: ${HEE_ADMIN_PORT}
+      WEBHOOK_URL: ${HEE_WEBHOOK_URL}
+    ports:
+      - ${HEE_HTTP_PORT}:${HEE_HTTP_PORT}
+      - ${HEE_ADMIN_PORT}:${HEE_ADMIN_PORT}
+    networks:
+      - indy_demo
+  hee-notebook:
+    build:
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${HEE_JUPYTER_PORT}
+    depends_on:
+      - hee-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/hee:/workspace
+    ports:
+      - "8891:8888"
+      - ${HEE_WEBHOOK_PORT}:${HEE_WEBHOOK_PORT}
 networks:
   indy_demo:

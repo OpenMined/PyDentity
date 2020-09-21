@@ -62,7 +62,10 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="ngrok-id-verifier id-verifier-agent ngrok-med-school medical-school-agent med-school-notebook id-verifier-notebook gmc-agent ngrok-gmc gmc-notebook"
+DEFAULT_CONTAINERS="ngrok-id-verifier id-verifier-agent id-verifier-notebook
+                    ngrok-med-school medical-school-agent med-school-notebook
+                    gmc-agent ngrok-gmc gmc-notebook
+                    hee-agent ngrok-hee hee-notebook"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -146,6 +149,20 @@ configureEnvironment() {
   export GMC_AGENT_ENDPOINT=${GMC_AGENT_ENDPOINT:-http://$DOCKERHOST:$GMC_HTTP_PORT}
   export GMC_WALLET_SEED="GMC_seed_000000000000000000000123"
   export GMC_JUPYTER_PORT="8890"
+
+  # HEE-agent
+  export HEE_AGENT_NAME="Higher Education England"
+  export HEE_ADMIN_PORT=8041
+  export HEE_HTTP_PORT=8040
+  export HEE_WEBHOOK_PORT=8042
+  export HEE_WEBHOOK_URL=${HEE_WEBHOOK_URL:-http://$DOCKERHOST:$HEE_WEBHOOK_PORT}
+  export HEE_AGENT_ENDPOINT=${HEE_AGENT_ENDPOINT:-http://$DOCKERHOST:$HEE_HTTP_PORT}
+  export HEE_WALLET_SEED="HEE_seed_000000000000000000000123"
+  export HEE_JUPYTER_PORT="8891"
+
+
+
+
 
 
 }
