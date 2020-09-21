@@ -2,7 +2,7 @@ version: "3"
 services:
   ngrok-id-verifier:
     image: wernight/ngrok
-    command: ngrok http verifier-agent:${IDVERIFIER_HTTP_PORT} --log stdout
+    command: ngrok http id-verifier-agent:${IDVERIFIER_HTTP_PORT} --log stdout
     networks:
       - indy_demo
   id-verifier-agent:
@@ -21,7 +21,7 @@ services:
 
   ngrok-med-school:
     image: wernight/ngrok
-    command: ngrok http issuer-agent:${MEDICAL_SCHOOL_HTTP_PORT} --log stdout
+    command: ngrok http medical-school-agent:${MEDICAL_SCHOOL_HTTP_PORT} --log stdout
     networks:
       - indy_demo
   medical-school-agent:
@@ -69,7 +69,7 @@ services:
       - ${IDVERIFIER_WEBHOOK_PORT}:${IDVERIFIER_WEBHOOK_PORT}
   ngrok-gmc:
     image: wernight/ngrok
-    command: ngrok http issuer-agent:${GMC_HTTP_PORT} --log stdout
+    command: ngrok http gmc-agent:${GMC_HTTP_PORT} --log stdout
     networks:
       - indy_demo
   gmc-agent:
