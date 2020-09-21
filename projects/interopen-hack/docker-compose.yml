@@ -102,7 +102,7 @@ services:
       - ${GMC_WEBHOOK_PORT}:${GMC_WEBHOOK_PORT}
   ngrok-hee:
     image: wernight/ngrok
-    command: ngrok http issuer-agent:${HEE_HTTP_PORT} --log stdout
+    command: ngrok http hee-agent:${HEE_HTTP_PORT} --log stdout
     networks:
       - indy_demo
   hee-agent:
