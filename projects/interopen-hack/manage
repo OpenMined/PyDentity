@@ -65,7 +65,8 @@ EOF
 DEFAULT_CONTAINERS="ngrok-id-verifier id-verifier-agent id-verifier-notebook
                     ngrok-med-school medical-school-agent med-school-notebook
                     gmc-agent ngrok-gmc gmc-notebook
-                    hee-agent ngrok-hee hee-notebook"
+                    hee-agent ngrok-hee hee-notebook
+                    lead-employer-agent ngrok-lead-employer lead-employer-notebook"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -159,6 +160,16 @@ configureEnvironment() {
   export HEE_AGENT_ENDPOINT=${HEE_AGENT_ENDPOINT:-http://$DOCKERHOST:$HEE_HTTP_PORT}
   export HEE_WALLET_SEED="HEE_seed_000000000000000000000123"
   export HEE_JUPYTER_PORT="8891"
+
+  # Lead Employer
+  export LEAD_AGENT_NAME="NHS Lead Employer"
+  export LEAD_ADMIN_PORT=8061
+  export LEAD_HTTP_PORT=8060
+  export LEAD_WEBHOOK_PORT=8062
+  export LEAD_WEBHOOK_URL=${LEAD_WEBHOOK_URL:-http://$DOCKERHOST:$LEAD_WEBHOOK_PORT}
+  export LEAD_AGENT_ENDPOINT=${LEAD_AGENT_ENDPOINT:-http://$DOCKERHOST:$LEAD_HTTP_PORT}
+  export LEAD_WALLET_SEED="LEAD_seed_00000000000000000000012"
+  export LEAD_JUPYTER_PORT="8892"
 
 
 

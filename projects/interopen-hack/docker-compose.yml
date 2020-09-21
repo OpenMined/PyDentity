@@ -133,5 +133,38 @@ services:
     ports:
       - "8891:8888"
       - ${HEE_WEBHOOK_PORT}:${HEE_WEBHOOK_PORT}
+  ngrok-lead-employer:
+    image: wernight/ngrok
+    command: ngrok http lead-employer-agent:${LEAD_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  lead-employer-agent:
+    build: ""
+    environment:
+      NGROK_NAME: ngrok-lead-employer
+      AGENT_NAME: ${LEAD_AGENT_NAME}
+      PORT: ${LEAD_HTTP_PORT}
+      ADMIN_PORT: ${LEAD_ADMIN_PORT}
+      WEBHOOK_URL: ${LEAD_WEBHOOK_URL}
+    ports:
+      - ${LEAD_HTTP_PORT}:${LEAD_HTTP_PORT}
+      - ${LEAD_ADMIN_PORT}:${LEAD_ADMIN_PORT}
+    networks:
+      - indy_demo
+  lead-employer-notebook:
+    build:
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${LEAD_JUPYTER_PORT}
+    depends_on:
+      - lead-employer-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/lead-employer:/workspace
+    ports:
+      - "8892:8888"
+      - ${LEAD_WEBHOOK_PORT}:${LEAD_WEBHOOK_PORT}
 networks:
   indy_demo:
