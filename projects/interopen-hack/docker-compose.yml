@@ -50,7 +50,7 @@ services:
     volumes:
       - ./notebooks/medical-school:/workspace
     ports:
-      - "8888:8888"
+      - ${MEDICAL_SCHOOL_JUPYTER_PORT}:8888
       - ${MEDICAL_SCHOOL_WEBHOOK_PORT}:${MEDICAL_SCHOOL_WEBHOOK_PORT}
   id-verifier-notebook:
     build:
@@ -65,7 +65,7 @@ services:
     volumes:
       - ${PWD}/notebooks/id-verifier:/workspace
     ports:
-      - "8889:8888"
+      - ${IDVERIFIER_JUPYTER_PORT}:8888
       - ${IDVERIFIER_WEBHOOK_PORT}:${IDVERIFIER_WEBHOOK_PORT}
   ngrok-gmc:
     image: wernight/ngrok
@@ -98,7 +98,7 @@ services:
     volumes:
       - ./notebooks/gmc:/workspace
     ports:
-      - "8890:8888"
+      - ${GMC_JUPYTER_PORT}:8888
       - ${GMC_WEBHOOK_PORT}:${GMC_WEBHOOK_PORT}
   ngrok-hee:
     image: wernight/ngrok
@@ -131,7 +131,7 @@ services:
     volumes:
       - ./notebooks/hee:/workspace
     ports:
-      - "8891:8888"
+      - ${HEE_JUPYTER_PORT}:8888
       - ${HEE_WEBHOOK_PORT}:${HEE_WEBHOOK_PORT}
   ngrok-lead-employer:
     image: wernight/ngrok
@@ -164,7 +164,7 @@ services:
     volumes:
       - ./notebooks/lead-employer:/workspace
     ports:
-      - "8892:8888"
+      - ${LEAD_JUPYTER_PORT}:8888
       - ${LEAD_WEBHOOK_PORT}:${LEAD_WEBHOOK_PORT}
 networks:
   indy_demo:
