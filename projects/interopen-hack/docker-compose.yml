@@ -48,7 +48,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ./notebooks/issuer:/workspace
+      - ./notebooks/medical-school:/workspace
     ports:
       - "8888:8888"
       - ${ISSUER_WEBHOOK_PORT}:${ISSUER_WEBHOOK_PORT}
@@ -63,7 +63,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ${PWD}/notebooks/verifier:/workspace
+      - ${PWD}/notebooks/id-verifier:/workspace
     ports:
       - "8889:8888"
       - ${VERIFIER_WEBHOOK_PORT}:${VERIFIER_WEBHOOK_PORT}
