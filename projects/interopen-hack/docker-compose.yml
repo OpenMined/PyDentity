@@ -1,0 +1,104 @@
+version: "3"
+services:
+  ngrok-id-verifier:
+    image: wernight/ngrok
+    command: ngrok http verifier-agent:${VERIFIER_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  id-verifier-agent:
+    build: ""
+    environment:
+      NGROK_NAME: ngrok-id-verifier
+      AGENT_NAME: Identity Verification Sevice
+      PORT: ${VERIFIER_HTTP_PORT}
+      ADMIN_PORT: ${VERIFIER_ADMIN_PORT}
+      WEBHOOK_URL: ${VERIFIER_WEBHOOK_URL}
+    ports:
+      - ${VERIFIER_HTTP_PORT}:${VERIFIER_HTTP_PORT}
+      - ${VERIFIER_ADMIN_PORT}:${VERIFIER_ADMIN_PORT}
+    networks:
+      - indy_demo
+
+  ngrok-med-school:
+    image: wernight/ngrok
+    command: ngrok http issuer-agent:${ISSUER_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  medical-school-agent:
+    build: ""
+    environment:
+      NGROK_NAME: ngrok-med-school
+      AGENT_NAME: Medical School
+      PORT: ${ISSUER_HTTP_PORT}
+      ADMIN_PORT: ${ISSUER_ADMIN_PORT}
+      WEBHOOK_URL: ${ISSUER_WEBHOOK_URL}
+    ports:
+      - ${ISSUER_HTTP_PORT}:${ISSUER_HTTP_PORT}
+      - ${ISSUER_ADMIN_PORT}:${ISSUER_ADMIN_PORT}
+    networks:
+      - indy_demo
+  med-school-notebook:
+    build:
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${ISSUER_JUPYTER_PORT}
+    depends_on:
+      - medical-school-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/issuer:/workspace
+    ports:
+      - "8888:8888"
+      - ${ISSUER_WEBHOOK_PORT}:${ISSUER_WEBHOOK_PORT}
+  id-verifier-notebook:
+    build:
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${VERIFIER_JUPYTER_PORT}
+    depends_on:
+      - id-verifier-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/notebooks/verifier:/workspace
+    ports:
+      - "8889:8888"
+      - ${VERIFIER_WEBHOOK_PORT}:${VERIFIER_WEBHOOK_PORT}
+  ngrok-gmc:
+    image: wernight/ngrok
+    command: ngrok http issuer-agent:${GMC_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  gmc-agent:
+    build: ""
+    environment:
+      NGROK_NAME: ngrok-gmc
+      AGENT_NAME: Medical School
+      PORT: ${GMC_HTTP_PORT}
+      ADMIN_PORT: ${GMC_ADMIN_PORT}
+      WEBHOOK_URL: ${GMC_WEBHOOK_URL}
+    ports:
+      - ${GMC_HTTP_PORT}:${GMC_HTTP_PORT}
+      - ${GMC_ADMIN_PORT}:${GMC_ADMIN_PORT}
+    networks:
+      - indy_demo
+  gmc-notebook:
+    build:
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${GMC_JUPYTER_PORT}
+    depends_on:
+      - gmc-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/gmc:/workspace
+    ports:
+      - "8890:8888"
+      - ${GMC_WEBHOOK_PORT}:${GMC_WEBHOOK_PORT}
+networks:
+  indy_demo:
