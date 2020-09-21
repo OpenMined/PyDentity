@@ -18,7 +18,21 @@ services:
       - ${IDVERIFIER_ADMIN_PORT}:${IDVERIFIER_ADMIN_PORT}
     networks:
       - indy_demo
-
+  id-verifier-notebook:
+    build:
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${IDVERIFIER_JUPYTER_PORT}
+    depends_on:
+      - id-verifier-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/notebooks/id-verifier:/workspace
+    ports:
+      - ${IDVERIFIER_JUPYTER_PORT}:8888
+      - ${IDVERIFIER_WEBHOOK_PORT}:${IDVERIFIER_WEBHOOK_PORT}
   ngrok-med-school:
     image: wernight/ngrok
     command: ngrok http medical-school-agent:${MEDICAL_SCHOOL_HTTP_PORT} --log stdout
@@ -52,21 +66,7 @@ services:
     ports:
       - ${MEDICAL_SCHOOL_JUPYTER_PORT}:8888
       - ${MEDICAL_SCHOOL_WEBHOOK_PORT}:${MEDICAL_SCHOOL_WEBHOOK_PORT}
-  id-verifier-notebook:
-    build:
-      context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
-      args:
-        - jupyter_port=${IDVERIFIER_JUPYTER_PORT}
-    depends_on:
-      - id-verifier-agent
-    networks:
-      - indy_demo
-    volumes:
-      - ${PWD}/notebooks/id-verifier:/workspace
-    ports:
-      - ${IDVERIFIER_JUPYTER_PORT}:8888
-      - ${IDVERIFIER_WEBHOOK_PORT}:${IDVERIFIER_WEBHOOK_PORT}
+
   ngrok-gmc:
     image: wernight/ngrok
     command: ngrok http gmc-agent:${GMC_HTTP_PORT} --log stdout
@@ -108,7 +108,7 @@ services:
   hee-agent:
     build: ""
     environment:
-      NGROK_NAME: ngrok-gmc
+      NGROK_NAME: ngrok-hee
       AGENT_NAME: ${HEE_AGENT_NAME}
       PORT: ${HEE_HTTP_PORT}
       ADMIN_PORT: ${HEE_ADMIN_PORT}
