@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir -e .
 WORKDIR $WORKSPACE
 
 # Make the image start the jupyer notebook
-COPY tutorials/aries-basic-controller/entrypoint.sh /
+COPY scripts/jupyter-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 

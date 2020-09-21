@@ -13,9 +13,9 @@ services:
     command: [
         "-c",
           "echo Waiting for ledger to be ready...;
-          sleep 60;
+          sleep 250;
           curl -d '{\"seed\":\"${BOB_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${BOB_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
-          sleep 2; \
+          sleep 30; \
             aca-py start \
           --inbound-transport http '0.0.0.0' ${BOB_HTTP_PORT} \
           --outbound-transport http \
@@ -44,9 +44,9 @@ services:
     command: [
         "-c",
         "echo Waiting for ledger to be ready...;
-        sleep 60;
+        sleep 250;
         curl -d '{\"seed\":\"${ALICE_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${ALICE_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
-        sleep 2; \
+        sleep 30; \
         aca-py start \
         --inbound-transport http '0.0.0.0' ${ALICE_HTTP_PORT} \
         --outbound-transport http \
@@ -121,7 +121,7 @@ services:
   ledger-browser:
     build:
       context: https://github.com/bcgov/von-network.git
-      dockerfile: ../dockerfiles/Dockerfile.basiccontroller
+      dockerfile: Dockerfile
     command: "bash -c 'sleep 10; ./scripts/start_webserver.sh;'"
     environment:
       - DOCKERHOST=${DOCKERHOST}
@@ -140,7 +140,7 @@ services:
   ledger-nodes:
     build:
       context: https://github.com/bcgov/von-network.git
-      dockerfile: ../dockerfiles/Dockerfile.basiccontroller
+      dockerfile: Dockerfile
     command: "bash -c './scripts/start_nodes.sh'"
     ports:
       - 9701:9701

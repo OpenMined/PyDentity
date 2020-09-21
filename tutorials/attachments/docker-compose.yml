@@ -1,10 +1,10 @@
 version: "3"
 services:
   alice-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    image: alice-protocol:agent
     build:
-      context: ../acapy-protocol-example
-      dockerfile: Dockerfile
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.attachmentprotocol
     ports:
       - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
       - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
@@ -23,16 +23,16 @@ services:
           --wallet-type 'indy' \
           --seed '${ALICE_WALLET_SEED}' \
           --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
+          --plugin attach_protocol.attachment_protocol \
           --admin-insecure-mode \
           --log-level info \
-          --plugin acapy_protocol_example.protocolexample \
           --label ${ALICE_AGENT_NAME}",
       ]
   bob-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    image: bob-protocol:agent
     build:
-      context: ../acapy-protocol-example
-      dockerfile: Dockerfile
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.attachmentprotocol
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
@@ -51,25 +51,26 @@ services:
          --seed '${BOB_WALLET_SEED}' \
          --admin '0.0.0.0' ${BOB_ADMIN_PORT} \
          --admin-insecure-mode \
+         --plugin attach_protocol.attachment_protocol \
          --log-level info \
-         --plugin acapy_protocol_example.protocolexample \
          --label ${BOB_AGENT_NAME}",
     ]
   setup:
     build:
-      context: ../aries-basic-controller
-      dockerfile: Dockerfile.setup
+      context: ../../
+      dockerfile: tutorials/helpers/create_connection/Dockerfile
     networks:
       - indy_demo
     depends_on:
       - alice-agent
       - bob-agent
-    #    ports:
-    #      - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
-    #      - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
+#    ports:
+#      - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
+#      - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
     environment:
       - ALICE_ADMIN_URL=http://alice-agent:${ALICE_ADMIN_PORT}
       - ALICE_WEBHOOK_PORT=${ALICE_WEBHOOK_PORT}
+      - ALICE_API_KEY=${ALICE_API_KEY}
       - ALICE_WEBHOOK_HOST=0.0.0.0
       - BOB_ADMIN_URL=http://bob-agent:${BOB_ADMIN_PORT}
       - BOB_WEBHOOK_PORT=${BOB_WEBHOOK_PORT}
@@ -78,13 +79,13 @@ services:
     command:
       [
         "-c",
-        "sleep 10;
-          python ./create_connection.py"
+        "sleep 5;
+        python ./create_connection.py"
       ]
   alice-notebook:
     build:
-      context: ..
-      dockerfile: ./om-aries-controller/Dockerfile
+      context: ../../
+      dockerfile: tutorials/attachments/Dockerfile
       args:
         - jupyter_port=${ALICE_JUPYTER_PORT}
     depends_on:
@@ -92,14 +93,14 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ./demo/alice:/workspace
+      - ${PWD}/notebooks/alice:/workspace
     ports:
       - "8888:8888"
       - ${ALICE_WEBHOOK_PORT}:${ALICE_WEBHOOK_PORT}
   bob-notebook:
     build:
-      context: ..
-      dockerfile: ./om-aries-controller/Dockerfile
+      context: ../../
+      dockerfile: tutorials/attachments/Dockerfile
       args:
         - jupyter_port=${BOB_JUPYTER_PORT}
     depends_on:
@@ -107,7 +108,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ./demo/bob:/workspace
+      - ${PWD}/notebooks/bob:/workspace
     ports:
       - "8889:8888"
       - ${BOB_WEBHOOK_PORT}:${BOB_WEBHOOK_PORT}
