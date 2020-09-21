@@ -2,7 +2,7 @@ version: "3"
 services:
   ngrok-id-verifier:
     image: wernight/ngrok
-    command: ngrok http verifier-agent:${VERIFIER_HTTP_PORT} --log stdout
+    command: ngrok http verifier-agent:${IDVERIFIER_HTTP_PORT} --log stdout
     networks:
       - indy_demo
   id-verifier-agent:
@@ -10,18 +10,18 @@ services:
     environment:
       NGROK_NAME: ngrok-id-verifier
       AGENT_NAME: Identity Verification Sevice
-      PORT: ${VERIFIER_HTTP_PORT}
-      ADMIN_PORT: ${VERIFIER_ADMIN_PORT}
-      WEBHOOK_URL: ${VERIFIER_WEBHOOK_URL}
+      PORT: ${IDVERIFIER_HTTP_PORT}
+      ADMIN_PORT: ${IDVERIFIER_ADMIN_PORT}
+      WEBHOOK_URL: ${IDVERIFIER_WEBHOOK_URL}
     ports:
-      - ${VERIFIER_HTTP_PORT}:${VERIFIER_HTTP_PORT}
-      - ${VERIFIER_ADMIN_PORT}:${VERIFIER_ADMIN_PORT}
+      - ${IDVERIFIER_HTTP_PORT}:${IDVERIFIER_HTTP_PORT}
+      - ${IDVERIFIER_ADMIN_PORT}:${IDVERIFIER_ADMIN_PORT}
     networks:
       - indy_demo
 
   ngrok-med-school:
     image: wernight/ngrok
-    command: ngrok http issuer-agent:${ISSUER_HTTP_PORT} --log stdout
+    command: ngrok http issuer-agent:${MEDICAL_SCHOOL_HTTP_PORT} --log stdout
     networks:
       - indy_demo
   medical-school-agent:
@@ -29,12 +29,12 @@ services:
     environment:
       NGROK_NAME: ngrok-med-school
       AGENT_NAME: Medical School
-      PORT: ${ISSUER_HTTP_PORT}
-      ADMIN_PORT: ${ISSUER_ADMIN_PORT}
-      WEBHOOK_URL: ${ISSUER_WEBHOOK_URL}
+      PORT: ${MEDICAL_SCHOOL_HTTP_PORT}
+      ADMIN_PORT: ${MEDICAL_SCHOOL_ADMIN_PORT}
+      WEBHOOK_URL: ${MEDICAL_SCHOOL_WEBHOOK_URL}
     ports:
-      - ${ISSUER_HTTP_PORT}:${ISSUER_HTTP_PORT}
-      - ${ISSUER_ADMIN_PORT}:${ISSUER_ADMIN_PORT}
+      - ${MEDICAL_SCHOOL_HTTP_PORT}:${MEDICAL_SCHOOL_HTTP_PORT}
+      - ${MEDICAL_SCHOOL_ADMIN_PORT}:${MEDICAL_SCHOOL_ADMIN_PORT}
     networks:
       - indy_demo
   med-school-notebook:
@@ -42,7 +42,7 @@ services:
       context: ../../
       dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
       args:
-        - jupyter_port=${ISSUER_JUPYTER_PORT}
+        - jupyter_port=${MEDICAL_SCHOOL_JUPYTER_PORT}
     depends_on:
       - medical-school-agent
     networks:
@@ -51,13 +51,13 @@ services:
       - ./notebooks/medical-school:/workspace
     ports:
       - "8888:8888"
-      - ${ISSUER_WEBHOOK_PORT}:${ISSUER_WEBHOOK_PORT}
+      - ${MEDICAL_SCHOOL_WEBHOOK_PORT}:${MEDICAL_SCHOOL_WEBHOOK_PORT}
   id-verifier-notebook:
     build:
       context: ../../
       dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
       args:
-        - jupyter_port=${VERIFIER_JUPYTER_PORT}
+        - jupyter_port=${IDVERIFIER_JUPYTER_PORT}
     depends_on:
       - id-verifier-agent
     networks:
@@ -66,7 +66,7 @@ services:
       - ${PWD}/notebooks/id-verifier:/workspace
     ports:
       - "8889:8888"
-      - ${VERIFIER_WEBHOOK_PORT}:${VERIFIER_WEBHOOK_PORT}
+      - ${IDVERIFIER_WEBHOOK_PORT}:${IDVERIFIER_WEBHOOK_PORT}
   ngrok-gmc:
     image: wernight/ngrok
     command: ngrok http issuer-agent:${GMC_HTTP_PORT} --log stdout
