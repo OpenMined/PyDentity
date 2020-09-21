@@ -76,7 +76,7 @@ services:
     build: ""
     environment:
       NGROK_NAME: ngrok-gmc
-      AGENT_NAME: Medical School
+      AGENT_NAME: ${GMC_AGENT_NAME}
       PORT: ${GMC_HTTP_PORT}
       ADMIN_PORT: ${GMC_ADMIN_PORT}
       WEBHOOK_URL: ${GMC_WEBHOOK_URL}
@@ -109,7 +109,7 @@ services:
     build: ""
     environment:
       NGROK_NAME: ngrok-gmc
-      AGENT_NAME: Medical School
+      AGENT_NAME: ${HEE_AGENT_NAME}
       PORT: ${HEE_HTTP_PORT}
       ADMIN_PORT: ${HEE_ADMIN_PORT}
       WEBHOOK_URL: ${HEE_WEBHOOK_URL}

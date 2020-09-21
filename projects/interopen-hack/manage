@@ -131,7 +131,7 @@ configureEnvironment() {
 
 
   # MEDICAL_SCHOOL-agent
-  export MEDICAL_SCHOOL_AGENT_NAME="MEDICAL_SCHOOL"
+  export MEDICAL_SCHOOL_AGENT_NAME="Medical School"
   export MEDICAL_SCHOOL_ADMIN_PORT=8021
   export MEDICAL_SCHOOL_HTTP_PORT=8020
   export MEDICAL_SCHOOL_WEBHOOK_PORT=8022
@@ -141,7 +141,7 @@ configureEnvironment() {
   export MEDICAL_SCHOOL_JUPYTER_PORT="8888"
 
   # GMC-agent
-  export GMC_AGENT_NAME="MEDICAL_SCHOOL"
+  export GMC_AGENT_NAME="General Medical Council"
   export GMC_ADMIN_PORT=8031
   export GMC_HTTP_PORT=8030
   export GMC_WEBHOOK_PORT=8032
@@ -151,7 +151,7 @@ configureEnvironment() {
   export GMC_JUPYTER_PORT="8890"
 
   # HEE-agent
-  export HEE_AGENT_NAME="Higher Education England"
+  export HEE_AGENT_NAME="Health Education England"
   export HEE_ADMIN_PORT=8041
   export HEE_HTTP_PORT=8040
   export HEE_WEBHOOK_PORT=8042
