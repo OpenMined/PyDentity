@@ -1,6 +1,0 @@
-{
-    "python.pythonPath": "/home/vineeth/anaconda3/envs/pydentity",
-    "python.linting.pylintEnabled": true,
-    "python.linting.mypyEnabled": false,
-    "python.linting.enabled": true
-}

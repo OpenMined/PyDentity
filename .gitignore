@@ -8,6 +8,6 @@ build
 */received_files/*
 libs/om-aries-controller/demo/bob/image_received.png
 
-
+.vscode/
 # exception to the rule
 !libs/om-aries-controller/demo/bob/received_files/.gitkeep
