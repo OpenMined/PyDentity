@@ -49,22 +49,6 @@ This library shows how the basic controller can easily be extended to control an
 
 SSI voting system.
 
-# Interopen-Hack Demo
+### [Doctors in Training](./projects/doctors-in-training)
 
-In the projects/interopen-hack folder
-
-With docker installed, run the example using ./manage start
-
-
-To go the first notebook [ID Verification](http://127.0.0.1:8888)
-
-The notebook requirea a token that can be found in the logs. The tokens can be fetched using the following command.
-
-* docker logs interopen-hack_id-verifier-notebook_1 
-
-
-# Sequence Diagram
-
-The Demo is uses this sequence diagram
-
-![sequencediagram](./sequence.jpg)
+A real life use case of SSI developed as part of an NHS INTEROpen hackathon.
