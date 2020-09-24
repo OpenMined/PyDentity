@@ -1,0 +1,72 @@
+version: "3"
+services:
+  ngrok-verifier:
+    image: wernight/ngrok
+    command: ngrok http verifier-agent:${VERIFIER_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  verifier-agent:
+    build: ""
+    environment:
+      NGROK_NAME: ngrok-verifier
+      AGENT_NAME: Verifier
+      PORT: ${VERIFIER_HTTP_PORT}
+      ADMIN_PORT: ${VERIFIER_ADMIN_PORT}
+      WEBHOOK_URL: ${VERIFIER_WEBHOOK_URL}
+    ports:
+      - ${VERIFIER_HTTP_PORT}:${VERIFIER_HTTP_PORT}
+      - ${VERIFIER_ADMIN_PORT}:${VERIFIER_ADMIN_PORT}
+    networks:
+      - indy_demo
+
+  ngrok-issuer:
+    image: wernight/ngrok
+    command: ngrok http issuer-agent:${ISSUER_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  issuer-agent:
+    build: ""
+    environment:
+      NGROK_NAME: ngrok-issuer
+      AGENT_NAME: Issuer
+      PORT: ${ISSUER_HTTP_PORT}
+      ADMIN_PORT: ${ISSUER_ADMIN_PORT}
+      WEBHOOK_URL: ${ISSUER_WEBHOOK_URL}
+    ports:
+      - ${ISSUER_HTTP_PORT}:${ISSUER_HTTP_PORT}
+      - ${ISSUER_ADMIN_PORT}:${ISSUER_ADMIN_PORT}
+    networks:
+      - indy_demo
+  issuer-notebook:
+    build:
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${ISSUER_JUPYTER_PORT}
+    depends_on:
+      - issuer-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/issuer:/workspace
+    ports:
+      - "8888:8888"
+      - ${ISSUER_WEBHOOK_PORT}:${ISSUER_WEBHOOK_PORT}
+  verifier-notebook:
+    build:
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${VERIFIER_JUPYTER_PORT}
+    depends_on:
+      - verifier-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/notebooks/verifier:/workspace
+    ports:
+      - "8889:8888"
+      - ${VERIFIER_WEBHOOK_PORT}:${VERIFIER_WEBHOOK_PORT}
+
+networks:
+  indy_demo:

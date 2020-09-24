@@ -51,28 +51,28 @@ class ProofController(BaseController):
     # Sends a presentation proposal
     async def send_proposal(self, proposal):
 
-        return await self.admin_POST(f"{self.base_url}/send-proposal", data=proposal)
+        return await self.admin_POST(f"{self.base_url}/send-proposal", json_data=proposal)
 
     # Creates a presentation request not bound to any proposal or existing connection
     async def create_request(self, request):
         # TODO How should proof request object be broken up? Complex.
         #  Do we want user to have to know how to build this object?
 
-        return await self.admin_POST(f"{self.base_url}/create-request", data=request)
+        return await self.admin_POST(f"{self.base_url}/create-request", json_data=request)
 
 
     # Sends a free presentation request not bound to any proposal
     async def send_request(self, request):
-        return await self.admin_POST(f"{self.base_url}/send-request", data=request)
+        return await self.admin_POST(f"{self.base_url}/send-request", json_data=request)
 
     async def send_request_for_proposal(self, pres_ex_id, proposal_request):
 
-        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-request", data=proposal_request)
+        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-request", json_data=proposal_request)
 
     # Send a proof presentation
     async def send_presentation(self, pres_ex_id, presentation):
 
-        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-presentation", data=presentation)
+        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-presentation", json_data=presentation)
 
     # Verify a received presentation
     async def verify_presentation(self, pres_ex_id):
