@@ -15,7 +15,7 @@ The project is in early development.
 
 ## Examples
 
-#### secure_multi_party_voting
+#### [Secure Multi-Party Voting](./demo/secure_multi_party_voting.ipynb)
 
 POC of secure multi-party voting.
 No credential verification/SSI in place at the moment.
