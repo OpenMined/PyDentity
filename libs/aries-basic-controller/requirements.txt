@@ -7,3 +7,4 @@ python-dotenv
 termcolor
 pillow
 qrcode
+beautifulsoup4

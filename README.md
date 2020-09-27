@@ -45,6 +45,10 @@ This library shows how the basic controller can easily be extended to control an
 
 ## Projects
 
+### [Opus](./projects/opus)
+
+SSI Third Party Credential Onboarding.
+
 ### [PryVote](./projects/pryvote)
 
 SSI voting system.
