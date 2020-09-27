@@ -38,4 +38,7 @@ class LedgerController(BaseController):
     async def get_taa(self):
         return await self.admin_GET(f"{self.base_url}/taa")
 
+    async def accept_taa(self, data):
+        return await self.admin_POST(f"{self.base_url}/taa/accept", json_data=data)
+
 

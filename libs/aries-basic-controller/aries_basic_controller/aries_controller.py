@@ -23,8 +23,9 @@ logger = logging.getLogger("aries_controller")
 class AriesAgentController:
 
     ## TODO rethink how to initialise. Too many args?
+    ## is it important to let users config connections/issuer etc
     def __init__(self, webhook_host: str, webhook_port: int, admin_url: str, webhook_base: str = "",
-                 connections: bool = True, messaging: bool = True, issuer: bool = True):
+                 connections: bool = True, messaging: bool = True, issuer: bool = True, api_key: str = None):
 
         self.webhook_site = None
         self.admin_url = admin_url
@@ -35,7 +36,13 @@ class AriesAgentController:
         self.webhook_host = webhook_host
         self.webhook_port = webhook_port
         self.connections_controller = None
-        self.client_session: ClientSession = ClientSession()
+
+        if api_key:
+            headers = {"X-API-Key": api_key}
+            self.client_session: ClientSession = ClientSession(headers=headers)
+        else:
+            self.client_session: ClientSession = ClientSession()
+
         if connections:
             self.connections = ConnectionsController(self.admin_url, self.client_session)
         if messaging:

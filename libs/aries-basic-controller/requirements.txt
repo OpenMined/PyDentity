@@ -4,4 +4,7 @@ prompt_toolkit
 pygments
 PyPubSub
 python-dotenv
+termcolor
+pillow
+qrcode
 beautifulsoup4
