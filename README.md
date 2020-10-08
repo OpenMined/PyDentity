@@ -39,7 +39,7 @@ Unpack the downloaded tar with
 ```tar -xvf release.tar.gz.```
 
 You should now see an executable called s2i. Either add the location of s2i to your PATH environment variable, or move it to a pre-existing directory in your PATH. For example,
-# sudo cp /path/to/s2i /usr/local/bin
+```sudo cp /path/to/s2i /usr/local/bin```
 will work with most setups.
 
 You can test it using
