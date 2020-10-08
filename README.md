@@ -20,7 +20,7 @@ The work is displayed in jupyter notebooks.
 
 ### Environment
 To install the dependencies,
-we recommend using [Conda]:
+we recommend using [Conda](https://docs.conda.io/en/latest/):
 1. Clone this repository
 1. In the command line, navigate to your local copy of the repository
 1. Run `conda create --name pydentity-dev python=3.6`
