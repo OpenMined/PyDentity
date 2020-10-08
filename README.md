@@ -45,7 +45,7 @@ will work with most setups.
 You can test it using
 ```s2i version```
 
-You can now go to the tutorials folder and run the examples
+You can now go to the tutorials folder and run the example
 ```cd tutorials/aries-basic-controller```
 
 Ensure that Docker is running.
