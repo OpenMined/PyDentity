@@ -15,42 +15,22 @@ Ultimately we are exploring how to create a [Distributed Trust System for Privac
 **This is very experimental at this stage.**
 
 ## Requirements
-This project is written in Python.
-The work is displayed in jupyter notebooks.
+This project is written in Python and is displayed in jupyter notebooks.
 
-### Environment
-To install the dependencies,
-we recommend using [Conda](https://docs.conda.io/en/latest/):
-1. Clone this repository
-1. In the command line, navigate to your local copy of the repository
-1. Run `conda create --name pydentity-dev python=3.6`
-    - This creates an environment `pydentity-dev`
-1. Activate the environment with `conda activate pydentity-dev`
-1. Run `conda install notebook`
-
-The **source-to-image** (s2i) tool is also required to build the docker images used in the demo. S2I can be downloaded [here](https://github.com/openshift/source-to-image). The website gives instructions for installing on other platforms.
+You need to install:
+1. [Docker](https://docs.docker.com/get-docker/)
+1. [Jupyter Notebook](https://jupyter.org/install)
+1. The **source-to-image** (s2i) tool is also required to build the docker images used in the demo. S2I can be downloaded [here](https://github.com/openshift/source-to-image). The website gives instructions for installing on other platforms.
 Verify that **s2i** is in your PATH.  If not, then edit your PATH and add the directory where **s2i** is installed.  The **manage** script will look for the **s2i** executable on your PATH.  If it is not found you will get a message asking you to download and set it on your PATH.
+    - If you are using a Mac and have Homebrew installed, the following command will install s2i: `brew install source-to-image`
+    - If you are using Linux, go to the [releases](https://github.com/openshift/source-to-image/releases/latest) page and download the correct distribution for your machine. Choose either the linux-386 or the linux-amd64 links for 32 and 64-bit, respectively. Unpack the downloaded tar with `tar -xvf "Release.tar.gz"`
+    - If you are not sure about your Operating System you can visit [this](https://whatsmyos.com/) and/or follow the instructions.
+    - You should now see an executable called s2i. Either add the location of s2i to your PATH environment variable, or move it to a pre-existing directory in your PATH. For example, `sudo cp /path/to/s2i /usr/local/bin` will work with most setups. You can test it using `s2i version`.
 
-If you are using a Mac and have Homebrew installed, the following command will install s2i:
-```brew install source-to-image```
+You can now go to the tutorials folder and follow the examples
+`cd tutorials/aries-basic-controller`
 
-If you are using Linux, go to the [releases](https://github.com/openshift/source-to-image/releases/latest) page and download the correct distribution for your machine. Choose either the linux-386 or the linux-amd64 links for 32 and 64-bit, respectively.
-Unpack the downloaded tar with
-```tar -xvf release.tar.gz.```
-
-If you are not sure about your Operating System you can visit [this](https://whatsmyos.com/) and/or follow the instructions.
-
-You should now see an executable called s2i. Either add the location of s2i to your PATH environment variable, or move it to a pre-existing directory in your PATH. For example,
-```sudo cp /path/to/s2i /usr/local/bin```
-will work with most setups.
-
-You can test it using
-```s2i version```
-
-You can now go to the tutorials folder and run the example
-```cd tutorials/aries-basic-controller```
-
-Ensure that Docker is running.
+Ensure that Docker is running. If it is not try `sudo dockerd` in another terminal.
 
 ## Tutorials
 
