@@ -19,7 +19,6 @@ This project is written in Python and is displayed in jupyter notebooks.
 
 You need to install:
 1. [Docker](https://docs.docker.com/get-docker/)
-1. [Jupyter Notebook](https://jupyter.org/install)
 1. The **source-to-image** (s2i) tool is also required to build the docker images used in the demo. S2I can be downloaded [here](https://github.com/openshift/source-to-image). The website gives instructions for installing on other platforms.
 Verify that **s2i** is in your PATH.  If not, then edit your PATH and add the directory where **s2i** is installed.  The **manage** script will look for the **s2i** executable on your PATH.  If it is not found you will get a message asking you to download and set it on your PATH.
     - If you are using a Mac and have Homebrew installed, the following command will install s2i: `brew install source-to-image`
