@@ -27,10 +27,10 @@ Verify that **s2i** is in your PATH.  If not, then edit your PATH and add the di
     - If you are not sure about your Operating System you can visit [this](https://whatsmyos.com/) and/or follow the instructions.
     - You should now see an executable called s2i. Either add the location of s2i to your PATH environment variable, or move it to a pre-existing directory in your PATH. For example, `sudo cp /path/to/s2i /usr/local/bin` will work with most setups. You can test it using `s2i version`.
 
+Ensure that Docker is running. If it is not try `sudo dockerd` in another terminal.
+
 You can now go to the tutorials folder and follow the examples
 `cd tutorials/aries-basic-controller`
-
-Ensure that Docker is running. If it is not try `sudo dockerd` in another terminal.
 
 ## Tutorials
 
