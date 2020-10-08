@@ -27,7 +27,7 @@ if __name__ == "__main__":
         description="A simple python package for controlling an aries agent through the admin-api interface",
         long_description=long_description,
         long_description_content_type="text/markdown",
-        url="https://github.com/wip-abramson/aries-basic-controller-python",
+        url="https://github.com/OpenMined/PyDentity/tree/master/libs/aries-basic-controller",
         packages=find_packages(),
         include_package_data=True,
         package_data={"aries_basic_controller": ["requirements.txt"]},
