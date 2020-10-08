@@ -38,6 +38,8 @@ If you are using Linux, go to the [releases](https://github.com/openshift/source
 Unpack the downloaded tar with
 ```tar -xvf release.tar.gz.```
 
+If you are not sure about your Operating System you can visit [this](https://whatsmyos.com/) and/or follow the instructions.
+
 You should now see an executable called s2i. Either add the location of s2i to your PATH environment variable, or move it to a pre-existing directory in your PATH. For example,
 ```sudo cp /path/to/s2i /usr/local/bin```
 will work with most setups.
