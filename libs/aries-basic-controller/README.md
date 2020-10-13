@@ -4,7 +4,7 @@ A simple pip installable package for controlling aries agents through admin API 
 
 # Install
 
-Current version 0.1.0
+Current version 0.1.1
 
 `python3 -m pip install aries_basic_controller`
 
