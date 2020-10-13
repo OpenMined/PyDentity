@@ -13,7 +13,7 @@ services:
     command: [
         "-c",
           "echo Waiting for ledger to be ready...;
-          sleep 250;
+          sleep 60;
           curl -d '{\"seed\":\"${BOB_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${BOB_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
           sleep 30; \
             aca-py start \
@@ -44,7 +44,7 @@ services:
     command: [
         "-c",
         "echo Waiting for ledger to be ready...;
-        sleep 250;
+        sleep 60;
         curl -d '{\"seed\":\"${ALICE_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${ALICE_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
         sleep 30; \
         aca-py start \
