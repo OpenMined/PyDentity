@@ -1,2 +1,2 @@
-aries-cloudagent[indy]
+aries-cloudagent[indy]==0.5.4
 python-dateutil
