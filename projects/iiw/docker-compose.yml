@@ -15,7 +15,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - iiw-wallet:/indy/home/.indy_client/default
+      - iiw-agent:/indy/home/.indy_client/default
     entrypoint: /bin/bash
     command: [
       "-c",
@@ -56,6 +56,6 @@ services:
       - "8888:8888"
       - ${IIW_WEBHOOK_PORT}:${IIW_WEBHOOK_PORT}
 volumes:
-  iiw-wallet:
+  iiw-agent:
 networks:
   indy_demo:
