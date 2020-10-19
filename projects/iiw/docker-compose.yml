@@ -1,0 +1,61 @@
+version: "3"
+services:
+  ngrok-iiw:
+    image: wernight/ngrok
+    command: ngrok http iiw-agent:${IIW_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  iiw-agent:
+    build:
+      context: ../../
+      dockerfile: tutorials/dockerfiles/Dockerfile.attachmentprotocol
+    ports:
+      - ${IIW_HTTP_PORT}:${IIW_HTTP_PORT}
+      - ${IIW_ADMIN_PORT}:${IIW_ADMIN_PORT}
+    networks:
+      - indy_demo
+    volumes:
+      - iiw-wallet:/indy/home/.indy_client/default
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "sleep 5;
+      aca-py start \
+         --inbound-transport http '0.0.0.0' ${IIW_HTTP_PORT} \
+         --outbound-transport http \
+         --endpoint ${IIW_AGENT_ENDPOINT} \
+         --webhook-url ${IIW_WEBHOOK_URL} \
+         --wallet-type 'indy' \
+         --auto-accept-requests  \
+         --auto-respond-credential-proposal \
+         --auto-respond-credential-offer \
+         --auto-respond-credential-request \
+         --auto-store-credential \
+         --auto-respond-presentation-proposal \
+         --auto-respond-presentation-request \
+         --admin '0.0.0.0' ${IIW_ADMIN_PORT} \
+         --genesis-url https://raw.githubusercontent.com/sovrin-foundation/sovrin/master/sovrin/pool_transactions_sandbox_genesis \
+         --admin-api-key ${IIW_API_KEY} \
+         --plugin attach_protocol.attachment_protocol \
+         --log-level info \
+         --label ${IIW_AGENT_NAME}",
+    ]
+  iiw-notebook:
+    build:
+      context: ../../
+      dockerfile: projects/iiw/Dockerfile
+      args:
+        - jupyter_port=${JUPYTER_PORT}
+    depends_on:
+      - iiw-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks:/workspace
+    ports:
+      - "8888:8888"
+      - ${IIW_WEBHOOK_PORT}:${IIW_WEBHOOK_PORT}
+volumes:
+  iiw-wallet:
+networks:
+  indy_demo:
