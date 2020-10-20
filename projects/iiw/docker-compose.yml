@@ -22,7 +22,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - iiw-agent:/home/indy/.indy_client/default
+      - iiw-agent:/home/indy/.indy_client/wallet
   iiw-notebook:
     build:
       context: ../../
