@@ -10,6 +10,15 @@ In the manage file you can configure the parameters of your agent. You may want 
 
 You can also edit your agents configuration flags in the startup.sh file.
 
+
+### Rum
+
+To start: `./manage start`. You might need to make the manage file executable.
+
 Fetch the jupyter notebook token by running `docker logs iiw_iiw-notebook_1`
 
 Navigate to the notebook - [https://localhost:8888](https://localhost:8888)
+
+To stop and keep volumes: `./manage stop`
+
+To stop and tear down volumes: `./manage down`
