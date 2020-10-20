@@ -7,7 +7,7 @@ build
 .ipynb_checkpoints/
 __pycache__/
 
-*/received_files/*
+**/received_files/*
 libs/om-aries-controller/demo/bob/image_received.png
 
 .vscode/
