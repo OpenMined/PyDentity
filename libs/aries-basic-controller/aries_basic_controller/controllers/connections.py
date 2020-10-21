@@ -175,3 +175,16 @@ class ConnectionsController(BaseController):
             logger.error(f"Connection {connection_id} not active")
             raise Exception("Connection must be active to send a credential")
         return
+
+    async def propose_introduction(
+        self,
+        connection_id: str,
+        target_connection_id: str,
+        message: str
+    ):
+        params = {
+            "target_connection_id": target_connection_id
+        }
+        if message:
+            params["message"] = message
+        return await self.admin_POST(f"/connections/{connection_id}/start-introduction", params=params)
