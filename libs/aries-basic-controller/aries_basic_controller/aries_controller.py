@@ -16,6 +16,7 @@ from .controllers.ledger import LedgerController
 from .controllers.credential import CredentialController
 from .controllers.server import ServerController
 from .controllers.oob import OOBController
+from .controllers.action_menu import ActionMenuController
 
 import logging
 
@@ -25,8 +26,18 @@ class AriesAgentController:
 
     ## TODO rethink how to initialise. Too many args?
     ## is it important to let users config connections/issuer etc
-    def __init__(self, webhook_host: str, webhook_port: int, admin_url: str, webhook_base: str = "",
-                 connections: bool = True, messaging: bool = True, issuer: bool = True, api_key: str = None):
+    def __init__(
+        self,
+        webhook_host: str,
+        webhook_port: int,
+        admin_url: str,
+        webhook_base: str = "",
+        connections: bool = True,
+        messaging: bool = True,
+        issuer: bool = True,
+        action_menu: bool = True,
+        api_key: str = None,
+    ):
 
         self.webhook_site = None
         self.admin_url = admin_url
@@ -62,7 +73,8 @@ class AriesAgentController:
             self.issuer = IssuerController(self.admin_url, self.client_session, self.connections,
                                            self.wallet, self.definitions)
 
-
+        if action_menu:
+            self.action_menu = ActionMenuController(self.admin_url, self.client_session)
 
     def register_listeners(self, listeners, defaults=True):
         if defaults:
