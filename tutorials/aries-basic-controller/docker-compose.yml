@@ -26,8 +26,10 @@ services:
           --admin '0.0.0.0' ${BOB_ADMIN_PORT} \
           --admin-insecure-mode \
           --log-level info \
-          --genesis-url '${LEDGER_URL}/genesis'
-          --label ${BOB_AGENT_NAME}",
+          --genesis-url '${LEDGER_URL}/genesis' \
+          --label ${BOB_AGENT_NAME} \
+          --wallet-name ${BOB_WALLET_NAME} \
+          --wallet-key ${BOB_WALLET_KEY}"
         ]
   alice-agent:
     image: bcgovimages/aries-cloudagent:py36-1.15-0_0.5.6
@@ -57,8 +59,10 @@ services:
         --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
         --admin-api-key ${ALICE_API_KEY} \
         --log-level info \
-        --genesis-url '${LEDGER_URL}/genesis'
-        --label ${ALICE_AGENT_NAME}",
+        --genesis-url '${LEDGER_URL}/genesis' \
+        --label ${ALICE_AGENT_NAME} \
+        --wallet-name ${ALICE_WALLET_NAME} \
+        --wallet-key ${ALICE_WALLET_KEY}",
     ]
   setup:
     build:
