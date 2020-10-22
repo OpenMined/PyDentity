@@ -1,7 +1,7 @@
 version: "3"
 services:
   bob-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.6
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
@@ -30,7 +30,7 @@ services:
           --label ${BOB_AGENT_NAME}",
         ]
   alice-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.6
     ports:
       - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
       - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
