@@ -15,6 +15,7 @@ from .controllers.proof import ProofController
 from .controllers.ledger import LedgerController
 from .controllers.credential import CredentialController
 from .controllers.server import ServerController
+from .controllers.oob import OOBController
 
 import logging
 
@@ -52,6 +53,8 @@ class AriesAgentController:
         self.ledger = LedgerController(self.admin_url, self.client_session)
         self.credentials = CredentialController(self.admin_url, self.client_session)
         self.server = ServerController(self.admin_url, self.client_session)
+        self.oob = OOBController(self.admin_url, self.client_session)
+
         if issuer:
             self.schema = SchemaController(self.admin_url, self.client_session)
             self.wallet = WalletController(self.admin_url, self.client_session)
