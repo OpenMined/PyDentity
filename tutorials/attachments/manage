@@ -125,8 +125,6 @@ configureEnvironment() {
   export BOB_AGENT_ENDPOINT=${BOB_AGENT_ENDPOINT:-http://$DOCKERHOST:$BOB_HTTP_PORT}
   export BOB_WALLET_SEED="bob_seed_00000000000000000000000"
   export BOB_JUPYTER_PORT="8889"
-  export BOB_WALLET_NAME="Bob Wallet"
-  export BOB_WALLET_KEY="bob_key_00000000000000000000000"
 
 
   # alice-agent
@@ -138,8 +136,6 @@ configureEnvironment() {
   export ALICE_AGENT_ENDPOINT=${ALICE_AGENT_ENDPOINT:-http://$DOCKERHOST:$ALICE_HTTP_PORT}
   export ALICE_WALLET_SEED="alice_seed_000000000000000000000"
   export ALICE_JUPYTER_PORT="8888"
-  export ALICE_WALLET_NAME="Alice Wallet"
-  export ALICE_WALLET_KEY="alice_key_00000000000000000000000"
 
 }
 
