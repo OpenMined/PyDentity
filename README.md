@@ -56,9 +56,13 @@ This is the core library in this repository. It is a simple python wrapper for t
 
 This library gives a very basic example of how to extend the core set of protocols that an aca-py agent understand with a custom protocol.
 
-### [om-aries-controller](./libs/om-aries-controller)
+### [attachment-protocol](./libs/attachment-protocol)
 
-This library shows how the basic controller can easily be extended to control an agent with custom protocols.
+This library implements a basic attachment acapy protocol plugin using decorators.
+
+### [attachment-controller](./libs/attachment-controller)
+
+This library extends the basic controller to include the attachment protocol endpoints.
 
 ## Projects
 
