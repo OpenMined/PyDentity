@@ -1,0 +1,246 @@
+version: "3"
+services:
+  nhstrust-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    ports:
+      - ${NHSTRUST_HTTP_PORT}:${NHSTRUST_HTTP_PORT}
+      - ${NHSTRUST_ADMIN_PORT}:${NHSTRUST_ADMIN_PORT}
+    networks:
+      - indy_demo
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+          "sleep 2; \
+            aca-py start \
+          --inbound-transport http '0.0.0.0' ${NHSTRUST_HTTP_PORT} \
+          --outbound-transport http \
+          --endpoint ${NHSTRUST_AGENT_ENDPOINT} \
+          --webhook-url ${NHSTRUST_WEBHOOK_URL} \
+          --wallet-type 'indy' \
+          --seed '${NHSTRUST_WALLET_SEED}' \
+          --admin '0.0.0.0' ${NHSTRUST_ADMIN_PORT} \
+          --admin-insecure-mode \
+          --log-level info \
+          --genesis-url '${GENESIS_URL}' \
+          --label '${NHSTRUST_AGENT_NAME}'",
+        ]
+  nhstrust-notebook:
+    build:
+      context: .
+      args:
+        - jupyter_port=${NHSTRUST_JUPYTER_PORT}
+    depends_on:
+      - nhstrust-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/notebooks/nhs_trust:/workspace
+    ports:
+      - "${NHSTRUST_JUPYTER_PORT}:8888"
+      - ${NHSTRUST_WEBHOOK_PORT}:${NHSTRUST_WEBHOOK_PORT}
+  regulator-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    ports:
+      - ${REGULATOR_HTTP_PORT}:${REGULATOR_HTTP_PORT}
+      - ${REGULATOR_ADMIN_PORT}:${REGULATOR_ADMIN_PORT}
+    networks:
+      - indy_demo
+#    volumes:
+#      - alice-wallet:/indy/home/.indy_client/default
+    entrypoint: /bin/bash
+    command: [
+        "-c",
+        "sleep 2; \
+        aca-py start \
+        --inbound-transport http '0.0.0.0' ${REGULATOR_HTTP_PORT} \
+        --outbound-transport http \
+        --endpoint ${REGULATOR_AGENT_ENDPOINT} \
+        --webhook-url ${REGULATOR_WEBHOOK_URL} \
+        --wallet-type 'indy' \
+        --seed '$REGULATOR_WALLET_SEED}' \
+        --admin '0.0.0.0' ${REGULATOR_ADMIN_PORT} \
+        --admin-insecure-mode \
+        --log-level info \
+        --genesis-url '${GENESIS_URL}' \
+        --label '${REGULATOR_AGENT_NAME}'",
+    ]
+  regulator-notebook:
+    build:
+      context: .
+      args:
+        - jupyter_port=${REGULATOR_JUPYTER_PORT}
+    depends_on:
+      - regulator-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/regulator:/workspace
+    ports:
+      - "${REGULATOR_JUPYTER_PORT}:8888"
+      - ${REGULATOR_WEBHOOK_PORT}:${REGULATOR_WEBHOOK_PORT}
+  researcher-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    ports:
+      - ${RESEARCHER_HTTP_PORT}:${RESEARCHER_HTTP_PORT}
+      - ${RESEARCHER_ADMIN_PORT}:${RESEARCHER_ADMIN_PORT}
+    networks:
+      - indy_demo
+    #    volumes:
+    #      - alice-wallet:/indy/home/.indy_client/default
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "
+          sleep 2; \
+          aca-py start \
+          --inbound-transport http '0.0.0.0' ${RESEARCHER_HTTP_PORT} \
+          --outbound-transport http \
+          --endpoint ${RESEARCHER_AGENT_ENDPOINT} \
+          --webhook-url ${RESEARCHER_WEBHOOK_URL} \
+          --wallet-type 'indy' \
+          --seed '${RESEARCHER_WALLET_SEED}' \
+          --admin '0.0.0.0' ${RESEARCHER_ADMIN_PORT} \
+          --admin-insecure-mode \
+          --log-level info \
+          --genesis-url '${GENESIS_URL}' \
+          --label '${RESEARCHER_AGENT_NAME}'",
+    ]
+  researcher-notebook:
+    build:
+      context: .
+      args:
+        - jupyter_port=${RESEARCHER_JUPYTER_PORT}
+    depends_on:
+      - researcher-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/researcher:/workspace
+    ports:
+      - "${RESEARCHER_JUPYTER_PORT}:8888"
+      - ${RESEARCHER_WEBHOOK_PORT}:${RESEARCHER_WEBHOOK_PORT}
+  hospital1-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    ports:
+      - ${HOSPITAL1_HTTP_PORT}:${HOSPITAL1_HTTP_PORT}
+      - ${HOSPITAL1_ADMIN_PORT}:${HOSPITAL1_ADMIN_PORT}
+    networks:
+      - indy_demo
+    #    volumes:
+    #      - alice-wallet:/indy/home/.indy_client/default
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "
+          sleep 2; \
+          aca-py start \
+          --inbound-transport http '0.0.0.0' ${HOSPITAL1_HTTP_PORT} \
+          --outbound-transport http \
+          --endpoint ${HOSPITAL1_AGENT_ENDPOINT} \
+          --webhook-url ${HOSPITAL1_WEBHOOK_URL} \
+          --wallet-type 'indy' \
+          --seed '${HOSPITAL1_WALLET_SEED}' \
+          --admin '0.0.0.0' ${HOSPITAL1_ADMIN_PORT} \
+          --admin-insecure-mode \
+          --log-level info \
+          --genesis-url '${GENESIS_URL}' \
+          --label '${HOSPITAL1_AGENT_NAME}'",
+    ]
+  hospital1-notebook:
+    build:
+      context: .
+      args:
+        - jupyter_port=${HOSPITAL1_JUPYTER_PORT}
+    depends_on:
+      - hospital1-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/hospital:/workspace
+    ports:
+      - "${HOSPITAL1_JUPYTER_PORT}:8888"
+      - ${HOSPITAL1_WEBHOOK_PORT}:${HOSPITAL1_WEBHOOK_PORT}
+  hospital2-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    ports:
+      - ${HOSPITAL2_HTTP_PORT}:${HOSPITAL2_HTTP_PORT}
+      - ${HOSPITAL2_ADMIN_PORT}:${HOSPITAL2_ADMIN_PORT}
+    networks:
+      - indy_demo
+    #    volumes:
+    #      - alice-wallet:/indy/home/.indy_client/default
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "sleep 2; \
+          aca-py start \
+          --inbound-transport http '0.0.0.0' ${HOSPITAL2_HTTP_PORT} \
+          --outbound-transport http \
+          --endpoint ${HOSPITAL2_AGENT_ENDPOINT} \
+          --webhook-url ${HOSPITAL2_WEBHOOK_URL} \
+          --wallet-type 'indy' \
+          --seed '${HOSPITAL2_WALLET_SEED}' \
+          --admin '0.0.0.0' ${HOSPITAL2_ADMIN_PORT} \
+          --admin-insecure-mode \
+          --log-level info \
+          --genesis-url '${GENESIS_URL}' \
+          --label '${HOSPITAL2_AGENT_NAME}'",
+    ]
+  hospital2-notebook:
+    build:
+      context: .
+      args:
+        - jupyter_port=${HOSPITAL2_JUPYTER_PORT}
+    depends_on:
+      - hospital2-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/hospital:/workspace
+    ports:
+      - "${HOSPITAL2_JUPYTER_PORT}:8888"
+      - ${HOSPITAL2_WEBHOOK_PORT}:${HOSPITAL2_WEBHOOK_PORT}
+  hospital3-agent:
+    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    ports:
+      - ${HOSPITAL3_HTTP_PORT}:${HOSPITAL3_HTTP_PORT}
+      - ${HOSPITAL3_ADMIN_PORT}:${HOSPITAL3_ADMIN_PORT}
+    networks:
+      - indy_demo
+    #    volumes:
+    #      - alice-wallet:/indy/home/.indy_client/default
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "sleep 2; \
+          aca-py start \
+          --inbound-transport http '0.0.0.0' ${HOSPITAL3_HTTP_PORT} \
+          --outbound-transport http \
+          --endpoint ${HOSPITAL3_AGENT_ENDPOINT} \
+          --webhook-url ${HOSPITAL3_WEBHOOK_URL} \
+          --wallet-type 'indy' \
+          --seed '${HOSPITAL3_WALLET_SEED}' \
+          --admin '0.0.0.0' ${HOSPITAL3_ADMIN_PORT} \
+          --admin-insecure-mode \
+          --log-level info \
+          --genesis-url '${GENESIS_URL}' \
+          --label '${HOSPITAL3_AGENT_NAME}'",
+    ]
+  hospital3-notebook:
+    build:
+      context: .
+      args:
+        - jupyter_port=${HOSPITAL3_JUPYTER_PORT}
+    depends_on:
+      - hospital3-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/hospital:/workspace
+    ports:
+      - "${HOSPITAL3_JUPYTER_PORT}:8888"
+      - ${HOSPITAL3_WEBHOOK_PORT}:${HOSPITAL3_WEBHOOK_PORT}
+
+networks:
+  indy_demo:
+
