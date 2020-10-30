@@ -14,9 +14,9 @@ class OOBController(BaseController):
         logger.debug("Out of Band ", payload)
 
     async def create_invitation(self, data):
-        response = await self.admin_POST(f"/out-of-band/create-invitation", data = data)
+        response = await self.admin_POST(f"/out-of-band/create-invitation", json_data = data)
         return response
 
     async def receive_invitation(self, data):
-        response = await self.admin_POST(f"/out-of-band/receive-invitation", data = data)
+        response = await self.admin_POST(f"/out-of-band/receive-invitation", json_data = data)
         return response
