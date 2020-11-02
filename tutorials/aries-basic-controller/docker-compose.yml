@@ -1,7 +1,7 @@
 version: "3"
 services:
   bob-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    image: bcgovimages/aries-cloudagent:py36-1.15-0_0.5.6
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
@@ -22,15 +22,17 @@ services:
           --endpoint ${BOB_AGENT_ENDPOINT} \
           --webhook-url ${BOB_WEBHOOK_URL} \
           --wallet-type 'indy' \
+          --wallet-name '${BOB_WALLET_NAME}' \
+          --wallet-key ${BOB_WALLET_KEY} \
           --seed '${BOB_WALLET_SEED}' \
           --admin '0.0.0.0' ${BOB_ADMIN_PORT} \
           --admin-insecure-mode \
           --log-level info \
-          --genesis-url '${LEDGER_URL}/genesis'
+          --genesis-url '${LEDGER_URL}/genesis' \
           --label ${BOB_AGENT_NAME}",
         ]
   alice-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    image: bcgovimages/aries-cloudagent:py36-1.15-0_0.5.6
     ports:
       - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
       - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
@@ -53,11 +55,13 @@ services:
         --endpoint ${ALICE_AGENT_ENDPOINT} \
         --webhook-url ${ALICE_WEBHOOK_URL} \
         --wallet-type 'indy' \
+        --wallet-name '${ALICE_WALLET_NAME}' \
+        --wallet-key ${ALICE_WALLET_KEY} \
         --seed '${ALICE_WALLET_SEED}' \
         --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
         --admin-api-key ${ALICE_API_KEY} \
         --log-level info \
-        --genesis-url '${LEDGER_URL}/genesis'
+        --genesis-url '${LEDGER_URL}/genesis' \
         --label ${ALICE_AGENT_NAME}",
     ]
   setup:
