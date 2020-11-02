@@ -24,16 +24,6 @@ class IssuerController(BaseController):
     async def get_record_by_id(self, cred_ex_id):
         return await self.admin_GET(f"{self.base_url}/records/{cred_ex_id}")
 
-    # Create a credential, automating the entire flow
-    # TODO trace=True causes error. Not sure why
-    # async def create_credential(self, connection_id, schema_id, cred_def_id, attributes, comment: str = "",
-    #                           auto_remove: bool = True, trace: bool = False):
-    #
-    #     body = await self.create_credential_body(connection_id, schema_id, cred_def_id, attributes, comment,
-    #                                              auto_remove, trace)
-    async def create_credential(self, body):
-        return await self.admin_POST(f"{self.base_url}/create", json_data=body)
-
     # Send holder a credential, automating the entire flow
     # TODO trace=True causes error. Not sure why
     async def send_credential(self, connection_id, schema_id, cred_def_id, attributes, comment: str = "",
