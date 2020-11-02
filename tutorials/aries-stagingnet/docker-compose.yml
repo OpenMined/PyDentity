@@ -6,13 +6,21 @@ services:
     networks:
       - indy_demo
   verifier-agent:
-    build: ""
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
-      NGROK_NAME: ngrok-verifier
-      AGENT_NAME: Verifier
-      PORT: ${VERIFIER_HTTP_PORT}
-      ADMIN_PORT: ${VERIFIER_ADMIN_PORT}
-      WEBHOOK_URL: ${VERIFIER_WEBHOOK_URL}
+      - NGROK_NAME=ngrok-verifier
+      - ADMIN_URL=http://verifier-agent:${VERIFIER_ADMIN_PORT}
+      - AGENT_NAME=${VERIFIER_AGENT_NAME}
+      - ADMIN_PORT=${VERIFIER_ADMIN_PORT}
+      - HTTP_PORT=${VERIFIER_HTTP_PORT}
+      - WEBHOOK_URL=${VERIFIER_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${VERIFIER_AGENT_ENDPOINT}
+      - WALLET_SEED=${VERIFIER_WALLET_SEED}
+      - WALLET_NAME=${VERIFIER_WALLET_NAME}
+      - WALLET_KEY=${VERIFIER_WALLET_KEY}
+      - ADMIN_SECURE=${VERIFIER_ADMIN_SECURE}
     ports:
       - ${VERIFIER_HTTP_PORT}:${VERIFIER_HTTP_PORT}
       - ${VERIFIER_ADMIN_PORT}:${VERIFIER_ADMIN_PORT}
@@ -27,11 +35,18 @@ services:
   issuer-agent:
     build: ""
     environment:
-      NGROK_NAME: ngrok-issuer
-      AGENT_NAME: Issuer
-      PORT: ${ISSUER_HTTP_PORT}
-      ADMIN_PORT: ${ISSUER_ADMIN_PORT}
-      WEBHOOK_URL: ${ISSUER_WEBHOOK_URL}
+      - NGROK_NAME=ngrok-issuer
+      - ADMIN_URL=http://issuer-agent:${ISSUER_ADMIN_PORT}
+      - AGENT_NAME=${ISSUER_AGENT_NAME}
+      - ADMIN_PORT=${ISSUER_ADMIN_PORT}
+      - HTTP_PORT=${ISSUER_HTTP_PORT}
+      - WEBHOOK_URL=${ISSUER_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${ISSUER_AGENT_ENDPOINT}
+      - WALLET_SEED=${ISSUER_WALLET_SEED}
+      - WALLET_NAME=${ISSUER_WALLET_NAME}
+      - WALLET_KEY=${ISSUER_WALLET_KEY}
+      - ADMIN_SECURE=${ISSUER_ADMIN_SECURE}
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${ISSUER_HTTP_PORT}:${ISSUER_HTTP_PORT}
       - ${ISSUER_ADMIN_PORT}:${ISSUER_ADMIN_PORT}

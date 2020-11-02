@@ -113,7 +113,7 @@ configureEnvironment() {
 
   # global
   export COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:controller}"
-  export LEDGER_URL=${LEDGER_URL-http://$DOCKERHOST:9000}
+  export GENESIS_URL="https://raw.githubusercontent.com/sovrin-foundation/sovrin/master/sovrin/pool_transactions_sandbox_genesis"
   export WALLET_TYPE="indy"
 
   # VERIFIER-agent
@@ -125,7 +125,7 @@ configureEnvironment() {
   export VERIFIER_AGENT_ENDPOINT=${VERIFIER_AGENT_ENDPOINT:-http://$DOCKERHOST:$VERIFIER_HTTP_PORT}
   export VERIFIER_WALLET_SEED="VERIFIER_seed_00000000000000000000000"
   export VERIFIER_JUPYTER_PORT="8889"
-
+  export VERIFIER_ADMIN_SECURE="false"
 
   # ISSUER-agent
   export ISSUER_AGENT_NAME="ISSUER"
@@ -136,6 +136,7 @@ configureEnvironment() {
   export ISSUER_AGENT_ENDPOINT=${ISSUER_AGENT_ENDPOINT:-http://$DOCKERHOST:$ISSUER_HTTP_PORT}
   export ISSUER_WALLET_SEED="ISSUER_seed_000000000000000000000"
   export ISSUER_JUPYTER_PORT="8888"
+  export ISSUER_ADMIN_SECURE="false"
 
 
 }
