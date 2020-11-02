@@ -129,7 +129,7 @@ configureEnvironment() {
   export BOB_JUPYTER_PORT="8889"
   export BOB_WALLET_NAME="Bob Wallet"
   export BOB_WALLET_KEY="bob_key_00000000000000000000000"
-  export BOB_ADMIN_SECURE=true
+  export BOB_ADMIN_SECURE="true"
 
 
   # alice-agent
