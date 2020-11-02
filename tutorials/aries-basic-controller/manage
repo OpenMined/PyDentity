@@ -62,7 +62,8 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="bob-agent alice-agent setup ledger-nodes ledger-browser alice-notebook bob-notebook"
+#DEFAULT_CONTAINERS="bob-agent alice-agent setup ledger-nodes ledger-browser alice-notebook bob-notebook"
+DEFAULT_CONTAINERS="bob-agent ledger-nodes ledger-browser"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -113,6 +114,7 @@ configureEnvironment() {
 
   # global
   export COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:controller}"
+  export GENESIS_URL=${GENESIS_URL-http://$DOCKERHOST:9000/genesis}
   export LEDGER_URL=${LEDGER_URL-http://$DOCKERHOST:9000}
   export WALLET_TYPE="indy"
 
@@ -127,6 +129,7 @@ configureEnvironment() {
   export BOB_JUPYTER_PORT="8889"
   export BOB_WALLET_NAME="Bob Wallet"
   export BOB_WALLET_KEY="bob_key_00000000000000000000000"
+  export BOB_ADMIN_SECURE="false"
 
 
   # alice-agent
@@ -141,6 +144,7 @@ configureEnvironment() {
   export ALICE_JUPYTER_PORT="8888"
   export ALICE_WALLET_NAME="Alice Wallet"
   export ALICE_WALLET_KEY="alice_key_00000000000000000000000"
+  export ALICE_ADMIN_SECURE="true"
 
 
 }
