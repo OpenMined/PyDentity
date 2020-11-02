@@ -62,8 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-#DEFAULT_CONTAINERS="bob-agent alice-agent setup ledger-nodes ledger-browser alice-notebook bob-notebook"
-DEFAULT_CONTAINERS="alice-agent bob-agent ledger-nodes ledger-browser"
+DEFAULT_CONTAINERS="bob-agent alice-agent setup ledger-nodes ledger-browser alice-notebook bob-notebook"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
