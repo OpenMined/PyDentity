@@ -8,30 +8,30 @@
 
 log-level: info
 genesis-url: '${GENESIS_URL}'
-admin-insecure-mode: ${ADMIN_SECURE}
-admin-api-key: ${API_KEY}
-admin: [0.0.0.0, ${ADMIN_PORT}]
-label: ${AGENT_NAME}
+admin-insecure-mode: true #'${ADMIN_SECURE}'
+#admin-api-key: '${API_KEY}'
+admin: [0.0.0.0, '${ADMIN_PORT}']
+label: '${AGENT_NAME}'
 # the following is the callback url for your controller
-webhook-url: ${WEBHOOK_URL}
+webhook-url: '${WEBHOOK_URL}'
 # assumes you are running a local von-network, like:
 #    cd von-network
 #    ./manage start <my local ip>
 inbound-transport:
-   - [http, '0.0.0.0', ${HTTP_PORT}]
-   - [ws, '0.0.0.0', ${HTTP_PORT}]
+   - [http, 0.0.0.0, '${HTTP_PORT}']
+   - [ws, 0.0.0.0, '${HTTP_PORT}']
 outbound-transport: http
 # the following is the public endpoint advertised by the agent
-endpoint: ${AGENT_ENDPOINT}
+endpoint: '${AGENT_ENDPOINT}'
 auto-ping-connection: true
 # register your did using (this example is for von-network):
 #    curl -d '{"seed":"my_seed_000000000000000000000000", "role":"TRUST_ANCHOR", "alias":"My Agent"}' -X POST http://localhost:9000/register
 # note that the env var name is configured in argparse.py
 # seed = comes from ACAPY_WALLET_SEED
-wallet-type: indy
+wallet-type: indy #${WALLET_TYPE}
 wallet-name: '${WALLET_NAME}'
-wallet-key: ${WALLET_KEY}
-wallet-seed: '${WALLET_SEED}'
+wallet-key: '${WALLET_KEY}'
+seed: '${WALLET_SEED}'
 ## run a local postgres (docker) like:
 ##    docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres:10
 #wallet-storage-type: postgres_storage
