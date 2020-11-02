@@ -21,7 +21,9 @@ inbound-transport:
 #   - [ws, 0.0.0.0, !ENV '${HTTP_PORT}']
 outbound-transport: http
 # the following is the public endpoint advertised by the agent
-endpoint: !ENV ${AGENT_ENDPOINT}
+endpoint:
+   - [http, !ENV '${AGENT_ENDPOINT}']
+   - [ws, !ENV '${AGENT_ENDPOINT}']
 auto-ping-connection: true
 # register your did using (this example is for von-network):
 #    curl -d '{"seed":"my_seed_000000000000000000000000", "role":"TRUST_ANCHOR", "alias":"My Agent"}' -X POST http://localhost:9000/register
