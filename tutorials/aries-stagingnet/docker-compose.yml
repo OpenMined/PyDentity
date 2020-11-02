@@ -33,7 +33,9 @@ services:
     networks:
       - indy_demo
   issuer-agent:
-    build: ""
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
       - NGROK_NAME=ngrok-issuer
       - ADMIN_URL=http://issuer-agent:${ISSUER_ADMIN_PORT}
