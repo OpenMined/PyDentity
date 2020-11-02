@@ -114,7 +114,7 @@ configureEnvironment() {
 
   # global
   export COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:controller}"
-  export GENESIS_URL=${GENESIS_URL-http://$DOCKERHOST:9000/genesis}
+#  export GENESIS_URL=${GENESIS_URL-http://$DOCKERHOST:9000/genesis}
   export LEDGER_URL=${LEDGER_URL-http://$DOCKERHOST:9000}
   export WALLET_TYPE="indy"
 

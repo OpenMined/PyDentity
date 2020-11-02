@@ -7,7 +7,7 @@
 #    ACAPY_WALLET_SEED=my_seed_000000000000000000000000 ACAPY_WALLET_KEY=key ./bin/aca-py start --arg-file ./demo/local-indy-args.yaml
 
 log-level: info
-genesis-url: '${GENESIS_URL}'
+genesis-url: test #${GENESIS_URL}
 admin-insecure-mode: true #'${ADMIN_SECURE}'
 #admin-api-key: '${API_KEY}'
 admin: [0.0.0.0, '${ADMIN_PORT}']
@@ -31,7 +31,7 @@ auto-ping-connection: true
 wallet-type: indy #${WALLET_TYPE}
 wallet-name: '${WALLET_NAME}'
 wallet-key: '${WALLET_KEY}'
-seed: '${WALLET_SEED}'
+seed: bob_seed_00000000000000000000000
 ## run a local postgres (docker) like:
 ##    docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres:10
 #wallet-storage-type: postgres_storage

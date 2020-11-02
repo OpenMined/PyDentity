@@ -5,18 +5,18 @@ services:
       context: ../../
       dockerfile: dockerfiles/agents/Dockerfile
     environment:
-      - ADMIN_URL=http://bob-agent:${BOB_ADMIN_PORT}
-      - AGENT_NAME=${BOB_AGENT_NAME}
-      - ADMIN_PORT=${BOB_ADMIN_PORT}
-      - HTTP_PORT=${BOB_HTTP_PORT}
-      - WEBHOOK_URL=${BOB_WEBHOOK_URL}
-      - AGENT_ENDPOINT=${BOB_AGENT_ENDPOINT}
-      - WALLET_SEED=${BOB_WALLET_SEED}
-      - WALLET_NAME=${BOB_WALLET_NAME}
-      - WALLET_TYPE=${WALLET_TYPE}
-      - WALLET_KEY=${BOB_WALLET_KEY}
-      - ADMIN_SECURE=${BOB_ADMIN_SECURE}
-      - GENESIS_URL=${GENESIS_URL}
+#      - ADMIN_URL=http://bob-agent:${BOB_ADMIN_PORT}
+#      - AGENT_NAME=${BOB_AGENT_NAME}
+#      - ADMIN_PORT=${BOB_ADMIN_PORT}
+#      - HTTP_PORT=${BOB_HTTP_PORT}
+#      - WEBHOOK_URL=${BOB_WEBHOOK_URL}
+#      - AGENT_ENDPOINT=${BOB_AGENT_ENDPOINT}
+#      - WALLET_SEED=${BOB_WALLET_SEED}
+#      - WALLET_NAME=${BOB_WALLET_NAME}
+#      - WALLET_TYPE=${WALLET_TYPE}
+#      - WALLET_KEY=${BOB_WALLET_KEY}
+#      - ADMIN_SECURE=${BOB_ADMIN_SECURE}
+      - GENESIS_URL=http://www.test.com
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
