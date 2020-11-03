@@ -51,6 +51,7 @@ services:
       - ACAPY_ADMIN_INSECURE_MODE=${BOB_ADMIN_SECURE}
       - GENESIS_URL=${GENESIS_URL}
       - ACAPY_NO_LEDGER=true
+      - ACAPY_PLUGIN=attach_protocol.attachment_protocol
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
