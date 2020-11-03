@@ -73,7 +73,7 @@ services:
   setup:
     build:
       context: ../../
-      dockerfile: tutorials/helpers/create_connection/Dockerfile
+      dockerfile: dockerfiles/agents/Dockerfile.createconnection
     networks:
       - indy_demo
     depends_on:
@@ -100,7 +100,7 @@ services:
   alice-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${ALICE_JUPYTER_PORT}
         - ALICE_API_KEY=${ALICE_API_KEY}
@@ -116,7 +116,7 @@ services:
   bob-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${BOB_JUPYTER_PORT}
     depends_on:
