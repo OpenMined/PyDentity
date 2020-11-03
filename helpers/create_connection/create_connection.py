@@ -24,7 +24,7 @@ BOB_WEBHOOK_BASE = os.getenv('BOB_WEBHOOK_BASE')
 
 async def start_agent():
 
-    time.sleep(6)
+    time.sleep(10)
 
     # Inviter
     bob_agent_controller = AriesAgentController(webhook_host=BOB_WEBHOOK_HOST, webhook_port=BOB_WEBHOOK_PORT,

@@ -19,6 +19,7 @@ services:
       - ACAPY_ADMIN_API_KEY=${ALICE_API_KEY}
       - GENESIS_URL=${GENESIS_URL}
       - ACAPY_NO_LEDGER=true
+      - ACAPY_PLUGIN=attach_protocol.attachment_protocol
     ports:
       - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
       - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
