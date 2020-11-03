@@ -8,8 +8,10 @@
 
 log-level: info
 genesis-url: !ENV ${GENESIS_URL}
-admin-insecure-mode: !ENV ${ADMIN_SECURE}
-#admin-api-key: !ENV ${API_KEY}
+# Admin insecure mode and api key will come from the following two variables
+# which is parsed and used automatically by ACA-Py
+# ACAPY_ADMIN_API_KEY
+# ACAPY_ADMIN_INSECURE_MODE
 admin: [0.0.0.0, !ENV '${ADMIN_PORT}']
 label: !ENV '${AGENT_NAME}'
 # the following is the callback url for your controller

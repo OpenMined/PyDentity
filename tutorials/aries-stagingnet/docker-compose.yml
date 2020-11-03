@@ -21,7 +21,7 @@ services:
       - WALLET_NAME=${VERIFIER_WALLET_NAME}
       - WALLET_KEY=${VERIFIER_WALLET_KEY}
       - WALLET_TYPE=${WALLET_TYPE}
-      - ADMIN_SECURE=${VERIFIER_ADMIN_SECURE}
+      - ACAPY_ADMIN_INSECURE_MODE=${VERIFIER_ADMIN_SECURE}
       - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${VERIFIER_HTTP_PORT}:${VERIFIER_HTTP_PORT}
@@ -50,7 +50,7 @@ services:
       - WALLET_NAME=${ISSUER_WALLET_NAME}
       - WALLET_KEY=${ISSUER_WALLET_KEY}
       - WALLET_TYPE=${WALLET_TYPE}
-      - ADMIN_SECURE=${ISSUER_ADMIN_SECURE}
+      - ACAPY_ADMIN_INSECURE_MODE=${ISSUER_ADMIN_SECURE}
       - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${ISSUER_HTTP_PORT}:${ISSUER_HTTP_PORT}
@@ -60,7 +60,7 @@ services:
   issuer-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${ISSUER_JUPYTER_PORT}
     depends_on:
@@ -75,7 +75,7 @@ services:
   verifier-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${VERIFIER_JUPYTER_PORT}
     depends_on:

@@ -8,7 +8,10 @@
 
 log-level: info
 genesis-url: !ENV ${GENESIS_URL}
-admin-api-key: !ENV ${API_KEY}
+# Admin insecure mode and api key will come from the following two variables
+# which is parsed and used automatically by ACA-Py
+# ACAPY_ADMIN_API_KEY
+# ACAPY_ADMIN_INSECURE_MODE
 admin: [0.0.0.0, !ENV '${ADMIN_PORT}']
 label: !ENV '${AGENT_NAME}'
 # the following is the callback url for your controller
@@ -41,3 +44,17 @@ seed: !ENV ${WALLET_SEED}
 #wallet-storage-config: '{"url":"localhost:5432","max_connections":5}'
 ## could be sent using env var ACAPY_WALLET_STORAGE_CREDS
 #wallet-storage-creds: '{"account":"postgres","password":"mysecretpassword","admin_account":"postgres","admin_password":"mysecretpassword"}'
+
+
+auto-accept-requests: true
+auto-respond-credential-proposal: true
+auto-respond-credential-offer: true
+auto-respond-credential-request: true
+auto-store-credential: true
+auto-respond-presentation-proposal: true
+auto-respond-presentation-request: true
+preserve-exchange-records: true
+debug-connections: true
+debug-credentials: true
+debug-presentations: true
+enable-undelivered-queue: true
