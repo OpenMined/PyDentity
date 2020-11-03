@@ -6,13 +6,23 @@ services:
     networks:
       - indy_demo
   id-verifier-agent:
-    build: ""
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
-      NGROK_NAME: ngrok-id-verifier
-      AGENT_NAME: Identity Verification Sevice
-      PORT: ${IDVERIFIER_HTTP_PORT}
-      ADMIN_PORT: ${IDVERIFIER_ADMIN_PORT}
-      WEBHOOK_URL: ${IDVERIFIER_WEBHOOK_URL}
+      - NGROK_NAME=ngrok-id-verifier
+      - ADMIN_URL=http://id-verifier-agent:${IDVERIFIER_ADMIN_PORT}
+      - AGENT_NAME=${IDVERIFIER_AGENT_NAME}
+      - ADMIN_PORT=${IDVERIFIER_ADMIN_PORT}
+      - HTTP_PORT=${IDVERIFIER_HTTP_PORT}
+      - WEBHOOK_URL=${IDVERIFIER_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${IDVERIFIER_AGENT_ENDPOINT}
+      - WALLET_SEED=${IDVERIFIER_WALLET_SEED}
+      - WALLET_NAME=${IDVERIFIER_WALLET_NAME}
+      - WALLET_KEY=${IDVERIFIER_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${IDVERIFIER_HTTP_PORT}:${IDVERIFIER_HTTP_PORT}
       - ${IDVERIFIER_ADMIN_PORT}:${IDVERIFIER_ADMIN_PORT}
@@ -21,7 +31,7 @@ services:
   id-verifier-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${IDVERIFIER_JUPYTER_PORT}
     depends_on:
@@ -39,13 +49,23 @@ services:
     networks:
       - indy_demo
   medical-school-agent:
-    build: ""
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
-      NGROK_NAME: ngrok-med-school
-      AGENT_NAME: Medical School
-      PORT: ${MEDICAL_SCHOOL_HTTP_PORT}
-      ADMIN_PORT: ${MEDICAL_SCHOOL_ADMIN_PORT}
-      WEBHOOK_URL: ${MEDICAL_SCHOOL_WEBHOOK_URL}
+      - NGROK_NAME=ngrok-med-school
+      - ADMIN_URL=http://medical-school-agent:${MEDICAL_SCHOOL_ADMIN_PORT}
+      - AGENT_NAME=${MEDICAL_SCHOOL_AGENT_NAME}
+      - ADMIN_PORT=${MEDICAL_SCHOOL_ADMIN_PORT}
+      - HTTP_PORT=${MEDICAL_SCHOOL_HTTP_PORT}
+      - WEBHOOK_URL=${MEDICAL_SCHOOL_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${MEDICAL_SCHOOL_AGENT_ENDPOINT}
+      - WALLET_SEED=${MEDICAL_SCHOOL_WALLET_SEED}
+      - WALLET_NAME=${MEDICAL_SCHOOL_WALLET_NAME}
+      - WALLET_KEY=${MEDICAL_SCHOOL_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${MEDICAL_SCHOOL_HTTP_PORT}:${MEDICAL_SCHOOL_HTTP_PORT}
       - ${MEDICAL_SCHOOL_ADMIN_PORT}:${MEDICAL_SCHOOL_ADMIN_PORT}
@@ -54,7 +74,7 @@ services:
   med-school-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${MEDICAL_SCHOOL_JUPYTER_PORT}
     depends_on:
@@ -73,13 +93,23 @@ services:
     networks:
       - indy_demo
   gmc-agent:
-    build: ""
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
-      NGROK_NAME: ngrok-gmc
-      AGENT_NAME: ${GMC_AGENT_NAME}
-      PORT: ${GMC_HTTP_PORT}
-      ADMIN_PORT: ${GMC_ADMIN_PORT}
-      WEBHOOK_URL: ${GMC_WEBHOOK_URL}
+      - NGROK_NAME=ngrok-gmc
+      - ADMIN_URL=http://gmc-agent:${GMC_ADMIN_PORT}
+      - AGENT_NAME=${GMC_AGENT_NAME}
+      - ADMIN_PORT=${GMC_ADMIN_PORT}
+      - HTTP_PORT=${GMC_HTTP_PORT}
+      - WEBHOOK_URL=${GMC_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${GMC_AGENT_ENDPOINT}
+      - WALLET_SEED=${GMC_WALLET_SEED}
+      - WALLET_NAME=${GMC_WALLET_NAME}
+      - WALLET_KEY=${GMC_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${GMC_HTTP_PORT}:${GMC_HTTP_PORT}
       - ${GMC_ADMIN_PORT}:${GMC_ADMIN_PORT}
@@ -88,7 +118,7 @@ services:
   gmc-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${GMC_JUPYTER_PORT}
     depends_on:
@@ -106,13 +136,23 @@ services:
     networks:
       - indy_demo
   hee-agent:
-    build: ""
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
-      NGROK_NAME: ngrok-hee
-      AGENT_NAME: ${HEE_AGENT_NAME}
-      PORT: ${HEE_HTTP_PORT}
-      ADMIN_PORT: ${HEE_ADMIN_PORT}
-      WEBHOOK_URL: ${HEE_WEBHOOK_URL}
+      - NGROK_NAME=ngrok-hee
+      - ADMIN_URL=http://hee-agent:${HEE_ADMIN_PORT}
+      - AGENT_NAME=${HEE_AGENT_NAME}
+      - ADMIN_PORT=${HEE_ADMIN_PORT}
+      - HTTP_PORT=${HEE_HTTP_PORT}
+      - WEBHOOK_URL=${HEE_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${HEE_AGENT_ENDPOINT}
+      - WALLET_SEED=${HEE_WALLET_SEED}
+      - WALLET_NAME=${HEE_WALLET_NAME}
+      - WALLET_KEY=${HEE_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${HEE_HTTP_PORT}:${HEE_HTTP_PORT}
       - ${HEE_ADMIN_PORT}:${HEE_ADMIN_PORT}
@@ -121,7 +161,7 @@ services:
   hee-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${HEE_JUPYTER_PORT}
     depends_on:
@@ -139,13 +179,23 @@ services:
     networks:
       - indy_demo
   lead-employer-agent:
-    build: ""
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
-      NGROK_NAME: ngrok-lead-employer
-      AGENT_NAME: ${LEAD_AGENT_NAME}
-      PORT: ${LEAD_HTTP_PORT}
-      ADMIN_PORT: ${LEAD_ADMIN_PORT}
-      WEBHOOK_URL: ${LEAD_WEBHOOK_URL}
+      - NGROK_NAME=ngrok-lead-employer
+      - ADMIN_URL=http://lead-employer-agent:${LEAD_ADMIN_PORT}
+      - AGENT_NAME=${LEAD_AGENT_NAME}
+      - ADMIN_PORT=${LEAD_ADMIN_PORT}
+      - HTTP_PORT=${LEAD_HTTP_PORT}
+      - WEBHOOK_URL=${LEAD_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${LEAD_AGENT_ENDPOINT}
+      - WALLET_SEED=${LEAD_WALLET_SEED}
+      - WALLET_NAME=${LEAD_WALLET_NAME}
+      - WALLET_KEY=${LEAD_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${LEAD_HTTP_PORT}:${LEAD_HTTP_PORT}
       - ${LEAD_ADMIN_PORT}:${LEAD_ADMIN_PORT}
@@ -154,7 +204,7 @@ services:
   lead-employer-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${LEAD_JUPYTER_PORT}
     depends_on:
