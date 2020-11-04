@@ -26,8 +26,18 @@ class WalletController(BaseController):
         }
         return await self.admin_POST(f"{self.base_url}/did/public", params=params)
 
-    async def get_tag_policy(self, credential_definition_id):
-        return await self.admin_GET(f"{self.base_url}/tag-policy/{credential_definition_id}")
+    async def get_did_endpoint(self, did):
+        params = {
+            "did": did
+        }
+        return await self.admin_GET(f"{self.base_url}/get-did-endpoint", params=params)
 
-    async def set_tag_policy(self, credential_definition_id):
-        return await self.admin_POST(f"{self.base_url}/tag-policy/{credential_definition_id}")
+    async def set_did_endpoint(self, did, endpoint, endpoint_type):
+        body = {
+            "did": did,
+            "endpoint": endpoint,
+            "endpoint_type": endpoint_type
+        }
+        return await self.admin_POST(f"{self.base_url}/set-did-endpoint", json_data=body)
+
+    ## TODO Patch rotate-keypair

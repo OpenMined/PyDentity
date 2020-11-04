@@ -120,7 +120,7 @@ class ConnectionsController(BaseController):
         return response
 
     async def remove_connection(self, connection_id):
-        response = await self.admin_POST(f"/connections/{connection_id}/remove")
+        response = await self.admin_DELETE(f"/connections/{connection_id}")
         return response
 
     async def create_static(self, their_seed, their_label, their_verkey, their_role, my_seed, my_did, their_endpoint, alias, their_did):

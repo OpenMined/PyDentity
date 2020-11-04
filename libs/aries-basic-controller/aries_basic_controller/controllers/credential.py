@@ -16,7 +16,7 @@ class CredentialController(BaseController):
         return await self.admin_GET(f"/credential/mime-types/{credential_id}")
 
     async def remove_credential(self, credential_id):
-        return await self.admin_POST(f"/credential/{credential_id}/remove")
+        return await self.admin_DELETE(f"/credential/{credential_id}")
 
     async def get_all(self, wql_query: str = None, count: int = None, start: int = None):
         params = {}
@@ -28,3 +28,6 @@ class CredentialController(BaseController):
             params["start"] = start
 
         return await self.admin_GET("/credentials", params=params)
+
+    async def is_revoked(self, credential_id):
+        return await self.admin_GET(f"credential/revoked/{credential_id}")
