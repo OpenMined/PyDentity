@@ -86,3 +86,7 @@ SSI voting system.
 ### [Doctors in Training](./projects/doctors-in-training)
 
 A real life use case of SSI developed as part of an NHS INTEROpen hackathon.
+
+### [Single Agent](./project/single-agent)
+
+This spins up a single agent (with attachment capability) pointing to the Sovrin StagingNet and publicly exposed using Ngrok. It includes an associated notebook. Our thought is you could use this to experiment with interoperability of other aries agents. For example aca-pico.
