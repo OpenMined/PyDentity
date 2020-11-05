@@ -79,7 +79,7 @@ class ProofController(BaseController):
         return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/verify-presentation")
 
     async def remove_presentation_record(self, pres_ex_id):
-        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/remove")
+        return await self.admin_DELETE(f"{self.base_url}/records/{pres_ex_id}")
 
     # def build_proof_request(self, name, version, requested_attributes, requested_predicates):
 

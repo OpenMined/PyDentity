@@ -8,21 +8,9 @@ ENV env_jupyter_port=jupyter_port
 RUN apt-get update && apt-get install -y gcc
 RUN conda install jupyter notebook=5.7.8
 
-#ADD aries-basic-controller aries-basic-controller
-#
-#
-#RUN pip install --no-cache-dir -e aries-basic-controller
-
-
 
 ADD libs/attachment-controller attachment-controller
 
-#ADD setup.py ./om-controller/setup.py
-#
-#ADD README.md ./om-controller/README.md
-#ADD requirements.txt ./om-controller/requirements.txt
-#
-#RUN cd om-controller
 
 RUN pip install --no-cache-dir -e attachment-controller
 

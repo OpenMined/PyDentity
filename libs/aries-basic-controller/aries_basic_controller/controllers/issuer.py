@@ -96,21 +96,21 @@ class IssuerController(BaseController):
         return await self.admin_POST(f"{self.base_url}/records/{cred_ex_id}/store", json_data=body)
 
     # Revoke and issued credential
-    async def revoke_credential(self, rev_reg_id, cred_rev_id, publish: bool = False):
-        params = {
-            "rev_reg_id": rev_reg_id,
-            "cred_reg_id": cred_rev_id,
-            "publish": publish
-        }
-        return await self.admin_POST(f"{self.base_url}/revoke", params=params)
-
-    # Publish pending revocations
-    async def publish_revocations(self):
-        return await self.admin_POST(f"{self.base_url}/publish-revocations")
+    # async def revoke_credential(self, rev_reg_id, cred_rev_id, publish: bool = False):
+    #     params = {
+    #         "rev_reg_id": rev_reg_id,
+    #         "cred_reg_id": cred_rev_id,
+    #         "publish": publish
+    #     }
+    #     return await self.admin_POST(f"{self.base_url}/revoke", params=params)
+    #
+    # # Publish pending revocations
+    # async def publish_revocations(self):
+    #     return await self.admin_POST(f"{self.base_url}/publish-revocations")
 
     # Remove an existing credential exchange record
     async def remove_record(self, cred_ex_id):
-        return await self.admin_POST(f"{self.base_url}/records/{cred_ex_id}/remove")
+        return await self.admin_DELETE(f"{self.base_url}/records/{cred_ex_id}")
 
     # Send a problem report for a credential exchange
     async def problem_report(self, cred_ex_id, explanation: str):

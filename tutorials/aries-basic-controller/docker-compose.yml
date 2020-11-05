@@ -1,7 +1,22 @@
 version: "3"
 services:
   bob-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.15-0_0.5.6
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile
+    environment:
+      - ADMIN_URL=http://bob-agent:${BOB_ADMIN_PORT}
+      - AGENT_NAME=${BOB_AGENT_NAME}
+      - ADMIN_PORT=${BOB_ADMIN_PORT}
+      - HTTP_PORT=${BOB_HTTP_PORT}
+      - WEBHOOK_URL=${BOB_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${BOB_AGENT_ENDPOINT}
+      - WALLET_SEED=${BOB_WALLET_SEED}
+      - WALLET_NAME=${BOB_WALLET_NAME}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - WALLET_KEY=${BOB_WALLET_KEY}
+      - ACAPY_ADMIN_INSECURE_MODE=${BOB_ADMIN_SECURE}
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
@@ -15,24 +30,27 @@ services:
           "echo Waiting for ledger to be ready...;
           sleep 60;
           curl -d '{\"seed\":\"${BOB_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${BOB_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
-          sleep 30; \
-            aca-py start \
-          --inbound-transport http '0.0.0.0' ${BOB_HTTP_PORT} \
-          --outbound-transport http \
-          --endpoint ${BOB_AGENT_ENDPOINT} \
-          --webhook-url ${BOB_WEBHOOK_URL} \
-          --wallet-type 'indy' \
-          --wallet-name '${BOB_WALLET_NAME}' \
-          --wallet-key ${BOB_WALLET_KEY} \
-          --seed '${BOB_WALLET_SEED}' \
-          --admin '0.0.0.0' ${BOB_ADMIN_PORT} \
-          --admin-insecure-mode \
-          --log-level info \
-          --genesis-url '${LEDGER_URL}/genesis' \
-          --label ${BOB_AGENT_NAME}",
+          python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
+          sleep 20; \
+            aca-py start --arg-file /tmp/agent_conf.yml"
         ]
   alice-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.15-0_0.5.6
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile
+    environment:
+      - ADMIN_URL=http://alice-agent:${ALICE_ADMIN_PORT}
+      - AGENT_NAME=${ALICE_AGENT_NAME}
+      - ADMIN_PORT=${ALICE_ADMIN_PORT}
+      - HTTP_PORT=${ALICE_HTTP_PORT}
+      - WEBHOOK_URL=${ALICE_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${ALICE_AGENT_ENDPOINT}
+      - WALLET_SEED=${ALICE_WALLET_SEED}
+      - WALLET_NAME=${ALICE_WALLET_NAME}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - WALLET_KEY=${ALICE_WALLET_KEY}
+      - ACAPY_ADMIN_API_KEY=${ALICE_API_KEY}
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
       - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
@@ -46,28 +64,16 @@ services:
     command: [
         "-c",
         "echo Waiting for ledger to be ready...;
-        sleep 60;
-        curl -d '{\"seed\":\"${ALICE_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${ALICE_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
-        sleep 30; \
-        aca-py start \
-        --inbound-transport http '0.0.0.0' ${ALICE_HTTP_PORT} \
-        --outbound-transport http \
-        --endpoint ${ALICE_AGENT_ENDPOINT} \
-        --webhook-url ${ALICE_WEBHOOK_URL} \
-        --wallet-type 'indy' \
-        --wallet-name '${ALICE_WALLET_NAME}' \
-        --wallet-key ${ALICE_WALLET_KEY} \
-        --seed '${ALICE_WALLET_SEED}' \
-        --admin '0.0.0.0' ${ALICE_ADMIN_PORT} \
-        --admin-api-key ${ALICE_API_KEY} \
-        --log-level info \
-        --genesis-url '${LEDGER_URL}/genesis' \
-        --label ${ALICE_AGENT_NAME}",
+                       sleep 60;
+                       curl -d '{\"seed\":\"${ALICE_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${ALICE_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
+                       python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
+                       sleep 20; \
+                         aca-py start --arg-file /tmp/agent_conf.yml"
     ]
   setup:
     build:
       context: ../../
-      dockerfile: tutorials/helpers/create_connection/Dockerfile
+      dockerfile: dockerfiles/agents/Dockerfile.createconnection
     networks:
       - indy_demo
     depends_on:
@@ -94,7 +100,7 @@ services:
   alice-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${ALICE_JUPYTER_PORT}
         - ALICE_API_KEY=${ALICE_API_KEY}
@@ -110,7 +116,7 @@ services:
   bob-notebook:
     build:
       context: ../../
-      dockerfile: tutorials/dockerfiles/Dockerfile.basiccontroller
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${BOB_JUPYTER_PORT}
     depends_on:

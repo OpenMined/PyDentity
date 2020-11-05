@@ -22,6 +22,12 @@ class LedgerController(BaseController):
 
         return await self.admin_POST(f"{self.base_url}/register-nym", params=params)
 
+    async def get_nym_role(self, did):
+        params = {
+            "did": did
+        }
+        return await self.admin_GET(f"{self.base_url}/get-nym-role", params=params)
+
 
     async def get_did_verkey(self, did):
         params = {
@@ -40,5 +46,7 @@ class LedgerController(BaseController):
 
     async def accept_taa(self, data):
         return await self.admin_POST(f"{self.base_url}/taa/accept", json_data=data)
+
+    #TODO PATCH rotate key pair
 
 

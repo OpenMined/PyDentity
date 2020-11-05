@@ -15,7 +15,7 @@ class ProtocolController(BaseController):
         await self.connections.is_active(connection_id)
 
         path = f"/connections/{connection_id}/send-attachment"
-        return await self.admin_POST(path, json_data=data)
+        return await self.admin_POST(path, data=data)
 
  # async def store_attachment(self,data):
 
