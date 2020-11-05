@@ -24,13 +24,14 @@ BOB_WEBHOOK_BASE = os.getenv('BOB_WEBHOOK_BASE')
 
 async def start_agent():
 
-    time.sleep(6)
+    time.sleep(10)
 
+    # Inviter
     bob_agent_controller = AriesAgentController(webhook_host=BOB_WEBHOOK_HOST, webhook_port=BOB_WEBHOOK_PORT,
                                                webhook_base=BOB_WEBHOOK_BASE, admin_url=BOB_ADMIN_URL)
 
 
-
+    # Invitee
     alice_agent_controller = AriesAgentController(webhook_host=ALICE_WEBHOOK_HOST, webhook_port=ALICE_WEBHOOK_PORT,
                                                webhook_base=ALICE_WEBHOOK_BASE, admin_url=ALICE_ADMIN_URL, api_key=ALICE_API_KEY)
 
@@ -71,11 +72,11 @@ async def start_agent():
     all_conns = await bob_agent_controller.connections.get_connections()
     print("All Conns : ", all_conns)
 
+
     connection = await bob_agent_controller.connections.accept_request(bob_connection_id)
     print("Request Accepted")
     print(connection)
 
-    connection = await bob_agent_controller.connections.get_connection(bob_connection_id)
     print("BOB AGENT CONNECTION")
     print(connection)
 

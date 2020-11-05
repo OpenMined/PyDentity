@@ -24,6 +24,16 @@ class IssuerController(BaseController):
     async def get_record_by_id(self, cred_ex_id):
         return await self.admin_GET(f"{self.base_url}/records/{cred_ex_id}")
 
+    # Create a credential, automating the entire flow
+    # TODO trace=True causes error. Not sure why
+    # async def create_credential(self, connection_id, schema_id, cred_def_id, attributes, comment: str = "",
+    #                           auto_remove: bool = True, trace: bool = False):
+    #
+    #     body = await self.create_credential_body(connection_id, schema_id, cred_def_id, attributes, comment,
+    #                                              auto_remove, trace)
+    async def create_credential(self, body):
+        return await self.admin_POST(f"{self.base_url}/create", json_data=body)
+
     # Send holder a credential, automating the entire flow
     # TODO trace=True causes error. Not sure why
     async def send_credential(self, connection_id, schema_id, cred_def_id, attributes, comment: str = "",
@@ -86,21 +96,21 @@ class IssuerController(BaseController):
         return await self.admin_POST(f"{self.base_url}/records/{cred_ex_id}/store", json_data=body)
 
     # Revoke and issued credential
-    async def revoke_credential(self, rev_reg_id, cred_rev_id, publish: bool = False):
-        params = {
-            "rev_reg_id": rev_reg_id,
-            "cred_reg_id": cred_rev_id,
-            "publish": publish
-        }
-        return await self.admin_POST(f"{self.base_url}/revoke", params=params)
-
-    # Publish pending revocations
-    async def publish_revocations(self):
-        return await self.admin_POST(f"{self.base_url}/publish-revocations")
+    # async def revoke_credential(self, rev_reg_id, cred_rev_id, publish: bool = False):
+    #     params = {
+    #         "rev_reg_id": rev_reg_id,
+    #         "cred_reg_id": cred_rev_id,
+    #         "publish": publish
+    #     }
+    #     return await self.admin_POST(f"{self.base_url}/revoke", params=params)
+    #
+    # # Publish pending revocations
+    # async def publish_revocations(self):
+    #     return await self.admin_POST(f"{self.base_url}/publish-revocations")
 
     # Remove an existing credential exchange record
     async def remove_record(self, cred_ex_id):
-        return await self.admin_POST(f"{self.base_url}/records/{cred_ex_id}/remove")
+        return await self.admin_DELETE(f"{self.base_url}/records/{cred_ex_id}")
 
     # Send a problem report for a credential exchange
     async def problem_report(self, cred_ex_id, explanation: str):
