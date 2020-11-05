@@ -8,7 +8,7 @@ services:
   iiw-agent:
     build:
       context: ../../
-      dockerfile: projects/iiw/Dockerfile.agent
+      dockerfile: ""
     environment:
       NGROK_NAME: ngrok-iiw
       AGENT_NAME: ${IIW_AGENT_NAME}
@@ -26,7 +26,7 @@ services:
   iiw-notebook:
     build:
       context: ../../
-      dockerfile: projects/iiw/Dockerfile
+      dockerfile: ""
       args:
         - jupyter_port=${JUPYTER_PORT}
     depends_on:

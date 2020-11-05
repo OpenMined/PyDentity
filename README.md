@@ -28,8 +28,17 @@ Verify that **s2i** is in your PATH.  If not, then edit your PATH and add the di
 
 Ensure that Docker is running. If it is not try `sudo dockerd` in another terminal.
 
-You can now go to the tutorials folder and follow the examples
+You should now be able to run any of the tutorials or projects within this repo.
+
+E.g for the main tutorial on the aries-basic-controller
+1. Navigate to the root directory of the tutorial
 `cd tutorials/aries-basic-controller`
+2. Spin up the docker-compose configuration
+`./manage start`
+3. Get the urls and tokens for the juypter notebook instances within the project
+**From the root PyDentity folder**
+`./scripts/get_URLS.sh`
+4. Navigate to the urls this spits out and follow the instructions within the notebooks.
 
 ## Tutorials
 
