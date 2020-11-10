@@ -1,7 +1,22 @@
 version: "3"
 services:
   nhstrust-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile
+    environment:
+      - ADMIN_URL=http://nhstrust-agent:${NHSTRUST_ADMIN_PORT}
+      - AGENT_NAME=${NHSTRUST_AGENT_NAME}
+      - ADMIN_PORT=${NHSTRUST_ADMIN_PORT}
+      - HTTP_PORT=${NHSTRUST_HTTP_PORT}
+      - WEBHOOK_URL=${NHSTRUST_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${NHSTRUST_AGENT_ENDPOINT}
+      - WALLET_SEED=${NHSTRUST_WALLET_SEED}
+      - WALLET_NAME=${NHSTRUST_WALLET_NAME}
+      - WALLET_KEY=${NHSTRUST_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${NHSTRUST_HTTP_PORT}:${NHSTRUST_HTTP_PORT}
       - ${NHSTRUST_ADMIN_PORT}:${NHSTRUST_ADMIN_PORT}
@@ -9,24 +24,16 @@ services:
       - indy_demo
     entrypoint: /bin/bash
     command: [
-        "-c",
-          "sleep 2; \
-            aca-py start \
-          --inbound-transport http '0.0.0.0' ${NHSTRUST_HTTP_PORT} \
-          --outbound-transport http \
-          --endpoint ${NHSTRUST_AGENT_ENDPOINT} \
-          --webhook-url ${NHSTRUST_WEBHOOK_URL} \
-          --wallet-type 'indy' \
-          --seed '${NHSTRUST_WALLET_SEED}' \
-          --admin '0.0.0.0' ${NHSTRUST_ADMIN_PORT} \
-          --admin-insecure-mode \
-          --log-level info \
-          --genesis-url '${GENESIS_URL}' \
-          --label '${NHSTRUST_AGENT_NAME}'",
-        ]
+      "-c",
+      "sleep 3;
+          python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
+          sleep 20; \
+            aca-py start --arg-file /tmp/agent_conf.yml"
+    ]
   nhstrust-notebook:
     build:
-      context: .
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${NHSTRUST_JUPYTER_PORT}
     depends_on:
@@ -36,37 +43,42 @@ services:
     volumes:
       - ${PWD}/notebooks/nhs_trust:/workspace
     ports:
-      - "${NHSTRUST_JUPYTER_PORT}:8888"
+      - ${NHSTRUST_JUPYTER_PORT}:8888
       - ${NHSTRUST_WEBHOOK_PORT}:${NHSTRUST_WEBHOOK_PORT}
   regulator-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile
+    environment:
+      - ADMIN_URL=http://regulator-agent:${REGULATOR_ADMIN_PORT}
+      - AGENT_NAME=${REGULATOR_AGENT_NAME}
+      - ADMIN_PORT=${REGULATOR_ADMIN_PORT}
+      - HTTP_PORT=${REGULATOR_HTTP_PORT}
+      - WEBHOOK_URL=${REGULATOR_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${REGULATOR_AGENT_ENDPOINT}
+      - WALLET_SEED=${REGULATOR_WALLET_SEED}
+      - WALLET_NAME=${REGULATOR_WALLET_NAME}
+      - WALLET_KEY=${REGULATOR_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${REGULATOR_HTTP_PORT}:${REGULATOR_HTTP_PORT}
       - ${REGULATOR_ADMIN_PORT}:${REGULATOR_ADMIN_PORT}
     networks:
       - indy_demo
-#    volumes:
-#      - alice-wallet:/indy/home/.indy_client/default
     entrypoint: /bin/bash
     command: [
-        "-c",
-        "sleep 2; \
-        aca-py start \
-        --inbound-transport http '0.0.0.0' ${REGULATOR_HTTP_PORT} \
-        --outbound-transport http \
-        --endpoint ${REGULATOR_AGENT_ENDPOINT} \
-        --webhook-url ${REGULATOR_WEBHOOK_URL} \
-        --wallet-type 'indy' \
-        --seed '$REGULATOR_WALLET_SEED}' \
-        --admin '0.0.0.0' ${REGULATOR_ADMIN_PORT} \
-        --admin-insecure-mode \
-        --log-level info \
-        --genesis-url '${GENESIS_URL}' \
-        --label '${REGULATOR_AGENT_NAME}'",
+      "-c",
+      "sleep 3;
+          python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
+          sleep 20; \
+            aca-py start --arg-file /tmp/agent_conf.yml"
     ]
   regulator-notebook:
     build:
-      context: .
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${REGULATOR_JUPYTER_PORT}
     depends_on:
@@ -79,35 +91,39 @@ services:
       - "${REGULATOR_JUPYTER_PORT}:8888"
       - ${REGULATOR_WEBHOOK_PORT}:${REGULATOR_WEBHOOK_PORT}
   researcher-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile
+    environment:
+      - ADMIN_URL=http://researcher-agent:${RESEARCHER_ADMIN_PORT}
+      - AGENT_NAME=${RESEARCHER_AGENT_NAME}
+      - ADMIN_PORT=${RESEARCHER_ADMIN_PORT}
+      - HTTP_PORT=${RESEARCHER_HTTP_PORT}
+      - WEBHOOK_URL=${RESEARCHER_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${RESEARCHER_AGENT_ENDPOINT}
+      - WALLET_SEED=${RESEARCHER_WALLET_SEED}
+      - WALLET_NAME=${RESEARCHER_WALLET_NAME}
+      - WALLET_KEY=${RESEARCHER_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${RESEARCHER_HTTP_PORT}:${RESEARCHER_HTTP_PORT}
       - ${RESEARCHER_ADMIN_PORT}:${RESEARCHER_ADMIN_PORT}
     networks:
       - indy_demo
-    #    volumes:
-    #      - alice-wallet:/indy/home/.indy_client/default
     entrypoint: /bin/bash
     command: [
       "-c",
-      "
-          sleep 2; \
-          aca-py start \
-          --inbound-transport http '0.0.0.0' ${RESEARCHER_HTTP_PORT} \
-          --outbound-transport http \
-          --endpoint ${RESEARCHER_AGENT_ENDPOINT} \
-          --webhook-url ${RESEARCHER_WEBHOOK_URL} \
-          --wallet-type 'indy' \
-          --seed '${RESEARCHER_WALLET_SEED}' \
-          --admin '0.0.0.0' ${RESEARCHER_ADMIN_PORT} \
-          --admin-insecure-mode \
-          --log-level info \
-          --genesis-url '${GENESIS_URL}' \
-          --label '${RESEARCHER_AGENT_NAME}'",
+      "sleep 3;
+          python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
+          sleep 20; \
+            aca-py start --arg-file /tmp/agent_conf.yml"
     ]
   researcher-notebook:
     build:
-      context: .
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${RESEARCHER_JUPYTER_PORT}
     depends_on:
@@ -120,35 +136,39 @@ services:
       - "${RESEARCHER_JUPYTER_PORT}:8888"
       - ${RESEARCHER_WEBHOOK_PORT}:${RESEARCHER_WEBHOOK_PORT}
   hospital1-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile
+    environment:
+      - ADMIN_URL=http://hospital1-agent:${HOSPITAL1_ADMIN_PORT}
+      - AGENT_NAME=${HOSPITAL1_AGENT_NAME}
+      - ADMIN_PORT=${HOSPITAL1_ADMIN_PORT}
+      - HTTP_PORT=${HOSPITAL1_HTTP_PORT}
+      - WEBHOOK_URL=${HOSPITAL1_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${HOSPITAL1_AGENT_ENDPOINT}
+      - WALLET_SEED=${HOSPITAL1_WALLET_SEED}
+      - WALLET_NAME=${HOSPITAL1_WALLET_NAME}
+      - WALLET_KEY=${HOSPITAL1_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${HOSPITAL1_HTTP_PORT}:${HOSPITAL1_HTTP_PORT}
       - ${HOSPITAL1_ADMIN_PORT}:${HOSPITAL1_ADMIN_PORT}
     networks:
       - indy_demo
-    #    volumes:
-    #      - alice-wallet:/indy/home/.indy_client/default
     entrypoint: /bin/bash
     command: [
       "-c",
-      "
-          sleep 2; \
-          aca-py start \
-          --inbound-transport http '0.0.0.0' ${HOSPITAL1_HTTP_PORT} \
-          --outbound-transport http \
-          --endpoint ${HOSPITAL1_AGENT_ENDPOINT} \
-          --webhook-url ${HOSPITAL1_WEBHOOK_URL} \
-          --wallet-type 'indy' \
-          --seed '${HOSPITAL1_WALLET_SEED}' \
-          --admin '0.0.0.0' ${HOSPITAL1_ADMIN_PORT} \
-          --admin-insecure-mode \
-          --log-level info \
-          --genesis-url '${GENESIS_URL}' \
-          --label '${HOSPITAL1_AGENT_NAME}'",
+      "sleep 3;
+          python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
+          sleep 20; \
+            aca-py start --arg-file /tmp/agent_conf.yml"
     ]
   hospital1-notebook:
     build:
-      context: .
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${HOSPITAL1_JUPYTER_PORT}
     depends_on:
@@ -161,34 +181,39 @@ services:
       - "${HOSPITAL1_JUPYTER_PORT}:8888"
       - ${HOSPITAL1_WEBHOOK_PORT}:${HOSPITAL1_WEBHOOK_PORT}
   hospital2-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile
+    environment:
+      - ADMIN_URL=http://hospital2-agent:${HOSPITAL2_ADMIN_PORT}
+      - AGENT_NAME=${HOSPITAL2_AGENT_NAME}
+      - ADMIN_PORT=${HOSPITAL2_ADMIN_PORT}
+      - HTTP_PORT=${HOSPITAL2_HTTP_PORT}
+      - WEBHOOK_URL=${HOSPITAL2_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${HOSPITAL2_AGENT_ENDPOINT}
+      - WALLET_SEED=${HOSPITAL2_WALLET_SEED}
+      - WALLET_NAME=${HOSPITAL2_WALLET_NAME}
+      - WALLET_KEY=${HOSPITAL2_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${HOSPITAL2_HTTP_PORT}:${HOSPITAL2_HTTP_PORT}
       - ${HOSPITAL2_ADMIN_PORT}:${HOSPITAL2_ADMIN_PORT}
     networks:
       - indy_demo
-    #    volumes:
-    #      - alice-wallet:/indy/home/.indy_client/default
     entrypoint: /bin/bash
     command: [
       "-c",
-      "sleep 2; \
-          aca-py start \
-          --inbound-transport http '0.0.0.0' ${HOSPITAL2_HTTP_PORT} \
-          --outbound-transport http \
-          --endpoint ${HOSPITAL2_AGENT_ENDPOINT} \
-          --webhook-url ${HOSPITAL2_WEBHOOK_URL} \
-          --wallet-type 'indy' \
-          --seed '${HOSPITAL2_WALLET_SEED}' \
-          --admin '0.0.0.0' ${HOSPITAL2_ADMIN_PORT} \
-          --admin-insecure-mode \
-          --log-level info \
-          --genesis-url '${GENESIS_URL}' \
-          --label '${HOSPITAL2_AGENT_NAME}'",
+      "sleep 3;
+          python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
+          sleep 20; \
+            aca-py start --arg-file /tmp/agent_conf.yml"
     ]
   hospital2-notebook:
     build:
-      context: .
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${HOSPITAL2_JUPYTER_PORT}
     depends_on:
@@ -201,34 +226,39 @@ services:
       - "${HOSPITAL2_JUPYTER_PORT}:8888"
       - ${HOSPITAL2_WEBHOOK_PORT}:${HOSPITAL2_WEBHOOK_PORT}
   hospital3-agent:
-    image: bcgovimages/aries-cloudagent:py36-1.14-1_0.5.1
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile
+    environment:
+      - ADMIN_URL=http://hospital3-agent:${HOSPITAL3_ADMIN_PORT}
+      - AGENT_NAME=${HOSPITAL3_AGENT_NAME}
+      - ADMIN_PORT=${HOSPITAL3_ADMIN_PORT}
+      - HTTP_PORT=${HOSPITAL3_HTTP_PORT}
+      - WEBHOOK_URL=${HOSPITAL3_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${HOSPITAL3_AGENT_ENDPOINT}
+      - WALLET_SEED=${HOSPITAL3_WALLET_SEED}
+      - WALLET_NAME=${HOSPITAL3_WALLET_NAME}
+      - WALLET_KEY=${HOSPITAL3_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${HOSPITAL3_HTTP_PORT}:${HOSPITAL3_HTTP_PORT}
       - ${HOSPITAL3_ADMIN_PORT}:${HOSPITAL3_ADMIN_PORT}
     networks:
       - indy_demo
-    #    volumes:
-    #      - alice-wallet:/indy/home/.indy_client/default
     entrypoint: /bin/bash
     command: [
       "-c",
-      "sleep 2; \
-          aca-py start \
-          --inbound-transport http '0.0.0.0' ${HOSPITAL3_HTTP_PORT} \
-          --outbound-transport http \
-          --endpoint ${HOSPITAL3_AGENT_ENDPOINT} \
-          --webhook-url ${HOSPITAL3_WEBHOOK_URL} \
-          --wallet-type 'indy' \
-          --seed '${HOSPITAL3_WALLET_SEED}' \
-          --admin '0.0.0.0' ${HOSPITAL3_ADMIN_PORT} \
-          --admin-insecure-mode \
-          --log-level info \
-          --genesis-url '${GENESIS_URL}' \
-          --label '${HOSPITAL3_AGENT_NAME}'",
+      "sleep 3;
+        python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
+        sleep 20; \
+          aca-py start --arg-file /tmp/agent_conf.yml"
     ]
   hospital3-notebook:
     build:
-      context: .
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
         - jupyter_port=${HOSPITAL3_JUPYTER_PORT}
     depends_on:
