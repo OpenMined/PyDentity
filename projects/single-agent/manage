@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="iiw-agent iiw-notebook ngrok-iiw "
+DEFAULT_CONTAINERS="agent controller-notebook ngrok-agent "
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -113,19 +113,22 @@ configureEnvironment() {
 
   # global
   export COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:controller}"
-  export LEDGER_URL=${LEDGER_URL-http://$DOCKERHOST:9000}
+  export GENESIS_URL="https://raw.githubusercontent.com/sovrin-foundation/sovrin/master/sovrin/pool_transactions_sandbox_genesis"
   export WALLET_TYPE="indy"
 
 
-  # iiw-agent
-  export IIW_AGENT_NAME="IIW"
-  export IIW_ADMIN_PORT=8021
-  export IIW_API_KEY="iiw_api_123456789"
-  export IIW_HTTP_PORT=8020
-  export IIW_WEBHOOK_PORT=8022
-  export IIW_WEBHOOK_URL=${IIW_WEBHOOK_URL:-http://$DOCKERHOST:$IIW_WEBHOOK_PORT}
-  export IIW_AGENT_ENDPOINT=${IIW_AGENT_ENDPOINT:-http://$DOCKERHOST:$IIW_HTTP_PORT}
-  export IIW_JUPYTER_PORT="8888"
+  # agent
+  export AGENT_NAME="AGENT"
+  export AGENT_ADMIN_PORT=8021
+  export AGENT_API_KEY="agent_api_123456789"
+  export AGENT_HTTP_PORT=8020
+  export AGENT_WEBHOOK_PORT=8022
+  export AGENT_WEBHOOK_URL=${AGENT_WEBHOOK_URL:-http://$DOCKERHOST:$AGENT_WEBHOOK_PORT}
+  export AGENT_AGENT_ENDPOINT=${AGENT_AGENT_ENDPOINT:-http://$DOCKERHOST:$AGENT_HTTP_PORT}
+  export AGENT_JUPYTER_PORT="8888"
+  export AGENT_WALLET_NAME="agent Wallet"
+  export AGENT_WALLET_KEY="agent_key_000000000000000000000"
+  export AGENT_WALLET_SEED="agent_seed_000000000000000000000"
 
 
 }
