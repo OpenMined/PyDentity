@@ -92,7 +92,6 @@ class AriesAgentController:
             if self.proofs:
                 pub.subscribe(self.proofs.default_handler, "present_proof")
 
-
         for listener in listeners:
             pub.subscribe(listener["handler"], listener["topic"])
 
@@ -115,11 +114,7 @@ class AriesAgentController:
         pub.sendMessage(topic, payload=payload)
         return web.Response(status=200)
 
-
     async def terminate(self):
         await self.client_session.close()
         if self.webhook_site:
             await self.webhook_site.stop()
-
-
-
