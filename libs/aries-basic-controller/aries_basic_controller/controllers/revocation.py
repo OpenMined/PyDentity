@@ -12,11 +12,11 @@ class RevocationController(BaseController):
     def __init__(self, admin_url: str, client_session: ClientSession):
         super().__init__(admin_url, client_session)
         self.base_url = "/revocation"
-        self.revocation_states = set(
+        self.revocation_states = set([
             "init", "generated", "posted", "active", "full"
-        )
+        ])
 
-    async def revoke_credential(self, cred_ex_id: str, cred_rev_id: str, publish: bool = False, rev_reg_id: str):
+    async def revoke_credential(self, cred_ex_id: str, cred_rev_id: str, rev_reg_id: str, publish: bool = False):
         """
         Revoke an issued credential.
 
