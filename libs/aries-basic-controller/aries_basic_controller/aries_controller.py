@@ -17,6 +17,7 @@ from .controllers.credential import CredentialController
 from .controllers.server import ServerController
 from .controllers.oob import OOBController
 from .controllers.action_menu import ActionMenuController
+from .controllers.revocation import RevocationController
 
 import logging
 
@@ -36,6 +37,7 @@ class AriesAgentController:
         messaging: bool = True,
         issuer: bool = True,
         action_menu: bool = True,
+        revocations: bool = True,
         api_key: str = None,
     ):
 
@@ -75,6 +77,11 @@ class AriesAgentController:
 
         if action_menu:
             self.action_menu = ActionMenuController(self.admin_url, self.client_session)
+        if revocations:
+            self.revocations = RevocationController(
+                self.admin_url,
+                self.client_session
+            )
 
     def register_listeners(self, listeners, defaults=True):
         if defaults:
