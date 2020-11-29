@@ -283,6 +283,8 @@ rm | down)
   docker-compose \
   --log-level ERROR down \
   -v
+  ;;
+*)
   usage
   ;;
 esac
