@@ -198,7 +198,7 @@ class RevocationController(BaseController):
     Private utility methods.
     """
 
-    async def __validate_revocation_registry_state(self, state: str) -> bool:
+    def __validate_revocation_registry_state(self, state: str) -> bool:
         """
         Validate if state input is one of init, generated, posted, active, full.
         """
