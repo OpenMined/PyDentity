@@ -30,4 +30,4 @@ class CredentialController(BaseController):
         return await self.admin_GET("/credentials", params=params)
 
     async def is_revoked(self, credential_id):
-        return await self.admin_GET(f"credential/revoked/{credential_id}")
+        return await self.admin_GET(f"/credential/revoked/{credential_id}")
