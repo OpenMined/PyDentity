@@ -33,7 +33,7 @@ services:
         curl -d '{\"seed\":\"${BOB_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${BOB_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
         python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
         sleep 20; \
-        aca-py start --arg-file /tmp/agent_conf.yml --tails-server-base-url https://b8ed201e879c.ngrok.io",
+        aca-py start --arg-file /tmp/agent_conf.yml --tails-server-base-url https://a5e208692130.ngrok.io",
       ]
   alice-agent:
     build:
@@ -70,7 +70,7 @@ services:
         curl -d '{\"seed\":\"${ALICE_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${ALICE_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
         python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
         sleep 20; \
-        aca-py start --arg-file /tmp/agent_conf.yml --tails-server-base-url https://b8ed201e879c.ngrok.io",
+        aca-py start --arg-file /tmp/agent_conf.yml --tails-server-base-url https://a5e208692130.ngrok.io",
       ]
   setup:
     build:
