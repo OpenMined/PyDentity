@@ -16,19 +16,26 @@ class RevocationController(BaseController):
             "init", "generated", "posted", "active", "full"
         ])
 
-    async def revoke_credential(self, cred_ex_id: str, cred_rev_id: str, rev_reg_id: str, publish: bool = False):
+    async def revoke_credential(self, cred_ex_id: str = "", cred_rev_id: str = "", rev_reg_id: str = "", publish: bool = False):
         """
         Revoke an issued credential.
 
         This method does not publish revocation to the ledger immediately by default - instead, marks it as pending.
+        Either (cred_ex_id) OR (cred_rev_id AND rev_reg_id) are required.
         """
 
         req_body = {
-            "cred_ex_id": cred_ex_id,
-            "cred_rev_id": cred_rev_id,
-            "publish": publish,
-            "rev_reg_id": rev_reg_id
+            "publish": publish
         }
+        if cred_ex_id:
+            req_body["cred_ex_id"] = cred_ex_id
+        elif cred_rev_id and rev_reg_id:
+            req_body["cred_rev_id"] = cred_rev_id
+            req_body["rev_reg_id"] = rev_reg_id
+        else:
+            raise InputError(
+                "Either (cred_ex_id) OR (cred_rev_id AND rev_reg_id) are required."
+            )
 
         return await self.admin_POST(f"{self.base_url}/revoke", json_data=req_body)
 
@@ -174,12 +181,15 @@ class RevocationController(BaseController):
 
         return await self.admin_PUT(f"{self.base_url}/registry/{rev_reg_id}/tails-file")
 
-    async def get_revocation_registry_tails_file(self, rev_reg_id: str):
-        """
-        Download tails file.
-        """
-
-        return await self.admin_GET(f"{self.base_url}/registry/{rev_reg_id}/tails-file")
+    """
+    TODO: this API call downloads the Tails file as an octet stream. We need to consider if we
+    want to build support for this
+    """
+    # async def get_revocation_registry_tails_file(self, rev_reg_id: str):
+    #     """
+    #     Download tails file.
+    #     """
+    #     return await self.admin_GET(f"{self.base_url}/registry/{rev_reg_id}/tails-file")
 
     async def update_revocation_registry_state(self, rev_reg_id: str, state: str):
         """
