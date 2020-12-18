@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="bob-agent alice-agent setup ledger-nodes ledger-browser alice-notebook bob-notebook"
+DEFAULT_CONTAINERS="tails-server bob-agent alice-agent setup ledger-nodes ledger-browser alice-notebook bob-notebook"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -116,6 +116,7 @@ configureEnvironment() {
   export GENESIS_URL=${GENESIS_URL-http://$DOCKERHOST:9000/genesis}
   export LEDGER_URL=${LEDGER_URL-http://$DOCKERHOST:9000}
   export WALLET_TYPE="indy"
+  export STORAGE_PATH=${STORAGE_PATH:-/tmp/tails-files}
 
   # bob-agent
   export BOB_AGENT_NAME="Bob"
@@ -129,7 +130,6 @@ configureEnvironment() {
   export BOB_WALLET_NAME="Bob Wallet"
   export BOB_WALLET_KEY="bob_key_00000000000000000000000"
   export BOB_ADMIN_SECURE="true"
-  export BOB_TAILS_SERVER_BASE_URL="https://b8ed201e879c.ngrok.io"
 
 
   # alice-agent
@@ -144,7 +144,6 @@ configureEnvironment() {
   export ALICE_JUPYTER_PORT="8888"
   export ALICE_WALLET_NAME="Alice Wallet"
   export ALICE_WALLET_KEY="alice_key_00000000000000000000000"
-  export ALICE_TAILS_SERVER_BASE_URL="https://b8ed201e879c.ngrok.io"
 
 }
 

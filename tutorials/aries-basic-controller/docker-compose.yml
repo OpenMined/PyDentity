@@ -16,13 +16,14 @@ services:
       - WALLET_TYPE=${WALLET_TYPE}
       - WALLET_KEY=${BOB_WALLET_KEY}
       - ACAPY_ADMIN_INSECURE_MODE=${BOB_ADMIN_SECURE}
-      - ACAPY_TAILS_SERVER_BASE_URL=${BOB_TAILS_SERVER_BASE_URL}
+      - ACAPY_TAILS_SERVER_BASE_URL=tails-server
       - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
     depends_on:
       - ledger-nodes
+      - tails-server
     networks:
       - indy_demo
     entrypoint: /bin/bash
@@ -33,7 +34,7 @@ services:
         curl -d '{\"seed\":\"${BOB_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${BOB_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
         python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
         sleep 20; \
-        aca-py start --arg-file /tmp/agent_conf.yml --tails-server-base-url https://a5e208692130.ngrok.io",
+        aca-py start --arg-file /tmp/agent_conf.yml",
       ]
   alice-agent:
     build:
@@ -51,13 +52,14 @@ services:
       - WALLET_TYPE=${WALLET_TYPE}
       - WALLET_KEY=${ALICE_WALLET_KEY}
       - ACAPY_ADMIN_API_KEY=${ALICE_API_KEY}
-      - ACAPY_TAILS_SERVER_BASE_URL=${ALICE_TAILS_SERVER_BASE_URL}
+      - ACAPY_TAILS_SERVER_BASE_URL=tails-server
       - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
       - ${ALICE_ADMIN_PORT}:${ALICE_ADMIN_PORT}
     depends_on:
       - ledger-nodes
+      - tails-server
     networks:
       - indy_demo
 #    volumes:
@@ -70,7 +72,7 @@ services:
         curl -d '{\"seed\":\"${ALICE_WALLET_SEED}\", \"role\":\"TRUST_ANCHOR\", \"alias\":\"${ALICE_AGENT_NAME}\"}' -X POST ${LEDGER_URL}/register; \
         python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
         sleep 20; \
-        aca-py start --arg-file /tmp/agent_conf.yml --tails-server-base-url https://a5e208692130.ngrok.io",
+        aca-py start --arg-file /tmp/agent_conf.yml",
       ]
   setup:
     build:
@@ -169,6 +171,21 @@ services:
       - nodes-data:/home/indy/ledger
     networks:
       - indy_demo
+
+  tails-server:
+    build:
+      context: https://github.com/bcgov/indy-tails-server.git
+      dockerfile: docker/Dockerfile.tails-server
+    ports:
+      - 6543:6543
+    networks:
+      - indy_demo
+    command: >
+      tails-server
+        --host 0.0.0.0
+        --port 6543
+        --storage-path $STORAGE_PATH
+        --log-level INFO
 
 networks:
   indy_demo:
