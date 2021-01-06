@@ -16,7 +16,7 @@ services:
       - WALLET_TYPE=${WALLET_TYPE}
       - WALLET_KEY=${BOB_WALLET_KEY}
       - ACAPY_ADMIN_INSECURE_MODE=${BOB_ADMIN_SECURE}
-      - ACAPY_TAILS_SERVER_BASE_URL=tails-server
+      - ACAPY_TAILS_SERVER_BASE_URL=http://tails-server:6543
       - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
@@ -52,7 +52,7 @@ services:
       - WALLET_TYPE=${WALLET_TYPE}
       - WALLET_KEY=${ALICE_WALLET_KEY}
       - ACAPY_ADMIN_API_KEY=${ALICE_API_KEY}
-      - ACAPY_TAILS_SERVER_BASE_URL=tails-server
+      - ACAPY_TAILS_SERVER_BASE_URL=http://tails-server:6543
       - GENESIS_URL=${GENESIS_URL}
     ports:
       - ${ALICE_HTTP_PORT}:${ALICE_HTTP_PORT}
