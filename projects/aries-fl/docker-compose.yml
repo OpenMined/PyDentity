@@ -123,7 +123,7 @@ services:
   researcher-notebook:
     build:
       context: ../../
-      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      dockerfile: projects/aries-fl/Dockerfile.ppmlcontroller
       args:
         - jupyter_port=${RESEARCHER_JUPYTER_PORT}
     depends_on:
@@ -168,7 +168,7 @@ services:
   hospital1-notebook:
     build:
       context: ../../
-      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      dockerfile: projects/aries-fl/Dockerfile.ppmlcontroller
       args:
         - jupyter_port=${HOSPITAL1_JUPYTER_PORT}
     depends_on:
@@ -213,7 +213,7 @@ services:
   hospital2-notebook:
     build:
       context: ../../
-      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      dockerfile: projects/aries-fl/Dockerfile.ppmlcontroller
       args:
         - jupyter_port=${HOSPITAL2_JUPYTER_PORT}
     depends_on:
@@ -258,7 +258,7 @@ services:
   hospital3-notebook:
     build:
       context: ../../
-      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      dockerfile: projects/aries-fl/Dockerfile.ppmlcontroller
       args:
         - jupyter_port=${HOSPITAL3_JUPYTER_PORT}
     depends_on:
