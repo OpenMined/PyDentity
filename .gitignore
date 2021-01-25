@@ -13,3 +13,7 @@ libs/om-aries-controller/demo/bob/image_received.png
 .vscode/
 # exception to the rule
 !libs/om-aries-controller/demo/bob/received_files/.gitkeep
+
+**/model.pt
+**/trained_model.pt
+**/untrained_model.pt
