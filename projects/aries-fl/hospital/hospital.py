@@ -68,6 +68,7 @@ class Hospital:
     def _ml_messages_handler(self, payload):
 
         connection_id = payload["connection_id"]
+        content = payload["content"]
         print(f"ML Message from {connection_id}")
 
         if connection_id in self.trusted_connection_ids:
@@ -75,7 +76,7 @@ class Hospital:
             try:
                 f = open("untrained_model.pt", "wb+")
                 # self.log(bytes.fromhex(message["content"]))
-                byte_message = bytes.fromhex(payload["content"])
+                byte_message = bytes.fromhex(content)
                 f.write(byte_message)
                 f.close()
 
