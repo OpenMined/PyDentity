@@ -63,7 +63,7 @@ class Researcher:
     def _register_agent_listeners(self):
         
         loop = asyncio.get_event_loop()
-        loop.create_task(self.agent_controller.listen_webhooks())
+        loop.run_until_complete(self.agent_controller.listen_webhooks())
         
         listeners=[{
             "handler": self._ml_messages_handler,
@@ -86,9 +86,9 @@ class Researcher:
     def _ml_messages_handler(self, payload):
         loop = asyncio.get_event_loop()
         connection_id =  payload["connection_id"]
-        
+        content = payload["content"]
 
-        if payload["connection_id"] == self.trusted_dataowner_connections[self.current_learner_index]:
+        if connection_id == self.trusted_dataowner_connections[self.current_learner_index]:
             self.current_learner_index += 1
             
             if self.current_learner_index != len(self.trusted_dataowner_connections):
@@ -96,7 +96,7 @@ class Researcher:
                 self.current_model_file = "part_trained_" + str(self.current_learner_index) + ".pt"
                 try:
                     f = open(self.current_model_file, "wb+")
-                    byte_message = bytes.fromhex(payload["content"])
+                    byte_message = bytes.fromhex(content)
                     f.write(byte_message)
                     f.close()
                 except Exception as e:
@@ -143,10 +143,11 @@ class Researcher:
         for dataowner in self.pending_dataowner_connections:
             if dataowner["connection_id"] == connection_id:
                 if state == "request":
+                    print("Accepting request ", connection_id)
                     loop.run_until_complete(self.agent_controller.connections.accept_request(connection_id))
                 if state == "response":
                     time.sleep(2)
-                    print("Sending trust ping")
+                    print("Sending trust ping", connection_id)
                     loop.run_until_complete(self.agent_controller.messaging.trust_ping(connection_id, "hello"))
 
                 if state == "active":
@@ -229,7 +230,7 @@ class Researcher:
         #Read in Data
         train_df = pd.read_csv(file_path)
 
-        print("VALIDATION DATA", train_df)
+#         print("VALIDATION DATA", train_df)
 
         ########## START DATA CLEANING ###############
         #Let’s get rid of the variables "Timestamp",“comments”, “state” just to make our lives easier.

@@ -45,12 +45,12 @@ class Hospital:
     def _register_agent_listeners(self):
 
         loop = asyncio.get_event_loop()
-        loop.create_task(self.agent_controller.listen_webhooks())
+        loop.run_until_complete(self.agent_controller.listen_webhooks())
 
         listeners = [{
-            "handler": self._ml_messages_handler,
-            "topic": "basicmessages"
-        },
+                "handler": self._ml_messages_handler,
+                "topic": "basicmessages"
+            },
             {
                 "handler": self._connection_handler,
                 "topic": "connections"
@@ -128,6 +128,7 @@ class Hospital:
                         response = loop.run_until_complete(self.agent_controller.proofs.send_request(proof_request_web_request))
                     else:
                         # No Auth Policy set
+                        print("No Auth Policy set")
                         connection["is_trusted"].set_result(True)
                     break
 
@@ -288,7 +289,9 @@ class Hospital:
         for data in y_train.values:
             y_train_data.append([data])
         y_train_data = torch.tensor(y_train_data).float()
-
+        
+        print("Data Processed")
+        
         return {
             "x": x_train_data,
             "y": y_train_data
@@ -367,7 +370,7 @@ class Hospital:
         }
 
         self.pending_connections.append(pending_connection)
-
+        print("Establishing connection")
         loop.run_until_complete(pending_connection["is_trusted"])
 
         if pending_connection["is_trusted"].result():

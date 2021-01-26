@@ -176,7 +176,8 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ./notebooks/hospital:/workspace
+      - ./notebooks/hospital1:/workspace
+      - ./hospital:/workspace/hospital
     ports:
       - "${HOSPITAL1_JUPYTER_PORT}:8888"
       - ${HOSPITAL1_WEBHOOK_PORT}:${HOSPITAL1_WEBHOOK_PORT}
@@ -221,7 +222,8 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ./notebooks/hospital:/workspace
+      - ./notebooks/hospital2:/workspace
+      - ./hospital:/workspace/hospital
     ports:
       - "${HOSPITAL2_JUPYTER_PORT}:8888"
       - ${HOSPITAL2_WEBHOOK_PORT}:${HOSPITAL2_WEBHOOK_PORT}
@@ -266,7 +268,8 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ./notebooks/hospital:/workspace
+      - ./notebooks/hospital3:/workspace
+      - ./hospital:/workspace/hospital
     ports:
       - "${HOSPITAL3_JUPYTER_PORT}:8888"
       - ${HOSPITAL3_WEBHOOK_PORT}:${HOSPITAL3_WEBHOOK_PORT}
