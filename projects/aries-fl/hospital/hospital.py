@@ -16,7 +16,7 @@ import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import matplotlib.pyplot as plt
 import seaborn as sns
 import torch
-
+import time
 # prep
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
@@ -131,17 +131,28 @@ class Hospital:
                         # No Auth Policy set
                         print("No Auth Policy set")
                         connection["is_trusted"].set_result(True)
-                    break
+                break
 
 
     def _cred_handler(self, payload):
+        loop = asyncio.get_event_loop()
+
         print("Handle Credentials")
         exchange_id = payload['credential_exchange_id']
         state = payload['state']
         role = payload['role']
         attributes = payload['credential_proposal_dict']['credential_proposal']['attributes']
         print(f"Credential exchange {exchange_id}, role: {role}, state: {state}")
-        print(f"Offering: {attributes}")
+
+        if state == "offer_received":
+            print(f"Offering: {attributes}")
+            print("Requesting credential")
+            loop.run_until_complete(self.agent_controller.issuer.send_request_for_record(exchange_id))
+        elif state == "credential_received":
+            print("Storing Credential")
+            credential_id = "NHS Hosptial " + exchange_id
+            loop.run_until_complete(self.agent_controller.issuer.store_credential(exchange_id, credential_id))
+
 
     def _proof_handler(self, payload):
         print("Handle present proof")
@@ -149,17 +160,66 @@ class Hospital:
         connection_id = payload["connection_id"]
         pres_ex_id = payload["presentation_exchange_id"]
         state = payload["state"]
-        print(f"Role {role}, Exchange {pres_ex_id} in state {state}")
+        loop = asyncio.get_event_loop()
 
-        if state == "presentation_received":
-            for connection in self.pending_dataowner_connections:
-                if connection["connection_id"] == connection_id:
-                    loop = asyncio.get_event_loop()
+        print(f"Role {role}, Exchange {pres_ex_id} in state {state}")
+        for connection in self.pending_connections:
+            if connection["connection_id"] == connection_id:
+                if state == "request_received":
+                    print("Received Authentication Challenge")
+
+                    credentials_by_reft = {}
+                    revealed = {}
+                    self_attested = {}
+                    predicates = {}
+
+                    # select credentials to provide for the proof
+                    credentials = loop.run_until_complete(self.agent_controller.proofs.get_presentation_credentials(pres_ex_id))
+                    print("Credentials", credentials)
+
+                    reveal_cred = credentials[0]
+                    print("Revealed Credential", reveal_cred)
+                    # {'cred_info': {'referent': 'NHS Hosptial 1e5044b7-e6c7-4ec6-88ea-49df91e19dd5',
+                    # 'attrs': {'name': 'Royal Infirmary of Edinburgh'}, 'schema_id': 'BvRKFu1fdzGdJzQcKb8e8p:2:NHS Hosptial:0.0.1', 'cred_def_id': 'RiUq77qGfmFmAHxj1NQcSY:3:CL:156569:default', 'rev_reg_id': None, 'cred_rev_id': None}, 'interval': None, 'presentation_referents': ['0_name_uuid']}
+                    if credentials:
+                        for row in credentials:
+
+                            for referent in row["presentation_referents"]:
+                                if referent not in credentials_by_reft:
+                                    credentials_by_reft[referent] = row
+
+                    for referent in payload["presentation_request"]["requested_attributes"]:
+                        if referent in credentials_by_reft:
+                            revealed[referent] = {
+                                "cred_id": credentials_by_reft[referent]["cred_info"][
+                                    "referent"
+                                ],
+                                "revealed": True,
+                            }
+
+
+                    print("\nGenerate the proof")
+                    proof = {
+                        "requested_predicates": predicates,
+                        "requested_attributes": revealed,
+                        "self_attested_attributes": self_attested,
+                    }
+                    print(proof)
+                    print("\nXXX")
+                    print(predicates)
+                    print(revealed)
+                    print(self_attested)
+
+                    loop.run_until_complete(self.agent_controller.proofs.send_presentation(pres_ex_id, proof))
+
+                elif state == "presentation_received":
+
 
                     print("Verifying DataOwner Presentation")
                     verify = loop.run_until_complete(self.agent_controller.proofs.verify_presentation(pres_ex_id))
                     connection["is_trusted"].set_result(verify['state'] == "verified")
-                    break
+                break
+
 
     def _process_data(self, file_path):
         # Read in Data

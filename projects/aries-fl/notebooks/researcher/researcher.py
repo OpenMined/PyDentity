@@ -173,7 +173,18 @@ class Researcher:
         role = payload['role']
         attributes = payload['credential_proposal_dict']['credential_proposal']['attributes']
         print(f"Credential exchange {exchange_id}, role: {role}, state: {state}")
-        print(f"Offering: {attributes}")
+        loop = asyncio.get_event_loop()
+
+        if state == "offer_received":
+            print(f"Offering: {attributes}")
+            print("Requesting credential")
+            loop.run_until_complete(self.agent_controller.issuer.send_request_for_record(exchange_id))
+        elif state == "credential_received":
+            print("Storing Credential")
+            credential_id = "Research Authority " + exchange_id
+            loop.run_until_complete(self.agent_controller.issuer.store_credential(exchange_id, credential_id))
+
+
         
     def _proof_handler(self, payload):
         print("Handle present proof")
@@ -183,10 +194,56 @@ class Researcher:
         state = payload["state"]
         print(f"Role {role}, Exchange {pres_ex_id} in state {state}")
         loop = asyncio.get_event_loop()
+        for dataowner in self.pending_dataowner_connections:
+            if dataowner["connection_id"] == connection_id:
+                if state == "request_received":
+                    print("Received Authentication Challenge")
 
-        if state == "presentation_received":
-            for dataowner in self.pending_dataowner_connections:
-                if dataowner["connection_id"] == connection_id:
+                    credentials_by_reft = {}
+                    revealed = {}
+                    self_attested = {}
+                    predicates = {}
+
+                    # select credentials to provide for the proof
+                    credentials = loop.run_until_complete(self.agent_controller.proofs.get_presentation_credentials(pres_ex_id))
+                    print("Credentials", credentials)
+
+                    reveal_cred = credentials[0]
+                    print("Revealed Credential")
+                    if credentials:
+                        for row in credentials:
+
+                            for referent in row["presentation_referents"]:
+                                if referent not in credentials_by_reft:
+                                    credentials_by_reft[referent] = row
+
+                    for referent in payload["presentation_request"]["requested_attributes"]:
+                        if referent in credentials_by_reft:
+                            revealed[referent] = {
+                                "cred_id": credentials_by_reft[referent]["cred_info"][
+                                    "referent"
+                                ],
+                                "revealed": True,
+                            }
+
+
+
+                    print("\nGenerate the proof")
+                    proof = {
+                        "requested_predicates": predicates,
+                        "requested_attributes": revealed,
+                        "self_attested_attributes": self_attested,
+                    }
+                    print(proof)
+                    print("\nXXX")
+                    print(predicates)
+                    print(revealed)
+                    print(self_attested)
+
+                    loop.run_until_complete(self.agent_controller.proofs.send_presentation(pres_ex_id, proof))
+
+                elif state == "presentation_received":
+
                     print("Verifying DataOwner Presentation")
                     verify = loop.run_until_complete(self.agent_controller.proofs.verify_presentation(pres_ex_id))
                     dataowner["is_trusted"].set_result(verify['state'] == "verified")

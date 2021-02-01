@@ -62,8 +62,8 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-# DEFAULT_CONTAINERS="nhstrust-agent nhstrust-notebook regulator-agent regulator-notebook researcher-agent researcher-notebook hospital1-agent hospital1-notebook hospital2-agent hospital2-notebook hospital3-agent hospital3-notebook"
-DEFAULT_CONTAINERS="researcher-agent researcher-notebook hospital1-agent hospital1-notebook hospital2-agent hospital2-notebook hospital3-agent hospital3-notebook"
+ DEFAULT_CONTAINERS="nhstrust-agent nhstrust-notebook regulator-agent regulator-notebook researcher-agent researcher-notebook hospital1-agent hospital1-notebook hospital2-agent hospital2-notebook hospital3-agent hospital3-notebook"
+# DEFAULT_CONTAINERS="researcher-agent researcher-notebook hospital1-agent hospital1-notebook hospital2-agent hospital2-notebook hospital3-agent hospital3-notebook"
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
 # -----------------------------------------------------------------------------------------------------------------
