@@ -1,44 +1,51 @@
 version: "3"
 services:
-  ngrok-iiw:
+  ngrok-agent:
     image: wernight/ngrok
-    command: ngrok http iiw-agent:${IIW_HTTP_PORT} --log stdout
+    command: ngrok http agent:${AGENT_HTTP_PORT} --log stdout
     networks:
       - indy_demo
-  iiw-agent:
+  agent:
     build:
       context: ../../
-      dockerfile: ""
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
-      NGROK_NAME: ngrok-iiw
-      AGENT_NAME: ${IIW_AGENT_NAME}
-      HTTP_PORT: ${IIW_HTTP_PORT}
-      ADMIN_PORT: ${IIW_ADMIN_PORT}
-      WEBHOOK_URL: ${IIW_WEBHOOK_URL}
-      API_KEY: ${IIW_API_KEY}
+      - NGROK_NAME=ngrok-agent
+      - ADMIN_URL=http://agent:${AGENT_ADMIN_PORT}
+      - AGENT_NAME=${AGENT_NAME}
+      - ADMIN_PORT=${AGENT_ADMIN_PORT}
+      - HTTP_PORT=${AGENT_HTTP_PORT}
+      - WEBHOOK_URL=${AGENT_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${AGENT_AGENT_ENDPOINT}
+      - WALLET_SEED=${AGENT_WALLET_SEED}
+      - WALLET_NAME=${AGENT_WALLET_NAME}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - WALLET_KEY=${AGENT_WALLET_KEY}
+      - ACAPY_ADMIN_INSECURE_MODE=true
+      - GENESIS_URL=${GENESIS_URL}
     ports:
-      - ${IIW_HTTP_PORT}:${IIW_HTTP_PORT}
-      - ${IIW_ADMIN_PORT}:${IIW_ADMIN_PORT}
+      - ${AGENT_HTTP_PORT}:${AGENT_HTTP_PORT}
+      - ${AGENT_ADMIN_PORT}:${AGENT_ADMIN_PORT}
     networks:
       - indy_demo
     volumes:
-      - iiw-agent:/home/indy/.indy_client/wallet
-  iiw-notebook:
+      - agent:/home/indy/.indy_client/wallet
+  controller-notebook:
     build:
       context: ../../
-      dockerfile: ""
+      dockerfile: dockerfiles/controllers/Dockerfile.attachmentcontroller
       args:
         - jupyter_port=${JUPYTER_PORT}
     depends_on:
-      - iiw-agent
+      - agent
     networks:
       - indy_demo
     volumes:
       - ./notebooks:/workspace
     ports:
       - "8888:8888"
-      - ${IIW_WEBHOOK_PORT}:${IIW_WEBHOOK_PORT}
+      - ${AGENT_WEBHOOK_PORT}:${AGENT_WEBHOOK_PORT}
 volumes:
-  iiw-agent:
+  agent:
 networks:
   indy_demo:

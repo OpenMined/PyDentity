@@ -5,10 +5,10 @@ With docker installed, run the example using ./manage start
 
 This spins up an aries agent and a notebook for both Alice and Bob. Additionally a local von-network is initialised.
 
-To view the tutorials navigate to:
-* [Alice notebook](http://localhost:8888) - this contains the majority of the tutorials
-* [Bob notebook](http://localhost:8889) - Bob plays the other half of the protocols when needed.
+To access the tutorials in the jupyter notebook run from the **root PyDentity folder**:
 
-Both notebooks require a token that can be found in the logs. Fetch the logs for the relevant container using these commands:
-* docker logs aries-basic-controller_alice-notebook_1
-* docker logs aries-basic-controller_bob-notebook_1
+`./scripts/get_URLS.sh`
+
+This will print out the urls with tokens for all jupyter notebook instances running within docker.
+
+Navigate to the links and begin the tutorial starting from Part 1.

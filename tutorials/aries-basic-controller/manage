@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="bob-agent alice-agent setup ledger-nodes ledger-browser alice-notebook bob-notebook"
+DEFAULT_CONTAINERS="tails-server bob-agent alice-agent setup ledger-nodes ledger-browser alice-notebook bob-notebook"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -116,6 +116,7 @@ configureEnvironment() {
   export GENESIS_URL=${GENESIS_URL-http://$DOCKERHOST:9000/genesis}
   export LEDGER_URL=${LEDGER_URL-http://$DOCKERHOST:9000}
   export WALLET_TYPE="indy"
+  export STORAGE_PATH=${STORAGE_PATH:-/tmp/tails-files}
 
   # bob-agent
   export BOB_AGENT_NAME="Bob"
@@ -283,6 +284,8 @@ rm | down)
   docker-compose \
   --log-level ERROR down \
   -v
+  ;;
+*)
   usage
   ;;
 esac
