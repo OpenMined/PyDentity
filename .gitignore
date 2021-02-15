@@ -17,3 +17,4 @@ libs/om-aries-controller/demo/bob/image_received.png
 **/model.pt
 **/trained_model.pt
 **/untrained_model.pt
+**/part_trained.pt
