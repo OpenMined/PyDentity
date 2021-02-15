@@ -75,6 +75,10 @@ This library extends the basic controller to include the attachment protocol end
 
 ## Projects
 
+### [Aries-FL](./projects/aries-fl)
+
+An example of authenticated federated learning mediated by aries agents communicating over DIDComm.
+
 ### [Opus](./projects/opus)
 
 SSI Third Party Credential Onboarding.
