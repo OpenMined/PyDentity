@@ -93,7 +93,21 @@ class AriesAgentController:
                 pub.subscribe(self.proofs.default_handler, "present_proof")
 
         for listener in listeners:
-            pub.subscribe(listener["handler"], listener["topic"])
+            self.add_listener(listener)
+
+    def add_listener(self, listener):
+        pub.subscribe(listener["handler"], listener["topic"])
+
+    def remove_listener(self, listener):
+        if pub.isSubscribed(listener["handler"], listener["topic"]):
+            pub.unsubscribe(listener["handler"], listener["topic"])
+        else:
+            logger.debug("Listener not subscribed", listener)
+
+    def remove_all_listeners(self, topic: str = None):
+        # Note advanced use of function can include both listenerFilter and topicFilter for this
+        # Add when needed
+        pub.unsubAll(topicName=topic)
 
     async def listen_webhooks(self):
         app = web.Application()
@@ -106,13 +120,13 @@ class AriesAgentController:
     async def _receive_webhook(self, request: ClientRequest):
         topic = request.match_info["topic"]
         payload = await request.json()
-        await self.handle_webhook(topic, payload)
+        await self._handle_webhook(topic, payload)
         return web.Response(status=200)
 
-    async def handle_webhook(self, topic, payload):
+    async def _handle_webhook(self, topic, payload):
         logging.debug(f"Handle Webhook - {topic}", payload)
         pub.sendMessage(topic, payload=payload)
-        return web.Response(status=200)
+        # return web.Response(status=200)
 
     async def terminate(self):
         await self.client_session.close()
