@@ -48,4 +48,10 @@ class Presentation_Parser():
       return self.verify['presentation_exchange_id']
 
     def is_verified(self):
+    """
+    Note that verify['state'] is ALWAYS going to be 'verified'.
+    verify['verified'] is the actual indicator of whether this proof
+    has succeeded, or if it has already been revoked and the
+    proof has failed.
+    """
       return bool(self.verify['verified'])
