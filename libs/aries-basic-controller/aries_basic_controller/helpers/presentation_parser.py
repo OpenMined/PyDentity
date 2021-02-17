@@ -1,51 +1,52 @@
+import json
+
 class Presentation():
     def __init__(self, verify):
         self.verify = verify
 
     def get_self_attested(self):
-        for (name, val) in self.verify['presentation']['requested_proof']['self_attested_attrs'].items():
-            print(name + " : " + val)
+      data = {}
+      for (name, val) in self.verify['presentation']['requested_proof']['self_attested_attrs'].items():
+        data[name] = val['raw']
+      return json.dumps(data)
 
     def get_revealed(self):
-        for (name, val) in self.verify['presentation']['requested_proof']['revealed_attrs'].items():
-            ## This is the actual data that you want. It's a little hidden
-            print(name + " : " + val['raw'])
+      data = {}
+      for (name, val) in self.verify['presentation']['requested_proof']['revealed_attrs'].items():
+          data[name] = val['raw']
+
+      return json.dumps(data)
 
     def get_unrevealed_attrs(self):
-        for (name, val) in self.verify['presentation']['requested_proof']['unrevealed_attrs'].items():
-            ## This is the actual data that you want. It's a little hidden
-            print(name + " : " + val['raw'])
+      data = {}
+      for (name, val) in self.verify['presentation']['requested_proof']['unrevealed_attrs'].items():
+        data[name] = val['raw']
+      return json.dumps(data)
+
     def get_predicates(self):
-        for (name, val) in self.verify['presentation']['requested_proof']['predicates'].items():
-            ## This is the actual data that you want. It's a little hidden
-            print(name + " : " + val['raw'])
+      data = {}
+      for (name, val) in self.verify['presentation']['requested_proof']['predicates'].items():
+        data[name] = val['raw']
+      return json.dumps(data)
 
     def get_identifiers(self):
-        print(self.verify['presentation']['identifiers'])
-        """         
-            "schema_id": "PQRXDxdGqQGSZ8z69p4xZP:2:test_revocable_schema:0.0.1",
-            "cred_def_id": "PQRXDxdGqQGSZ8z69p4xZP:3:CL:14:default",
-            "rev_reg_id": "PQRXDxdGqQGSZ8z69p4xZP:4:PQRXDxdGqQGSZ8z69p4xZP:3:CL:14:default:CL_ACCUM:24f4f2ad-0d38-4f46-b020-23eb3cbd0595",
-            "timestamp": 1613564695
-        """
+      return self.verify['presentation']['identifiers']
 
     def get_role(self):
-        print(self.verify['role'])
+      return(self.verify['role'])
 
     def get_threadid(self):
-        print(self.verify['thread_id'])
+      return(self.verify['thread_id'])
 
     def get_presentation_request(self):
-        print(self.verify['presentation_request'])
+      return(self.verify['presentation_request'])
 
     def get_verified_state(self):
-        print(self.verify['state'])
+      return self.verify['state']
 
     def is_verified(self):
-        if self.verify['state'] == 'verified':
-            print('verified')
-        else:
-            print('verification failed')
+      # Assume the actual state of the verification is in   "verified": "true",
+      return bool(self.verify['state'] == 'verified')
 
 verify = {
   "presentation_exchange_id": "49baae24-57e0-48ad-8df8-adf0ea567c96",
