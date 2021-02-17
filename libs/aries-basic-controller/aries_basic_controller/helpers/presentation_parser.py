@@ -5,12 +5,16 @@ class Presentation():
         self.verify = verify
 
     def get_self_attested(self):
+      if self.is_verified() == "false":
+        print('Verification Failed')
       data = {}
       for (name, val) in self.verify['presentation']['requested_proof']['self_attested_attrs'].items():
         data[name] = val['raw']
       return json.dumps(data)
 
     def get_revealed(self):
+      if self.is_verified() == "false":
+        print('Verification Failed')
       data = {}
       for (name, val) in self.verify['presentation']['requested_proof']['revealed_attrs'].items():
           data[name] = val['raw']
@@ -18,12 +22,16 @@ class Presentation():
       return json.dumps(data)
 
     def get_unrevealed_attrs(self):
+      if self.is_verified() == "false":
+        print('Verification Failed')
       data = {}
       for (name, val) in self.verify['presentation']['requested_proof']['unrevealed_attrs'].items():
         data[name] = val['raw']
       return json.dumps(data)
 
     def get_predicates(self):
+      if self.is_verified() == "false":
+        print('Verification Failed')
       data = {}
       for (name, val) in self.verify['presentation']['requested_proof']['predicates'].items():
         data[name] = val['raw']
@@ -83,7 +91,7 @@ class Presentation():
       return self.verify['presentation_exchange_id']
 
     def is_verified(self):
-      return bool(self.verify['verified'])
+      return self.verify['verified']
 
     def conn_id(self):
         return self.verify['connection_id']
@@ -1405,3 +1413,14 @@ print(presentation.get_rev_reg_ids())
 
 print('\n')
 print(presentation.conn_id())
+
+
+print('\n')
+print(presentation.is_verified())
+
+
+print('\n')
+print(presentation.get_self_attested())
+
+print('\n')
+print(presentation.get_revealed())
