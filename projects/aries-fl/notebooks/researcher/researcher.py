@@ -53,6 +53,8 @@ class Researcher:
         self.current_learner_index = 0
         
         self.model_path = "model.pt"
+        
+        self.part_trained_models = []
 
         torch.save(model, self.model_path)
         # The Researcher generates the model
@@ -87,42 +89,33 @@ class Researcher:
         loop = asyncio.get_event_loop()
         connection_id =  payload["connection_id"]
         content = payload["content"]
+        
+        if connection_id in self.trusted_dataowner_connections:
+            model_file = "part_trained_" + connection_id + ".pt"
+            try:
+                f = open(self.current_model_file, "wb+")
+                byte_message = bytes.fromhex(content)
+                f.write(byte_message)
+                f.close()
+            except Exception as e:
+                print("Error writing file", e)
+                return
 
-        if connection_id == self.trusted_dataowner_connections[self.current_learner_index]:
-            self.current_learner_index += 1
+            self.validate_model(model_file)
             
-            if self.current_learner_index != len(self.trusted_dataowner_connections):
-                print("Still learning")
-                self.current_model_file = "part_trained_" + str(self.current_learner_index) + ".pt"
-                try:
-                    f = open(self.current_model_file, "wb+")
-                    byte_message = bytes.fromhex(content)
-                    f.write(byte_message)
-                    f.close()
-                except Exception as e:
-                    print("Error writing file", e)
-                    return
-                next_learner_connection_id = self.trusted_dataowner_connections[self.current_learner_index]
-                print("Continue Learning", next_learner_connection_id)
-                self.validate_model(self.current_model_file)
-                loop.run_until_complete(self.agent_controller.messaging.send_message(next_learner_connection_id, content))
-
-
-            else:
-                print("Learning complete")
-                trained_model_file = "trained_model.pt"
-                try:
-                    f = open(trained_model_file, "wb+")
-                    # self.log(bytes.fromhex(message["content"]))
-                    byte_message = bytes.fromhex(payload["content"])
-
-                    f.write(byte_message)
-                    f.close()
-                    self.validate_model(trained_model_file)
-                except Exception as e:
-                    print("Error writing file", e)
-                    return
+            part_trained = {
+                "connection_id": connection_id,
+                "model_file": model_file
+            }
+            
+            self.part_trained_models.append(part_trained)
+            
+            if len(self.part_trained_models) == len(self.trusted_dataowner_connections):
                 self.learning_complete.set_result(True)
+            
+        
+
+
 
 
 
@@ -472,10 +465,14 @@ class Researcher:
         print(f"Training model with {len(self.trusted_dataowner_connections)} DataOwners")
         
         self.learning_complete = asyncio.Future()
+        for connection_id in self.trusted_dataowner_connections:
 
-        loop.run_until_complete(self.agent_controller.messaging.send_message(self.trusted_dataowner_connections[0], content))
+            loop.run_until_complete(self.agent_controller.messaging.send_message(connection_id, content))
         
         loop.run_until_complete(self.learning_complete)
+        
+        ## We need to aggregate the models 
+        print(self.part_trained_models)
         
         print("LEARNING COMPLETE")
         
