@@ -3,9 +3,11 @@
 from marshmallow import fields, Schema
 from aiohttp import web, FormData
 from aiohttp_apispec import docs, match_info_schema, form_schema, request_schema, response_schema
-from aries_cloudagent.connections.models.connection_record import ConnectionRecord
+from aries_cloudagent.connections.models.conn_record import ConnRecord
 from aries_cloudagent.messaging.valid import UUIDFour
 from aries_cloudagent.storage.error import StorageNotFoundError
+from aries_cloudagent.storage.base import BaseStorage
+from aries_cloudagent.admin.request_context import AdminRequestContext
 
 from .messages.attachment import Attachment, AttachmentSchema
 
@@ -32,9 +34,11 @@ async def send_attachment(request: web.BaseRequest):
     """
     Request Handler to send attachment protocol
     """
-    context = request.app["request_context"]
+    context: AdminRequestContext = request["context"]
     connection_id = request.match_info["conn_id"]
-    outbound_handler = request.app["outbound_message_router"]
+    outbound_handler = request["outbound_message_router"]
+
+    session = await context.session()
 
     # WARNING: don't do that if you plan to receive large files!
     # TODO change to handle large files??
@@ -58,7 +62,7 @@ async def send_attachment(request: web.BaseRequest):
     content = file.read()
 
     try:
-        connection = await ConnectionRecord.retrieve_by_id(context, connection_id)
+        connection = await ConnRecord.retrieve_by_id(session, connection_id)
     except StorageNotFoundError:
         raise web.HTTPNotFound()
 
