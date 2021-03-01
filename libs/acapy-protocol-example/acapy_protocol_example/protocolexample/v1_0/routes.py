@@ -5,9 +5,10 @@ from aiohttp_apispec import docs, match_info_schema, request_schema, response_sc
 
 from marshmallow import fields, Schema
 
-from aries_cloudagent.connections.models.connection_record import ConnectionRecord
+from aries_cloudagent.connections.models.conn_record import ConnRecord
 from aries_cloudagent.messaging.valid import UUIDFour
 from aries_cloudagent.storage.error import StorageNotFoundError
+from aries_cloudagent.admin.request_context import AdminRequestContext
 
 from .messages.protocolexample import ProtocolExample
 
@@ -42,15 +43,17 @@ async def connections_send_ping(request: web.BaseRequest):
         request: aiohttp request object
 
     """
-    context = request.app["request_context"]
+    context: AdminRequestContext = request["context"]
     connection_id = request.match_info["conn_id"]
-    outbound_handler = request.app["outbound_message_router"]
+    outbound_handler = request["outbound_message_router"]
+    session = await context.session()
+
     body = await request.json()
     example = body.get("example")
     response_requested = body.get("response_requested")
 
     try:
-        connection = await ConnectionRecord.retrieve_by_id(context, connection_id)
+        connection = await ConnRecord.retrieve_by_id(session, connection_id)
     except StorageNotFoundError:
         raise web.HTTPNotFound()
 
