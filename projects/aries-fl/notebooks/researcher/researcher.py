@@ -93,7 +93,7 @@ class Researcher:
         if connection_id in self.trusted_dataowner_connections:
             model_file = "part_trained_" + connection_id + ".pt"
             try:
-                f = open(self.current_model_file, "wb+")
+                f = open(model_file, "wb+")
                 byte_message = bytes.fromhex(content)
                 f.write(byte_message)
                 f.close()
