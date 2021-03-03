@@ -34,6 +34,9 @@ wallet-name: !ENV ${WALLET_NAME}
 wallet-key: !ENV ${WALLET_KEY}
 seed: !ENV ${WALLET_SEED}
 auto-provision: true
+multitenant: true
+multitenant-admin: true
+jwt-secret: "password"
 
 ## run a local postgres (docker) like:
 ##    docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres:10
