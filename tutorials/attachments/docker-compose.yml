@@ -31,7 +31,7 @@ services:
         "
           sleep 5; \
           python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
-          aca-py start --auto-provision --arg-file /tmp/agent_conf.yml"
+          aca-py start --arg-file /tmp/agent_conf.yml"
       ]
   bob-agent:
     image: bob-protocol:agent
@@ -64,7 +64,7 @@ services:
         "
           sleep 5; \
           python3 scripts/parse_yml_env_variables.py -c ./configuration/aries-args-basic.yaml; \
-          aca-py start --auto-provision --arg-file /tmp/agent_conf.yml"
+          aca-py start --arg-file /tmp/agent_conf.yml"
     ]
   setup:
     build:
