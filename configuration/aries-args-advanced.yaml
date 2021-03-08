@@ -45,6 +45,7 @@ seed: !ENV ${WALLET_SEED}
 
 
 auto-accept-requests: true
+auto-provision: true
 auto-respond-credential-proposal: true
 auto-respond-credential-offer: true
 auto-respond-credential-request: true
