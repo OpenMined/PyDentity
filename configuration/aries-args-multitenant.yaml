@@ -25,6 +25,7 @@ inbound-transport:
 outbound-transport: http
 # the following is the public endpoint advertised by the agent
 endpoint: !ENV ${AGENT_ENDPOINT}
+auto-ping-connection: true
 # register your did using (this example is for von-network):
 #    curl -d '{"seed":"my_seed_000000000000000000000000", "role":"TRUST_ANCHOR", "alias":"My Agent"}' -X POST http://localhost:9000/register
 # note that the env var name is configured in argparse.py
@@ -33,8 +34,6 @@ wallet-type: !ENV ${WALLET_TYPE}
 wallet-name: !ENV ${WALLET_NAME}
 wallet-key: !ENV ${WALLET_KEY}
 seed: !ENV ${WALLET_SEED}
-auto-provision: true
-
 
 ## run a local postgres (docker) like:
 ##    docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres:10
@@ -43,3 +42,21 @@ auto-provision: true
 #wallet-storage-config: '{"url":"localhost:5432","max_connections":5}'
 ## could be sent using env var ACAPY_WALLET_STORAGE_CREDS
 #wallet-storage-creds: '{"account":"postgres","password":"mysecretpassword","admin_account":"postgres","admin_password":"mysecretpassword"}'
+
+
+auto-accept-requests: true
+auto-provision: true
+auto-respond-credential-proposal: true
+auto-respond-credential-offer: true
+auto-respond-credential-request: true
+auto-store-credential: true
+auto-respond-presentation-proposal: true
+auto-respond-presentation-request: true
+preserve-exchange-records: true
+debug-connections: true
+debug-credentials: true
+debug-presentations: true
+enable-undelivered-queue: true
+multitenant: true
+multitenant-admin: true
+jwt-secret: "password"
