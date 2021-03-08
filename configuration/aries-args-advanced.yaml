@@ -57,6 +57,3 @@ debug-connections: true
 debug-credentials: true
 debug-presentations: true
 enable-undelivered-queue: true
-multitenant: true
-multitenant-admin: true
-jwt-secret: "password"
