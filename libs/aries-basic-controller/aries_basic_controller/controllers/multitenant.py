@@ -1,7 +1,7 @@
 # For usage please consult https://github.com/hyperledger/aries-cloudagent-python/blob/main/Mediation.md
 
 from .base import BaseController
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ClientRequest
 import logging
 from typing import List
 
@@ -34,12 +34,12 @@ class MultitenancyController(BaseController):
 
 
     # Remove a subwallet
-    async def remove_subwallet_by_id(self, request, wallet_id: str):
+    async def remove_subwallet_by_id(self, wallet_id: str, request=None):
         return await self.admin_POST(f"{self.base_url}/wallet/{wallet_id}/remove", json_data=request)
 
 
     # Get auth token for a subwallet
-    async def get_subwallet_authtoken_by_id(self, request, wallet_id: str):
+    async def get_subwallet_authtoken_by_id(self, wallet_id: str, request=None):
         return await self.admin_POST(f"{self.base_url}/wallet/{wallet_id}/token", json_data=request)
 
 

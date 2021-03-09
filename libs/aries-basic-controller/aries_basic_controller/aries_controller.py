@@ -14,6 +14,7 @@ from .controllers.issuer import IssuerController
 from .controllers.proof import ProofController
 from .controllers.ledger import LedgerController
 from .controllers.credential import CredentialController
+from .controllers.multitenant import MultitenancyController
 from .controllers.server import ServerController
 from .controllers.oob import OOBController
 from .controllers.action_menu import ActionMenuController
@@ -35,6 +36,7 @@ class AriesAgentController:
         webhook_base: str = "",
         connections: bool = True,
         messaging: bool = True,
+        multitenant: bool = False,
         issuer: bool = True,
         action_menu: bool = True,
         revocations: bool = True,
@@ -68,6 +70,9 @@ class AriesAgentController:
         self.server = ServerController(self.admin_url, self.client_session)
         self.oob = OOBController(self.admin_url, self.client_session)
 
+        if multitenant:
+            self.multitenant = MultitenancyController(self.admin_url, self.client_session)
+
         if issuer:
             self.schema = SchemaController(self.admin_url, self.client_session)
             self.wallet = WalletController(self.admin_url, self.client_session)
@@ -77,6 +82,7 @@ class AriesAgentController:
 
         if action_menu:
             self.action_menu = ActionMenuController(self.admin_url, self.client_session)
+            
         if revocations:
             self.revocations = RevocationController(
                 self.admin_url,
