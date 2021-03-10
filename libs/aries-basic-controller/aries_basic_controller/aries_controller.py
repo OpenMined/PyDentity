@@ -7,6 +7,7 @@ from pubsub import pub
 
 from .controllers.connections import ConnectionsController
 from .controllers.messaging import MessagingController
+from .controllers.mediation import MediationController
 from .controllers.schema import SchemaController
 from .controllers.wallet import WalletController
 from .controllers.definitions import DefinitionsController
@@ -37,6 +38,7 @@ class AriesAgentController:
         connections: bool = True,
         messaging: bool = True,
         multitenant: bool = False,
+        mediation: bool = True,
         issuer: bool = True,
         action_menu: bool = True,
         revocations: bool = True,
@@ -73,6 +75,9 @@ class AriesAgentController:
         if multitenant:
             self.multitenant = MultitenancyController(self.admin_url, self.client_session)
 
+        if mediation:
+            self.mediation = MediationController(self.admin_url, self.client_session)
+
         if issuer:
             self.schema = SchemaController(self.admin_url, self.client_session)
             self.wallet = WalletController(self.admin_url, self.client_session)
@@ -82,7 +87,7 @@ class AriesAgentController:
 
         if action_menu:
             self.action_menu = ActionMenuController(self.admin_url, self.client_session)
-            
+
         if revocations:
             self.revocations = RevocationController(
                 self.admin_url,

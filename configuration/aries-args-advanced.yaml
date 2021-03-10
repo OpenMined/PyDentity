@@ -57,3 +57,4 @@ debug-connections: true
 debug-credentials: true
 debug-presentations: true
 enable-undelivered-queue: true
+open-mediation: true
