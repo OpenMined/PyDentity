@@ -63,7 +63,10 @@ class AriesAgentController:
             self.client_session: ClientSession = ClientSession()
 
         if jwt_token:
-            headers = {"Authorization": jwt_token}
+            print('in jwt token section')
+            print(jwt_token)
+            headers = {'Authorization': 'Bearer ' + jwt_token, 'content-type': "application/json"}
+            print(headers)
             self.client_session: ClientSession = ClientSession(headers=headers)
         else:
             self.client_session: ClientSession = ClientSession()
