@@ -142,7 +142,7 @@ class AriesAgentController:
         app.add_routes([web.post(self.webhook_base + "/topic/{topic}/", self._receive_webhook)])
         runner = web.AppRunner(app)
         await runner.setup()
-        self.webhook_site = web.TCPSite(runner, self.webhook_host, self.webhook_port)
+        self.webhook_site = web.TCPSite(runner, self.webhook_host, self.webhook_port, reuse_address=True, reuse_port=True)
         await self.webhook_site.start()
 
     async def _receive_webhook(self, request: ClientRequest):
