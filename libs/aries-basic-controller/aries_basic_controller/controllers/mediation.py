@@ -96,6 +96,6 @@ class MediationController(BaseController):
         return await self.admin_POST(f"{self.base_url}/requests/{mediation_id}/grant")
 
 
-    # Grant received mediation request
+    # Set default mediator
     async def set_default_mediator(self, mediation_id: str):
         return await self.admin_PUT(f"{self.base_url}/requests/{mediation_id}/default-mediator")

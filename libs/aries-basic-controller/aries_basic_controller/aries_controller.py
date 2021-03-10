@@ -43,6 +43,7 @@ class AriesAgentController:
         action_menu: bool = True,
         revocations: bool = True,
         api_key: str = None,
+        jwt_token: str = None,
     ):
 
         self.webhook_site = None
@@ -57,6 +58,12 @@ class AriesAgentController:
 
         if api_key:
             headers = {"X-API-Key": api_key}
+            self.client_session: ClientSession = ClientSession(headers=headers)
+        else:
+            self.client_session: ClientSession = ClientSession()
+
+        if jwt_token:
+            headers = {"Authorization": jwt_token}
             self.client_session: ClientSession = ClientSession(headers=headers)
         else:
             self.client_session: ClientSession = ClientSession()
@@ -93,6 +100,16 @@ class AriesAgentController:
                 self.admin_url,
                 self.client_session
             )
+
+        
+    # def update_jwt_token(self, api_key: str):
+    #     headers = {"X-API-Key": api_key}
+    #     self.client_session: ClientSession = ClientSession(headers=headers)
+        # if connections:
+        #     self.connections = ConnectionsController(self.admin_url, self.client_session)
+        # if messaging:
+        #     self.messaging = MessagingController(self.admin_url, self.client_session)
+
 
     def register_listeners(self, listeners, defaults=True):
         if defaults:
