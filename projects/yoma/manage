@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="ngrok-yoma yoma-agent ngrok-yoma-multi-tenant yoma-multi-tenant-agent yoma-multi-tenant-notebook yoma-notebook"
+DEFAULT_CONTAINERS="ngrok-yoma yoma-agent ngrok-yoma-multi-tenant yoma-multi-tenant-agent yoma-multi-tenant-notebook yoma-notebook op-notebook youth-notebook"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -126,7 +126,7 @@ configureEnvironment() {
   export EXTERNAL_WALLET_SEED="VAGENT_seed_00000000000000000000"
   export EXTERNAL_WALLET_KEY="EXTERNAL_key_00000000000000000000000"
   export EXTERNAL_WALLET_NAME="EXTERNAL Wallet"
-  export EXTERNAL_JUPYTER_PORT="8889"
+  export EXTERNAL_JUPYTER_PORT="8888"
   export EXTERNAL_ADMIN_SECURE="true"
 
   # BASEWALLET-agent
@@ -139,7 +139,7 @@ configureEnvironment() {
   export BASEWALLET_WALLET_SEED="IAGENT_seed_00000000000000000000"
   export BASEWALLET_WALLET_KEY="BASEWALLET_key_00000000000000000000000"
   export BASEWALLET_WALLET_NAME="BASEWALLET Wallet"
-  export BASEWALLET_JUPYTER_PORT="8888"
+  export BASEWALLET_JUPYTER_PORT="8889"
   export BASEWALLET_ADMIN_SECURE="true"
 
 

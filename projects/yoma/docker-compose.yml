@@ -31,7 +31,7 @@ services:
 
   ngrok-yoma-multi-tenant:
     image: wernight/ngrok
-    command: ngrok http yoma-multi-tenant-agent-agent:${BASEWALLET_HTTP_PORT} --log stdout
+    command: ngrok http yoma-multi-tenant-agent:${BASEWALLET_HTTP_PORT} --log stdout
     networks:
       - indy_demo
   yoma-multi-tenant-agent:
@@ -39,7 +39,7 @@ services:
       context: ../../
       dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
-      - NGROK_NAME=ngrok-ngrok-yoma-multi
+      - NGROK_NAME=ngrok-yoma-multi-tenant
       - ADMIN_URL=http://yoma-multi-tenant-agent:${BASEWALLET_ADMIN_PORT}
       - AGENT_NAME=${BASEWALLET_AGENT_NAME}
       - ADMIN_PORT=${BASEWALLET_ADMIN_PORT}
@@ -74,7 +74,7 @@ services:
     volumes:
       - ./notebooks/yoma:/workspace
     ports:
-      - "8888:8888"
+      - "8889:8888"
       - ${BASEWALLET_WEBHOOK_PORT}:${BASEWALLET_WEBHOOK_PORT}
 
   yoma-notebook:
@@ -90,7 +90,7 @@ services:
     volumes:
       - ${PWD}/notebooks/yoma:/workspace
     ports:
-      - "8889:8888"
+      - "8888:8888"
       - ${EXTERNAL_WEBHOOK_PORT}:${EXTERNAL_WEBHOOK_PORT}
 
   youth-notebook:
@@ -106,8 +106,8 @@ services:
     volumes:
       - ${PWD}/notebooks/youth:/workspace
     ports:
-      - "8889:8888"
-      - ${EXTERNAL_WEBHOOK_PORT}:${EXTERNAL_WEBHOOK_PORT}
+      - "8891:8888"
+#      - ${EXTERNAL_WEBHOOK_PORT}:${EXTERNAL_WEBHOOK_PORT}
 
   op-notebook:
     build:
@@ -122,8 +122,8 @@ services:
     volumes:
       - ${PWD}/notebooks/opportunity_provider:/workspace
     ports:
-      - "8889:8888"
-      - ${EXTERNAL_WEBHOOK_PORT}:${EXTERNAL_WEBHOOK_PORT}
+      - "8890:8888"
+#      - ${EXTERNAL_WEBHOOK_PORT}:${EXTERNAL_WEBHOOK_PORT}
 
 networks:
   indy_demo:
