@@ -1,0 +1,131 @@
+version: "3"
+services:
+  ngrok-yoma:
+    image: wernight/ngrok
+    command: ngrok http yoma-agent:${EXTERNAL_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  yoma-agent:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
+    environment:
+      - NGROK_NAME=ngrok-yoma
+      - ADMIN_URL=http://yoma-agent:${EXTERNAL_ADMIN_PORT}
+      - AGENT_NAME=${EXTERNAL_AGENT_NAME}
+      - ADMIN_PORT=${EXTERNAL_ADMIN_PORT}
+      - HTTP_PORT=${EXTERNAL_HTTP_PORT}
+      - WEBHOOK_URL=${EXTERNAL_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${EXTERNAL_AGENT_ENDPOINT}
+      - WALLET_SEED=${EXTERNAL_WALLET_SEED}
+      - WALLET_NAME=${EXTERNAL_WALLET_NAME}
+      - WALLET_KEY=${EXTERNAL_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=${EXTERNAL_ADMIN_SECURE}
+      - GENESIS_URL=${GENESIS_URL}
+    ports:
+      - ${EXTERNAL_HTTP_PORT}:${EXTERNAL_HTTP_PORT}
+      - ${EXTERNAL_ADMIN_PORT}:${EXTERNAL_ADMIN_PORT}
+    networks:
+      - indy_demo
+
+  ngrok-yoma-multi-tenant:
+    image: wernight/ngrok
+    command: ngrok http yoma-multi-tenant-agent-agent:${BASEWALLET_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  yoma-multi-tenant-agent:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
+    environment:
+      - NGROK_NAME=ngrok-ngrok-yoma-multi
+      - ADMIN_URL=http://yoma-multi-tenant-agent:${BASEWALLET_ADMIN_PORT}
+      - AGENT_NAME=${BASEWALLET_AGENT_NAME}
+      - ADMIN_PORT=${BASEWALLET_ADMIN_PORT}
+      - HTTP_PORT=${BASEWALLET_HTTP_PORT}
+      - WEBHOOK_URL=${BASEWALLET_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${BASEWALLET_AGENT_ENDPOINT}
+      - WALLET_SEED=${BASEWALLET_WALLET_SEED}
+      - WALLET_NAME=${BASEWALLET_WALLET_NAME}
+      - WALLET_KEY=${BASEWALLET_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=${BASEWALLET_ADMIN_SECURE}
+      - GENESIS_URL=${GENESIS_URL}
+      - ACAPY_MULTITENANT=true
+      - ACAPY_MULTITENANT_JWT_SECRET=password
+      - ACAPY_MULTITENANT_ADMIN=true
+    ports:
+      - ${BASEWALLET_HTTP_PORT}:${BASEWALLET_HTTP_PORT}
+      - ${BASEWALLET_ADMIN_PORT}:${BASEWALLET_ADMIN_PORT}
+    networks:
+      - indy_demo
+
+  yoma-multi-tenant-notebook:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${BASEWALLET_JUPYTER_PORT}
+    depends_on:
+      - yoma-multi-tenant-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/yoma:/workspace
+    ports:
+      - "8888:8888"
+      - ${BASEWALLET_WEBHOOK_PORT}:${BASEWALLET_WEBHOOK_PORT}
+
+  yoma-notebook:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${EXTERNAL_JUPYTER_PORT}
+    depends_on:
+      - yoma-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/notebooks/yoma:/workspace
+    ports:
+      - "8889:8888"
+      - ${EXTERNAL_WEBHOOK_PORT}:${EXTERNAL_WEBHOOK_PORT}
+
+  youth-notebook:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${EXTERNAL_JUPYTER_PORT}
+    depends_on:
+      - yoma-multi-tenant-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/notebooks/youth:/workspace
+    ports:
+      - "8889:8888"
+      - ${EXTERNAL_WEBHOOK_PORT}:${EXTERNAL_WEBHOOK_PORT}
+
+  op-notebook:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${EXTERNAL_JUPYTER_PORT}
+    depends_on:
+      - yoma-multi-tenant-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/notebooks/opportunity_provider:/workspace
+    ports:
+      - "8889:8888"
+      - ${EXTERNAL_WEBHOOK_PORT}:${EXTERNAL_WEBHOOK_PORT}
+
+networks:
+  indy_demo:
+
+
