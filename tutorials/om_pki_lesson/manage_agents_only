@@ -62,8 +62,8 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="ngrok-dataowner dataowner-agent ngrok-om-authority om-authority-agent om-authority-notebook dataowner-notebook ngrok-datascientist datascientist-agent datascientist-notebook"
-# DEFAULT_CONTAINERS="ngrok-dataowner dataowner-agent ngrok-om-authority om-authority-agent ngrok-datascientist datascientist-agent"
+# DEFAULT_CONTAINERS="ngrok-dataowner dataowner-agent ngrok-om-authority om-authority-agent om-authority-notebook dataowner-notebook ngrok-datascientist datascientist-agent datascientist-notebook"
+DEFAULT_CONTAINERS="ngrok-dataowner dataowner-agent ngrok-om-authority om-authority-agent ngrok-datascientist datascientist-agent"
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
 # -----------------------------------------------------------------------------------------------------------------
