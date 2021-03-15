@@ -55,6 +55,7 @@ class AriesAgentController:
         self.webhook_host = webhook_host
         self.webhook_port = webhook_port
         self.connections_controller = None
+        self.jwt_token = jwt_token
 
         if api_key:
             headers = {"X-API-Key": api_key}
@@ -101,14 +102,46 @@ class AriesAgentController:
                 self.client_session
             )
 
-        
-    # def update_jwt_token(self, api_key: str):
-    #     headers = {"X-API-Key": api_key}
-    #     self.client_session: ClientSession = ClientSession(headers=headers)
-        # if connections:
-        #     self.connections = ConnectionsController(self.admin_url, self.client_session)
-        # if messaging:
-        #     self.messaging = MessagingController(self.admin_url, self.client_session)
+    # TODO: Determine whether we really want to essentially create a whole new ClientSession object as done below
+    # Ideally we'd just update the existing session along the lines of self.client_session(headers) 
+    # That does not work, though because it is not callable and updating cannot be achieved reliably 
+    # because headers can be of different type
+    # from https://docs.aiohttp.org/en/stable/client_reference.html :
+    # "May be either iterable of key-value pairs or Mapping (e.g. dict, CIMultiDict)."
+    # So for now let's create a new ClientSession and use all the instances current attributes 
+    # to update every attr using ClientSession
+    def update_jwt_token(self, jwt_token): 
+        self.jwt_token = jwt_token
+        headers = {'Authorization': 'Bearer ' + jwt_token, 'content-type': "application/json"}
+        self.client_session: ClientSession = ClientSession(headers=headers)
+
+        if self.connections:
+            self.connections = ConnectionsController(self.admin_url, self.client_session)
+
+        if self.messaging:
+            self.messaging = MessagingController(self.admin_url, self.client_session)
+
+        if self.multitenant:
+            self.multitenant = MultitenancyController(self.admin_url, self.client_session)
+            
+        if self.mediation:
+            self.mediation = MediationController(self.admin_url, self.client_session)
+
+        if self.issuer:
+            self.schema = SchemaController(self.admin_url, self.client_session)
+            self.wallet = WalletController(self.admin_url, self.client_session)
+            self.definitions = DefinitionsController(self.admin_url, self.client_session)
+            self.issuer = IssuerController(self.admin_url, self.client_session, self.connections,
+                                           self.wallet, self.definitions)
+
+        if self.action_menu:
+            self.action_menu = ActionMenuController(self.admin_url, self.client_session)
+
+        if self.revocations:
+            self.revocations = RevocationController(
+                self.admin_url,
+                self.client_session
+            )
 
 
     def register_listeners(self, listeners, defaults=True):
