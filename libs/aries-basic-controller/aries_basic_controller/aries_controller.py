@@ -57,17 +57,16 @@ class AriesAgentController:
         self.connections_controller = None
         self.jwt_token = jwt_token
 
+        headers = {}
+
         if api_key:
-            headers = {"X-API-Key": api_key}
-            self.client_session: ClientSession = ClientSession(headers=headers)
-        else:
-            self.client_session: ClientSession = ClientSession()
+            headers = headers.update({"X-API-Key": api_key})
 
         if jwt_token:
-            headers = {'Authorization': 'Bearer ' + jwt_token, 'content-type': "application/json"}
-            self.client_session: ClientSession = ClientSession(headers=headers)
-        else:
-            self.client_session: ClientSession = ClientSession()
+            headers = headers.update({'Authorization': 'Bearer ' + jwt_token, 'content-type': "application/json"})
+
+        self.client_session: ClientSession = ClientSession(headers=headers)
+        
 
         if connections:
             self.connections = ConnectionsController(self.admin_url, self.client_session)
