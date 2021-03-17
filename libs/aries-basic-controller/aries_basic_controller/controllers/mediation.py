@@ -57,7 +57,7 @@ class MediationController(BaseController):
 
 
     # Request mediation from connection
-    async def request_mediation(self, request, conn_id: str):
+    async def request_mediation(self, conn_id: str, request: {} = {}):
         return await self.admin_POST(f"{self.base_url}/request/{conn_id}", json_data=request)
 
 
