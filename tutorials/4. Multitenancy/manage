@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="ngrok-external external-agent ngrok-basewallet basewallet-agent basewallet-notebook external-notebook"
+DEFAULT_CONTAINERS="ngrok-external external-agent ngrok-basewallet basewallet-agent basewallet-notebook external-notebook ngrok-mediator mediator-agent mediator-notebook "
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -141,6 +141,20 @@ configureEnvironment() {
   export BASEWALLET_WALLET_NAME="BASEWALLET Wallet"
   export BASEWALLET_JUPYTER_PORT="8888"
   export BASEWALLET_ADMIN_SECURE="true"
+  
+    # MEDIATOR-agent
+  export MEDIATOR_AGENT_NAME="MEDIATOR"
+  export MEDIATOR_ADMIN_PORT=8041
+  export MEDIATOR_HTTP_PORT=8040
+  export MEDIATOR_WEBHOOK_PORT=8042
+  export MEDIATOR_WEBHOOK_URL=${MEDIATOR_WEBHOOK_URL:-http://$DOCKERHOST:$MEDIATOR_WEBHOOK_PORT}
+  export MEDIATOR_AGENT_ENDPOINT=${MEDIATOR_AGENT_ENDPOINT:-http://$DOCKERHOST:$MEDIATOR_HTTP_PORT}
+  export MEDIATOR_WALLET_SEED="VAGENT_seed_00000000000000000000"
+  export MEDIATOR_WALLET_KEY="MEDIATOR_key_00000000000000000000000"
+  export MEDIATOR_WALLET_NAME="MEDIATOR Wallet"
+  export MEDIATOR_JUPYTER_PORT="8890"
+  export MEDIATOR_ADMIN_SECURE="true"
+
 
 
 }

@@ -28,7 +28,49 @@ services:
       - ${EXTERNAL_ADMIN_PORT}:${EXTERNAL_ADMIN_PORT}
     networks:
       - indy_demo
-
+  ngrok-mediator:
+    image: wernight/ngrok
+    command: ngrok http mediator-agent:${MEDIATOR_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  mediator-agent:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
+    environment:
+      - NGROK_NAME=ngrok-mediator
+      - ADMIN_URL=http://mediator-agent:${MEDIATOR_ADMIN_PORT}
+      - AGENT_NAME=${MEDIATOR_AGENT_NAME}
+      - ADMIN_PORT=${MEDIATOR_ADMIN_PORT}
+      - HTTP_PORT=${MEDIATOR_HTTP_PORT}
+      - WEBHOOK_URL=${MEDIATOR_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${MEDIATOR_AGENT_ENDPOINT}
+      - WALLET_SEED=${MEDIATOR_WALLET_SEED}
+      - WALLET_NAME=${MEDIATOR_WALLET_NAME}
+      - WALLET_KEY=${MEDIATOR_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=${MEDIATOR_ADMIN_SECURE}
+      - GENESIS_URL=${GENESIS_URL}
+    ports:
+      - ${MEDIATOR_HTTP_PORT}:${MEDIATOR_HTTP_PORT}
+      - ${MEDIATOR_ADMIN_PORT}:${MEDIATOR_ADMIN_PORT}
+    networks:
+      - indy_demo
+  mediator-notebook:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${MEDIATOR_JUPYTER_PORT}
+    depends_on:
+      - mediator-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/notebooks/mediator:/workspace
+    ports:
+      - ${MEDIATOR_JUPYTER_PORT}:8888
+      - ${MEDIATOR_WEBHOOK_PORT}:${MEDIATOR_WEBHOOK_PORT}
   ngrok-basewallet:
     image: wernight/ngrok
     command: ngrok http basewallet-agent:${BASEWALLET_HTTP_PORT} --log stdout
