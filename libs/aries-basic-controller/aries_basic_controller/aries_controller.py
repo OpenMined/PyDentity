@@ -43,7 +43,7 @@ class AriesAgentController:
         action_menu: bool = True,
         revocations: bool = True,
         api_key: str = None,
-        jwt_token: str = None,
+        tennant_jwt: str = None,
     ):
 
         self.webhook_site = None
@@ -55,15 +55,15 @@ class AriesAgentController:
         self.webhook_host = webhook_host
         self.webhook_port = webhook_port
         self.connections_controller = None
-        self.jwt_token = jwt_token
+        self.tennant_jwt = tennant_jwt
 
         headers = {}
 
         if api_key:
             headers = headers.update({"X-API-Key": api_key})
 
-        if jwt_token:
-            headers = headers.update({'Authorization': 'Bearer ' + jwt_token, 'content-type': "application/json"})
+        if tennant_jwt:
+            headers = headers.update({'Authorization': 'Bearer ' + tennant_jwt, 'content-type': "application/json"})
 
         self.client_session: ClientSession = ClientSession(headers=headers)
         
@@ -109,9 +109,9 @@ class AriesAgentController:
     # "May be either iterable of key-value pairs or Mapping (e.g. dict, CIMultiDict)."
     # So for now let's create a new ClientSession and use all the instances current attributes 
     # to update every attr using ClientSession
-    def update_jwt_token(self, jwt_token): 
-        self.jwt_token = jwt_token
-        headers = {'Authorization': 'Bearer ' + jwt_token, 'content-type': "application/json"}
+    def update_tennant_jwt(self, tennant_jwt): 
+        self.tennant_jwt = tennant_jwt
+        headers = {'Authorization': 'Bearer ' + tennant_jwt, 'content-type': "application/json"}
         self.client_session: ClientSession = ClientSession(headers=headers)
 
         if self.connections:
