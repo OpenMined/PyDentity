@@ -38,7 +38,7 @@ class AriesAgentController:
         connections: bool = True,
         messaging: bool = True,
         multitenant: bool = False,
-        mediation: bool = True,
+        mediation: bool = False,
         issuer: bool = True,
         action_menu: bool = True,
         revocations: bool = True,
@@ -55,17 +55,18 @@ class AriesAgentController:
         self.webhook_host = webhook_host
         self.webhook_port = webhook_port
         self.connections_controller = None
-        self.tennant_jwt = tennant_jwt
 
-        headers = {}
+        self.headers = {}
 
         if api_key:
-            headers = headers.update({"X-API-Key": api_key})
+            self.api_key = api_key
+            self.headers.update({"X-API-Key": api_key})
 
         if tennant_jwt:
-            headers = headers.update({'Authorization': 'Bearer ' + tennant_jwt, 'content-type': "application/json"})
+            self.tennant_jwt = tennant_jwt
+            self.headers.update({'Authorization': 'Bearer ' + tennant_jwt, 'content-type': "application/json"})
 
-        self.client_session: ClientSession = ClientSession(headers=headers)
+        self.client_session: ClientSession = ClientSession(headers= self.headers)
         
 
         if connections:
@@ -111,8 +112,8 @@ class AriesAgentController:
     # to update every attr using ClientSession
     def update_tennant_jwt(self, tennant_jwt): 
         self.tennant_jwt = tennant_jwt
-        headers = {'Authorization': 'Bearer ' + tennant_jwt, 'content-type': "application/json"}
-        self.client_session: ClientSession = ClientSession(headers=headers)
+        self.headers.update({'Authorization': 'Bearer ' + tennant_jwt, 'content-type': "application/json"})
+        self.client_session: ClientSession = ClientSession(headers=self.headers)
 
         if self.connections:
             self.connections = ConnectionsController(self.admin_url, self.client_session)
