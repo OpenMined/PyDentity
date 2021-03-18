@@ -46,10 +46,10 @@ seed: !ENV ${WALLET_SEED}
 
 auto-accept-requests: true
 auto-provision: true
-auto-respond-credential-proposal: true
-auto-respond-credential-offer: true
-auto-respond-credential-request: true
-auto-store-credential: true
+auto-respond-credential-proposal: false
+auto-respond-credential-offer: false
+auto-respond-credential-request: false
+auto-store-credential: false
 auto-respond-presentation-proposal: true
 auto-respond-presentation-request: true
 preserve-exchange-records: true
