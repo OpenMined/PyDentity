@@ -1,7 +1,7 @@
 # For usage please consult https://github.com/hyperledger/aries-cloudagent-python/blob/main/Mediation.md
 
 from .base import BaseController
-from aiohttp import ClientSession, ClientRequest
+from aiohttp import ClientSession
 import logging
 from typing import List
 
