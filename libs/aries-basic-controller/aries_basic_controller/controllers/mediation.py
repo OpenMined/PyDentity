@@ -20,7 +20,7 @@ class MediationController(BaseController):
 
     # Get default mediator
     async def get_default_mediator(self):
-        return await self.admin_POST(f"{self.base_url}/default-mediator")
+        return await self.admin_GET(f"{self.base_url}/default-mediator")
 
 
     # Clear default mediator
@@ -57,12 +57,12 @@ class MediationController(BaseController):
 
 
     # Request mediation from connection
-    async def request_mediation(self, request, conn_id: str):
+    async def request_mediation(self, conn_id: str, request: {} = {}):
         return await self.admin_POST(f"{self.base_url}/request/{conn_id}", json_data=request)
 
 
     # Query mediation requests, returns list of all mediation records
-    async def get_mediation_records(self, mediator_terms: [str], recipient_terms: [str], state: str = None, conn_id: str = None):
+    async def get_mediation_records(self, mediator_terms: [str] = None, recipient_terms: [str] = None, state: str = None, conn_id: str = None):
         params = {}
         if conn_id:
             params["conn_id"] = conn_id
@@ -96,6 +96,6 @@ class MediationController(BaseController):
         return await self.admin_POST(f"{self.base_url}/requests/{mediation_id}/grant")
 
 
-    # Grant received mediation request
+    # Set default mediator
     async def set_default_mediator(self, mediation_id: str):
-        return await self.admin_PUT(f"{self.base_url}/requests/{mediation_id}/default-mediator")
+        return await self.admin_PUT(f"{self.base_url}/{mediation_id}/default-mediator")
