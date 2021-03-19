@@ -4,6 +4,7 @@ from aiohttp import (
     ClientRequest,
 )
 from pubsub import pub
+import sys
 
 from .controllers.connections import ConnectionsController
 from .controllers.messaging import MessagingController
@@ -169,12 +170,15 @@ class AriesAgentController:
         pub.unsubAll(topicName=topic)
 
     async def listen_webhooks(self):
-        app = web.Application()
-        app.add_routes([web.post(self.webhook_base + "/topic/{topic}/", self._receive_webhook)])
-        runner = web.AppRunner(app)
-        await runner.setup()
-        self.webhook_site = web.TCPSite(runner, self.webhook_host, self.webhook_port)
-        await self.webhook_site.start()
+        try:
+            app = web.Application()
+            app.add_routes([web.post(self.webhook_base + "/topic/{topic}/", self._receive_webhook)])
+            runner = web.AppRunner(app)
+            await runner.setup()
+            self.webhook_site = web.TCPSite(runner, self.webhook_host, self.webhook_port)
+            await self.webhook_site.start()
+        except:
+            print("Listening webhooks failed!", sys.exc_info()[0], "occurred.")
 
     async def _receive_webhook(self, request: ClientRequest):
         topic = request.match_info["topic"]
