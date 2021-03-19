@@ -59,10 +59,10 @@ class AriesAgentController:
         headers = {}
 
         if api_key:
-            headers = headers.update({"X-API-Key": api_key})
+            headers.update({"X-API-Key": api_key})
 
         if tennant_jwt:
-            headers = headers.update({'Authorization': 'Bearer ' + tennant_jwt, 'content-type': "application/json"})
+            headers.update({'Authorization': 'Bearer ' + tennant_jwt, 'content-type': "application/json"})
 
         self.client_session: ClientSession = ClientSession(headers=headers)
         
