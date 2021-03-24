@@ -218,7 +218,7 @@ class AriesAgentController:
             pub.sendMessage(topic, payload=payload)
             # return web.Response(status=200)
         except Exception as exc:
-            logger.debug(f"Handling webhooks failed! {exc!r} occurred.")
+            logger.debug(f"Handling webhooks failed! {exc!r} occurred when trying to handle this topic: {topic}")
             
 
     async def terminate(self):
