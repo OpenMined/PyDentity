@@ -59,8 +59,8 @@ class AriesAgentController:
         Initialise revocation interface for credentials (default is True)
     api_key : str 
         The API key (default is None)
-    tennant_jwt: str
-        The tennant JW token (default is None)
+    tenant_jwt: str
+        The tenant JW token (default is None)
     """
     
     ## TODO rethink how to initialise. Too many args?
@@ -77,7 +77,7 @@ class AriesAgentController:
     action_menu: bool = True
     revocations: bool = True
     api_key: str = None
-    tennant_jwt: str = None
+    tenant_jwt: str = None
 
 
     def __post_init__(self):
@@ -94,8 +94,8 @@ class AriesAgentController:
         if self.api_key:
             self.headers.update({"X-API-Key": self.api_key})
 
-        if self.tennant_jwt:
-            self.headers.update({'Authorization': 'Bearer ' + self.tennant_jwt, 'content-type': "application/json"})
+        if self.tenant_jwt:
+            self.headers.update({'Authorization': 'Bearer ' + self.tenant_jwt, 'content-type': "application/json"})
 
         self.client_session: ClientSession = ClientSession(headers=self.headers)
     
@@ -135,16 +135,16 @@ class AriesAgentController:
             )
 
     
-    def update_tennant_jwt(self, tennant_jwt: str): 
-        """Update the tenannt JW token attribute and the header
+    def update_tenant_jwt(self, tenant_jwt: str): 
+        """Update the tenant JW token attribute and the header
         
         Args:
         ----
-        tennant_jwt : str 
-            The tennant's JW token
+        tenant_jwt : str 
+            The tenant's JW token
         """
-        self.tennant_jwt = tennant_jwt
-        self.headers.update({'Authorization': 'Bearer ' + tennant_jwt, 'content-type': "application/json"})
+        self.tenant_jwt = tenant_jwt
+        self.headers.update({'Authorization': 'Bearer ' + tenant_jwt, 'content-type': "application/json"})
         self.client_session.headers.update(self.headers)
         
         
@@ -169,9 +169,9 @@ class AriesAgentController:
             del self.headers['X-API-Key']
       
       
-    def remove_tennant_jwt(self):
-        """Removes the tennant's JW Token attribute and corresponding headers from the Client Session"""
-        self.tennant_jwt = None
+    def remove_tenant_jwt(self):
+        """Removes the tenant's JW Token attribute and corresponding headers from the Client Session"""
+        self.tenant_jwt = None
         if 'Authorization' in self.client_session.headers:
             del self.client_session.headers['Authorization']
             del self.headers['Authorization']
