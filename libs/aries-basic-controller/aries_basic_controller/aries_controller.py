@@ -157,7 +157,7 @@ class AriesAgentController:
                 self.add_listener(listener)
         except Exception as exc:
             print(f"Register webhooks listeners failed! {exc!r} occurred.")
-            logger.debug(f"Register webhooks listeners failed! {exc!r} occurred.")
+            logger.warn(f"Register webhooks listeners failed! {exc!r} occurred.")
 
 
     def add_listener(self, listener):
@@ -165,7 +165,7 @@ class AriesAgentController:
             pub.subscribe(listener["handler"], listener["topic"])
         except Exception as exc:
             print(f"Adding webhooks listener failed! {exc!r} occurred.")
-            logger.debug(f"Adding webhooks listener failed! {exc!r} occurred.")
+            logger.warn(f"Adding webhooks listener failed! {exc!r} occurred.")
             
 
     def remove_listener(self, listener):
@@ -176,7 +176,7 @@ class AriesAgentController:
                 logger.debug("Listener not subscribed", listener)
         except Exception as exc:
             print(f"Removing webhooks listener failed! {exc!r} occurred.")
-            logger.debug(f"Removing webhooks listener failed! {exc!r} occurred.")
+            logger.warn(f"Removing webhooks listener failed! {exc!r} occurred.")
             
 
     def remove_all_listeners(self, topic: str = None):
@@ -186,7 +186,7 @@ class AriesAgentController:
             pub.unsubAll(topicName=topic)
         except Exception as exc:
             print(f"Removing all webhooks listeners failed! {exc!r} occurred.")
-            logger.debug(f"Removing all webhooks listeners failed! {exc!r} occurred.")
+            logger.warn(f"Removing all webhooks listeners failed! {exc!r} occurred.")
             
 
     async def listen_webhooks(self):
@@ -199,7 +199,7 @@ class AriesAgentController:
             await self.webhook_site.start()
         except Exception as exc:
             print(f"Listening webhooks failed! {exc!r} occurred.")
-            logger.debug(f"Listening webhooks failed! {exc!r} occurred.")
+            logger.warn(f"Listening webhooks failed! {exc!r} occurred.")
 
 
     async def _receive_webhook(self, request: ClientRequest):
@@ -209,7 +209,7 @@ class AriesAgentController:
             await self._handle_webhook(topic, payload)
             return web.Response(status=200)
         except Exception as exc:
-            logger.debug(f"Receiving webhooks failed! {exc!r} occurred.")
+            logger.warn(f"Receiving webhooks failed! {exc!r} occurred.")
         
 
     async def _handle_webhook(self, topic, payload):
@@ -218,7 +218,7 @@ class AriesAgentController:
             pub.sendMessage(topic, payload=payload)
             # return web.Response(status=200)
         except Exception as exc:
-            logger.debug(f"Handling webhooks failed! {exc!r} occurred when trying to handle this topic: {topic}")
+            logger.warn(f"Handling webhooks failed! {exc!r} occurred when trying to handle this topic: {topic}")
             
 
     async def terminate(self):
@@ -228,4 +228,4 @@ class AriesAgentController:
                 await self.webhook_site.stop()
         except Exception as exc:
             print(f"Terminating webhooks listener failed! {exc!r} occurred.")
-            logger.debug(f"Terminating webhooks listener failed! {exc!r} occurred.")
+            logger.warn(f"Terminating webhooks listener failed! {exc!r} occurred.")
