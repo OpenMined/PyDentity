@@ -11,6 +11,6 @@ Current version 0.2
 
 ## Tutorial
 
-Find out how to use this package by taking our [jupyter notebook tutorial series](../../tutorials/aries-basic-controller).
+Find out how to use this package by taking our [jupyter notebook tutorial series](../../tutorials/).
 
 
