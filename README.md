@@ -29,6 +29,8 @@ Verify that **s2i** is in your PATH.  If not, then edit your PATH and add the di
 
 Ensure that Docker is running. If it is not try `sudo dockerd` in another terminal.
 
+## Running a Tutorial or Project
+
 You should now be able to run any of the tutorials or projects within this repo.
 
 E.g for the main tutorial on the aries-basic-controller

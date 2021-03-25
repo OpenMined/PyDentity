@@ -1,0 +1,137 @@
+version: "3"
+services:
+  ngrok-external:
+    image: wernight/ngrok
+    command: ngrok http external-agent:${EXTERNAL_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  external-agent:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
+    environment:
+      - NGROK_NAME=ngrok-external
+      - ADMIN_URL=http://external-agent:${EXTERNAL_ADMIN_PORT}
+      - AGENT_NAME=${EXTERNAL_AGENT_NAME}
+      - ADMIN_PORT=${EXTERNAL_ADMIN_PORT}
+      - HTTP_PORT=${EXTERNAL_HTTP_PORT}
+      - WEBHOOK_URL=${EXTERNAL_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${EXTERNAL_AGENT_ENDPOINT}
+      - WALLET_SEED=${EXTERNAL_WALLET_SEED}
+      - WALLET_NAME=${EXTERNAL_WALLET_NAME}
+      - WALLET_KEY=${EXTERNAL_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=${EXTERNAL_ADMIN_SECURE}
+      - GENESIS_URL=${GENESIS_URL}
+    ports:
+      - ${EXTERNAL_HTTP_PORT}:${EXTERNAL_HTTP_PORT}
+      - ${EXTERNAL_ADMIN_PORT}:${EXTERNAL_ADMIN_PORT}
+    networks:
+      - indy_demo
+  ngrok-mediator:
+    image: wernight/ngrok
+    command: ngrok http mediator-agent:${MEDIATOR_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  mediator-agent:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
+    environment:
+      - NGROK_NAME=ngrok-mediator
+      - ADMIN_URL=http://mediator-agent:${MEDIATOR_ADMIN_PORT}
+      - AGENT_NAME=${MEDIATOR_AGENT_NAME}
+      - ADMIN_PORT=${MEDIATOR_ADMIN_PORT}
+      - HTTP_PORT=${MEDIATOR_HTTP_PORT}
+      - WEBHOOK_URL=${MEDIATOR_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${MEDIATOR_AGENT_ENDPOINT}
+      - WALLET_SEED=${MEDIATOR_WALLET_SEED}
+      - WALLET_NAME=${MEDIATOR_WALLET_NAME}
+      - WALLET_KEY=${MEDIATOR_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=${MEDIATOR_ADMIN_SECURE}
+      - GENESIS_URL=${GENESIS_URL}
+    ports:
+      - ${MEDIATOR_HTTP_PORT}:${MEDIATOR_HTTP_PORT}
+      - ${MEDIATOR_ADMIN_PORT}:${MEDIATOR_ADMIN_PORT}
+    networks:
+      - indy_demo
+  mediator-notebook:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${MEDIATOR_JUPYTER_PORT}
+    depends_on:
+      - mediator-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/notebooks/mediator:/workspace
+    ports:
+      - ${MEDIATOR_JUPYTER_PORT}:8888
+      - ${MEDIATOR_WEBHOOK_PORT}:${MEDIATOR_WEBHOOK_PORT}
+  ngrok-basewallet:
+    image: wernight/ngrok
+    command: ngrok http basewallet-agent:${BASEWALLET_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  basewallet-agent:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok
+    environment:
+      - NGROK_NAME=ngrok-basewallet
+      - ADMIN_URL=http://basewallet-agent:${BASEWALLET_ADMIN_PORT}
+      - AGENT_NAME=${BASEWALLET_AGENT_NAME}
+      - ADMIN_PORT=${BASEWALLET_ADMIN_PORT}
+      - HTTP_PORT=${BASEWALLET_HTTP_PORT}
+      - WEBHOOK_URL=${BASEWALLET_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${BASEWALLET_AGENT_ENDPOINT}
+      - WALLET_SEED=${BASEWALLET_WALLET_SEED}
+      - WALLET_NAME=${BASEWALLET_WALLET_NAME}
+      - WALLET_KEY=${BASEWALLET_WALLET_KEY}
+      - WALLET_TYPE=${WALLET_TYPE}
+      - ACAPY_ADMIN_INSECURE_MODE=${BASEWALLET_ADMIN_SECURE}
+      - GENESIS_URL=${GENESIS_URL}
+      - ACAPY_MULTITENANT=true
+      - ACAPY_MULTITENANT_JWT_SECRET="password"
+      - ACAPY_MULTITENANT_ADMIN=true
+    ports:
+      - ${BASEWALLET_HTTP_PORT}:${BASEWALLET_HTTP_PORT}
+      - ${BASEWALLET_ADMIN_PORT}:${BASEWALLET_ADMIN_PORT}
+    networks:
+      - indy_demo
+  basewallet-notebook:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${BASEWALLET_JUPYTER_PORT}
+    depends_on:
+      - basewallet-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ./notebooks/basewallet:/workspace
+    ports:
+      - "8888:8888"
+      - ${BASEWALLET_WEBHOOK_PORT}:${BASEWALLET_WEBHOOK_PORT}
+  external-notebook:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${EXTERNAL_JUPYTER_PORT}
+    depends_on:
+      - external-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/notebooks/external:/workspace
+    ports:
+      - "8889:8888"
+      - ${EXTERNAL_WEBHOOK_PORT}:${EXTERNAL_WEBHOOK_PORT}
+
+networks:
+  indy_demo:
