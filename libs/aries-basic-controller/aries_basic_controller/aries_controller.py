@@ -5,6 +5,7 @@ from aiohttp import (
 )
 from dataclasses import dataclass
 from pubsub import pub
+import sys
 
 from .controllers.connections import ConnectionsController
 from .controllers.messaging import MessagingController
@@ -191,16 +192,21 @@ class AriesAgentController:
             Whether to connect to the default handlers for connections, basicmessage and present_proof 
             (default is True)
         """
-        if defaults:
-            if self.connections:
-                pub.subscribe(self.connections.default_handler, "connections")
-            if self.messaging:
-                pub.subscribe(self.messaging.default_handler, "basicmessages")
-            if self.proofs:
-                pub.subscribe(self.proofs.default_handler, "present_proof")
+        try:
+            if defaults:
+                if self.connections:
+                    pub.subscribe(self.connections.default_handler, "connections")
+                if self.messaging:
+                    pub.subscribe(self.messaging.default_handler, "basicmessages")
+                if self.proofs:
+                    pub.subscribe(self.proofs.default_handler, "present_proof")
 
-        for listener in listeners:
-            self.add_listener(listener)
+            for listener in listeners:
+                self.add_listener(listener)
+        except Exception as exc:
+            print(f"Register webhooks listeners failed! {exc!r} occurred.")
+            logger.warn(f"Register webhooks listeners failed! {exc!r} occurred.")
+
 
 
     def add_listener(self, listener):
@@ -211,7 +217,12 @@ class AriesAgentController:
         listener : dict
             A dictionary comprised of a "handler": handler (fct) and a "topic":"topicname" key-value pairs
         """
-        pub.subscribe(listener["handler"], listener["topic"])
+        try:
+            pub.subscribe(listener["handler"], listener["topic"])
+        except Exception as exc:
+            print(f"Adding webhooks listener failed! {exc!r} occurred.")
+            logger.warn(f"Adding webhooks listener failed! {exc!r} occurred.")
+            
 
 
     def remove_listener(self, listener):
@@ -222,10 +233,15 @@ class AriesAgentController:
         listener : dict
             A dictionary comprised of a "handler": handler (fct) and a "topic":"topicname" key-value pairs
         """
-        if pub.isSubscribed(listener["handler"], listener["topic"]):
-            pub.unsubscribe(listener["handler"], listener["topic"])
-        else:
-            logger.debug("Listener not subscribed", listener)
+        try:
+            if pub.isSubscribed(listener["handler"], listener["topic"]):
+                pub.unsubscribe(listener["handler"], listener["topic"])
+            else:
+                logger.debug("Listener not subscribed", listener)
+        except Exception as exc:
+            print(f"Removing webhooks listener failed! {exc!r} occurred.")
+            logger.warn(f"Removing webhooks listener failed! {exc!r} occurred.")
+            
 
 
     def remove_all_listeners(self, topic: str = None):
@@ -238,17 +254,27 @@ class AriesAgentController:
         """
         # Note advanced use of function can include both listenerFilter and topicFilter for this
         # Add when needed
-        pub.unsubAll(topicName=topic)
+        try:
+            pub.unsubAll(topicName=topic)
+        except Exception as exc:
+            print(f"Removing all webhooks listeners failed! {exc!r} occurred.")
+            logger.warn(f"Removing all webhooks listeners failed! {exc!r} occurred.")
+            
 
 
     async def listen_webhooks(self):
         """Create a server to listen to webhooks"""
-        app = web.Application()
-        app.add_routes([web.post(self.webhook_base + "/topic/{topic}/", self._receive_webhook)])
-        runner = web.AppRunner(app)
-        await runner.setup()
-        self.webhook_site = web.TCPSite(runner, self.webhook_host, self.webhook_port)
-        await self.webhook_site.start()
+        try:
+            app = web.Application()
+            app.add_routes([web.post(self.webhook_base + "/topic/{topic}/", self._receive_webhook)])
+            runner = web.AppRunner(app)
+            await runner.setup()
+            self.webhook_site = web.TCPSite(runner, self.webhook_host, self.webhook_port)
+            await self.webhook_site.start()
+        except Exception as exc:
+            print(f"Listening webhooks failed! {exc!r} occurred.")
+            logger.warn(f"Listening webhooks failed! {exc!r} occurred.")
+
 
 
     async def _receive_webhook(self, request: ClientRequest):
@@ -265,9 +291,13 @@ class AriesAgentController:
             A response with status 200
         """
         topic = request.match_info["topic"]
-        payload = await request.json()
-        await self._handle_webhook(topic, payload)
-        return web.Response(status=200)
+        try:
+            payload = await request.json()
+            await self._handle_webhook(topic, payload)
+            return web.Response(status=200)
+        except Exception as exc:
+            logger.warn(f"Receiving webhooks failed! {exc!r} occurred.")
+        
 
 
     async def _handle_webhook(self, topic, payload):
@@ -280,13 +310,21 @@ class AriesAgentController:
         payload : dict
             A JSON-like dictionary representation of the payload
         """
-        logging.debug(f"Handle Webhook - {topic}", payload)
-        pub.sendMessage(topic, payload=payload)
-        # return web.Response(status=200)
+        try:
+            logging.debug(f"Handle Webhook - {topic}", payload)
+            pub.sendMessage(topic, payload=payload)
+            # return web.Response(status=200)
+        except Exception as exc:
+            logger.warn(f"Handling webhooks failed! {exc!r} occurred when trying to handle this topic: {topic}")
+            
 
 
     async def terminate(self):
         """Terminate the controller client session and webhook listeners"""
-        await self.client_session.close()
-        if self.webhook_site:
-            await self.webhook_site.stop()
+        try:
+            await self.client_session.close()
+            if self.webhook_site:
+                await self.webhook_site.stop()
+        except Exception as exc:
+            print(f"Terminating webhooks listener failed! {exc!r} occurred.")
+            logger.warn(f"Terminating webhooks listener failed! {exc!r} occurred.")
