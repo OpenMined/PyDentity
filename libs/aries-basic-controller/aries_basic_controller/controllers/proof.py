@@ -67,17 +67,17 @@ class ProofController(BaseController):
     
 
     # Send a problem report for presentation exchange
-    async def send_problem_report(self, request, pres_ex_id):
+    async def send_problem_report(self, pres_ex_id, request):
         return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/problem-report", json_data=request)
 
 
     # Sends a proof presentation
-    async def send_presentation(self, request, pres_ex_id):
+    async def send_presentation(self, pres_ex_id, request):
         return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-presentation", json_data=request)
 
 
     # Sends a presentation request in reference to a proposal
-    async def send_request_for_proposal(self, request, pres_ex_id):
+    async def send_request_for_proposal(self, pres_ex_id, request):
         return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-request", json_data=request)
 
     
