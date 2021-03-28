@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="ngrok-external external-agent ngrok-basewallet basewallet-agent basewallet-notebook external-notebook ngrok-mediator mediator-agent mediator-notebook "
+DEFAULT_CONTAINERS="ngrok-external external-agent ngrok-multitenant multitenant-agent multitenant-notebook external-notebook ngrok-mediator mediator-agent mediator-notebook wallets-db"
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -129,18 +129,18 @@ configureEnvironment() {
   export EXTERNAL_JUPYTER_PORT="8889"
   export EXTERNAL_ADMIN_SECURE="true"
 
-  # BASEWALLET-agent
-  export BASEWALLET_AGENT_NAME="BASEWALLET"
-  export BASEWALLET_ADMIN_PORT=8021
-  export BASEWALLET_HTTP_PORT=8020
-  export BASEWALLET_WEBHOOK_PORT=8022
-  export BASEWALLET_WEBHOOK_URL=${BASEWALLET_WEBHOOK_URL:-http://$DOCKERHOST:$BASEWALLET_WEBHOOK_PORT}
-  export BASEWALLET_AGENT_ENDPOINT=${BASEWALLET_AGENT_ENDPOINT:-http://$DOCKERHOST:$BASEWALLET_HTTP_PORT}
-  export BASEWALLET_WALLET_SEED="IAGENT_seed_00000000000000000000"
-  export BASEWALLET_WALLET_KEY="BASEWALLET_key_00000000000000000000000"
-  export BASEWALLET_WALLET_NAME="BASEWALLET Wallet"
-  export BASEWALLET_JUPYTER_PORT="8888"
-  export BASEWALLET_ADMIN_SECURE="true"
+  # MULTITENANT-agent
+  export MULTITENANT_AGENT_NAME="MULTITENANT"
+  export MULTITENANT_ADMIN_PORT=8021
+  export MULTITENANT_HTTP_PORT=8020
+  export MULTITENANT_WEBHOOK_PORT=8022
+  export MULTITENANT_WEBHOOK_URL=${MULTITENANT_WEBHOOK_URL:-http://$DOCKERHOST:$MULTITENANT_WEBHOOK_PORT}
+  export MULTITENANT_AGENT_ENDPOINT=${MULTITENANT_AGENT_ENDPOINT:-http://$DOCKERHOST:$MULTITENANT_HTTP_PORT}
+  export MULTITENANT_WALLET_SEED="IAGENT_seed_00000000000000000000"
+  export MULTITENANT_WALLET_KEY="MULTITENANT_key_00000000000000000000000"
+  export MULTITENANT_WALLET_NAME="MULTITENANT Wallet"
+  export MULTITENANT_JUPYTER_PORT="8888"
+  export MULTITENANT_ADMIN_SECURE="true"
   
     # MEDIATOR-agent
   export MEDIATOR_AGENT_NAME="MEDIATOR"

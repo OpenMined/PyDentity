@@ -71,52 +71,70 @@ services:
     ports:
       - ${MEDIATOR_JUPYTER_PORT}:8888
       - ${MEDIATOR_WEBHOOK_PORT}:${MEDIATOR_WEBHOOK_PORT}
-  ngrok-basewallet:
-    image: wernight/ngrok
-    command: ngrok http basewallet-agent:${BASEWALLET_HTTP_PORT} --log stdout
+  wallets-db:
+    image: postgres:11
+    container_name: wallets-db
+    command: postgres -c listen_addresses='*'
+    environment:
+      POSTGRES_PASSWORD: dbpass
+      POSTGRES_USER: postgres
+      POSTGRES_DB: wallets
+    volumes:
+      - ./resources/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - indy_demo
-  basewallet-agent:
+    tty: true
+  ngrok-multitenant:
+    image: wernight/ngrok
+    command: ngrok http multitenant-agent:${MULTITENANT_HTTP_PORT} --log stdout
+    networks:
+      - indy_demo
+  multitenant-agent:
     build:
       context: ../../
       dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
-      - NGROK_NAME=ngrok-basewallet
-      - ADMIN_URL=http://basewallet-agent:${BASEWALLET_ADMIN_PORT}
-      - AGENT_NAME=${BASEWALLET_AGENT_NAME}
-      - ADMIN_PORT=${BASEWALLET_ADMIN_PORT}
-      - HTTP_PORT=${BASEWALLET_HTTP_PORT}
-      - WEBHOOK_URL=${BASEWALLET_WEBHOOK_URL}
-      - AGENT_ENDPOINT=${BASEWALLET_AGENT_ENDPOINT}
-      - WALLET_SEED=${BASEWALLET_WALLET_SEED}
-      - WALLET_NAME=${BASEWALLET_WALLET_NAME}
-      - WALLET_KEY=${BASEWALLET_WALLET_KEY}
+      - NGROK_NAME=ngrok-multitenant
+      - ADMIN_URL=http://multitenant-agent:${MULTITENANT_ADMIN_PORT}
+      - AGENT_NAME=${MULTITENANT_AGENT_NAME}
+      - ADMIN_PORT=${MULTITENANT_ADMIN_PORT}
+      - HTTP_PORT=${MULTITENANT_HTTP_PORT}
+      - WEBHOOK_URL=${MULTITENANT_WEBHOOK_URL}
+      - AGENT_ENDPOINT=${MULTITENANT_AGENT_ENDPOINT}
+      - WALLET_SEED=${MULTITENANT_WALLET_SEED}
+      - WALLET_NAME=${MULTITENANT_WALLET_NAME}
+      - WALLET_KEY=${MULTITENANT_WALLET_KEY}
       - WALLET_TYPE=${WALLET_TYPE}
-      - ACAPY_ADMIN_INSECURE_MODE=${BASEWALLET_ADMIN_SECURE}
+      - ACAPY_ADMIN_INSECURE_MODE=${MULTITENANT_ADMIN_SECURE}
       - GENESIS_URL=${GENESIS_URL}
       - ACAPY_MULTITENANT=true
       - ACAPY_MULTITENANT_JWT_SECRET="password"
       - ACAPY_MULTITENANT_ADMIN=true
+      - ACAPY_WALLET_STORAGE_TYPE=postgres_storage
+      - ACAPY_WALLET_STORAGE_CONFIG={"url":"wallets-db:5432","wallet_scheme":"MultiWalletSingleTable"}
+      - ACAPY_WALLET_STORAGE_CREDS={"account":"postgres","password":"dbpass","admin_account":"postgres","admin_password":"dbpass"}
     ports:
-      - ${BASEWALLET_HTTP_PORT}:${BASEWALLET_HTTP_PORT}
-      - ${BASEWALLET_ADMIN_PORT}:${BASEWALLET_ADMIN_PORT}
+      - ${MULTITENANT_HTTP_PORT}:${MULTITENANT_HTTP_PORT}
+      - ${MULTITENANT_ADMIN_PORT}:${MULTITENANT_ADMIN_PORT}
+    depends_on:
+      - wallets-db
     networks:
       - indy_demo
-  basewallet-notebook:
+  multitenant-notebook:
     build:
       context: ../../
       dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
       args:
-        - jupyter_port=${BASEWALLET_JUPYTER_PORT}
+        - jupyter_port=${MULTITENANT_JUPYTER_PORT}
     depends_on:
-      - basewallet-agent
+      - multitenant-agent
     networks:
       - indy_demo
     volumes:
-      - ./notebooks/basewallet:/workspace
+      - ./notebooks/multitenant:/workspace
     ports:
       - "8888:8888"
-      - ${BASEWALLET_WEBHOOK_PORT}:${BASEWALLET_WEBHOOK_PORT}
+      - ${MULTITENANT_WEBHOOK_PORT}:${MULTITENANT_WEBHOOK_PORT}
   external-notebook:
     build:
       context: ../../
@@ -132,6 +150,8 @@ services:
     ports:
       - "8889:8888"
       - ${EXTERNAL_WEBHOOK_PORT}:${EXTERNAL_WEBHOOK_PORT}
+
+
 
 networks:
   indy_demo:
