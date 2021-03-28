@@ -11,7 +11,7 @@ services:
       dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
       - NGROK_NAME=ngrok-ALICE
-      - ADMIN_URL=http://ALICE-agent:${ALICE_ADMIN_PORT}
+      - ADMIN_URL=http://alice-agent:${ALICE_ADMIN_PORT}
       - AGENT_NAME=${ALICE_AGENT_NAME}
       - ADMIN_PORT=${ALICE_ADMIN_PORT}
       - HTTP_PORT=${alice_HTTP_PORT}
@@ -39,7 +39,7 @@ services:
       dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
       - NGROK_NAME=ngrok-MEDIATOR1
-      - ADMIN_URL=http://MEDIATOR1-agent:${MEDIATOR1_ADMIN_PORT}
+      - ADMIN_URL=http://mediator1-agent:${MEDIATOR1_ADMIN_PORT}
       - AGENT_NAME=${MEDIATOR1_AGENT_NAME}
       - ADMIN_PORT=${MEDIATOR1_ADMIN_PORT}
       - HTTP_PORT=${MEDIATOR1_HTTP_PORT}
@@ -82,7 +82,7 @@ services:
       dockerfile: dockerfiles/agents/Dockerfile.ngrok
     environment:
       - NGROK_NAME=ngrok-MEDIATOR2
-      - ADMIN_URL=http://MEDIATOR2-agent:${MEDIATOR2_ADMIN_PORT}
+      - ADMIN_URL=http://mediator2-agent:${MEDIATOR2_ADMIN_PORT}
       - AGENT_NAME=${MEDIATOR2_AGENT_NAME}
       - ADMIN_PORT=${MEDIATOR2_ADMIN_PORT}
       - HTTP_PORT=${MEDIATOR2_HTTP_PORT}
@@ -152,7 +152,7 @@ services:
       args:
         - jupyter_port=${BOB_JUPYTER_PORT}
     depends_on:
-      - bob-agent
+      - BOB-agent
     networks:
       - indy_demo
     volumes:
