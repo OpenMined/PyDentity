@@ -35,7 +35,7 @@ You should now be able to run any of the tutorials or projects within this repo.
 
 E.g for the main tutorial on the aries-basic-controller
 1. Navigate to the root directory of the tutorial
-`cd tutorials/aries-basic-controller`
+`cd tutorials/1. Learning Aries, ACA-Py and the Basic Controller`
 2. Spin up the docker-compose configuration
 `./manage start`
 3. Get the urls and tokens for the juypter notebook instances within the project
@@ -47,15 +47,26 @@ E.g for the main tutorial on the aries-basic-controller
 
 In the tutorials folder you will find a set of series of juypter notebook tutorials walking through how to use the libraries contained within this repository. Each tutorial series can be run from it's folder using `./manage start`
 
-### [SSI Basics with Hyperledger](./tutorials/aries-basic-controller)
+### [Learning Aries, ACA-Py and the Basic Controller](./tutorials/1.%20Learning%20Aries,%20ACA-Py%20and%20the%20Basic%20Controller)
 
 This series introduces Self-Sovereign Identity and provides all the information needed to get started developing with the Hyperledger SSI stack using the aries-basic-controller library we developed to provide code examples within the notebooks.
 
 **This is a great place to start!** 
 
-### [Making SSI "Real"](./tutorials/aries-stagingnet)
+### [Public Ledgers and Mobile Wallets](./tutorials/2.%20Public%20Ledgers%20and%20Mobile%20Wallets)
 
-In this series you will learn how to move your solutions from a local test network onto the publicly accessible internet by connecting to the Sovrin StagingNet.
+In this series you will learn how to move your solutions from a local test network onto the publicly accessible internet by connecting to the Sovrin StagingNet. You will interact with the agents through the notebooks using a publically available mobile agent that you can download from the app store.
+
+### [Sending files](./tutorials/3.%20Attachments)
+
+In this series you will learn how to attach files and send them from Alice to Bob.
+
+### [Multi-tenancy and Mediation](./tutorials/4.%20Multitenancy)
+
+In this series you will learn mainly three things. Firstly, we show how to create wallets for Alice and Bob on the same agent. These wallets are called subwallets and are managed by a base wallet. We continue by exploring mediation of communication ([see here for more details](https://github.com/hyperledger/aries-cloudagent-python/blob/main/Mediation.md)). Lastly, the tutorial expands on these concept by introducing an external agent - external as in from an outside network. Here, we use familiar concepts from the second tutorial series. 
+
+**This configuration also gives an example of how to configure an agent to use postgres for it's wallet storage**
+
 
 ## Libraries
 
