@@ -15,7 +15,7 @@ services:
       - AGENT_NAME=${DATAOWNER_AGENT_NAME}
       - ADMIN_PORT=${DATAOWNER_ADMIN_PORT}
       - HTTP_PORT=${DATAOWNER_HTTP_PORT}
-      - WEBHOOK_URL=${DATAOWNER_WEBHOOK_URL}
+      - ACAPY_WEBHOOK_URL=${DATAOWNER_WEBHOOK_URL}
       - AGENT_ENDPOINT=${DATAOWNER_AGENT_ENDPOINT}
       - WALLET_SEED=${DATAOWNER_WALLET_SEED}
       - WALLET_NAME=${DATAOWNER_WALLET_NAME}
@@ -73,7 +73,7 @@ services:
       - AGENT_NAME=${OM_AUTHORITY_AGENT_NAME}
       - ADMIN_PORT=${OM_AUTHORITY_ADMIN_PORT}
       - HTTP_PORT=${OM_AUTHORITY_HTTP_PORT}
-      - WEBHOOK_URL=${OM_AUTHORITY_WEBHOOK_URL}
+      - ACAPY_WEBHOOK_URL=${OM_AUTHORITY_WEBHOOK_URL}
       - AGENT_ENDPOINT=${OM_AUTHORITY_AGENT_ENDPOINT}
       - WALLET_SEED=${OM_AUTHORITY_WALLET_SEED}
       - WALLET_NAME=${OM_AUTHORITY_WALLET_NAME}
@@ -87,10 +87,10 @@ services:
     ports:
       - ${OM_AUTHORITY_HTTP_PORT}:${OM_AUTHORITY_HTTP_PORT}
       - ${OM_AUTHORITY_ADMIN_PORT}:${OM_AUTHORITY_ADMIN_PORT}
+    depends_on:
+      - om-authority-wallet-db
     networks:
       - indy_demo
-    volumes:
-      - om-auth-wallet:/home/indy/.indy_client/wallet
   om-authority-notebook:
     build:
       context: ../../
@@ -122,7 +122,7 @@ services:
       - AGENT_NAME=${DATASCIENTIST_AGENT_NAME}
       - ADMIN_PORT=${DATASCIENTIST_ADMIN_PORT}
       - HTTP_PORT=${DATASCIENTIST_HTTP_PORT}
-      - WEBHOOK_URL=${DATASCIENTIST_WEBHOOK_URL}
+      - ACAPY_WEBHOOK_URL=${DATASCIENTIST_WEBHOOK_URL}
       - AGENT_ENDPOINT=${DATASCIENTIST_AGENT_ENDPOINT}
       - WALLET_SEED=${DATASCIENTIST_WALLET_SEED}
       - WALLET_NAME=${DATASCIENTIST_WALLET_NAME}
@@ -158,4 +158,3 @@ networks:
 volumes:
   datascientist-wallet:
   dataowner-wallet:
-  om-auth-wallet:

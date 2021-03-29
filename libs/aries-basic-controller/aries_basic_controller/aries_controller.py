@@ -219,6 +219,7 @@ class AriesAgentController:
         """
         try:
             pub.subscribe(listener["handler"], listener["topic"])
+            logger.debug("Lister added for topic : ", listener["topic"])
         except Exception as exc:
             print(f"Adding webhooks listener failed! {exc!r} occurred.")
             logger.warn(f"Adding webhooks listener failed! {exc!r} occurred.")
@@ -291,6 +292,8 @@ class AriesAgentController:
             A response with status 200
         """
         topic = request.match_info["topic"]
+        print("WEBHOOK RECIEVED - ", topic)
+
         try:
             payload = await request.json()
             await self._handle_webhook(topic, payload)
@@ -312,7 +315,9 @@ class AriesAgentController:
         """
         try:
             logging.debug(f"Handle Webhook - {topic}", payload)
+            print(f"HANDLE WEBHOOK - {topic}")
             pub.sendMessage(topic, payload=payload)
+            print(f"PUBSUB SENT - {topic}")
             # return web.Response(status=200)
         except Exception as exc:
             logger.warn(f"Handling webhooks failed! {exc!r} occurred when trying to handle this topic: {topic}")
