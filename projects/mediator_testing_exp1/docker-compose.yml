@@ -137,9 +137,6 @@ services:
       - WALLET_TYPE=${WALLET_TYPE}
       - ACAPY_ADMIN_INSECURE_MODE=${BOB_ADMIN_SECURE}
       - GENESIS_URL=${GENESIS_URL}
-      - ACAPY_MULTITENANT=true
-      - ACAPY_MULTITENANT_JWT_SECRET="password"
-      - ACAPY_MULTITENANT_ADMIN=true
     ports:
       - ${BOB_HTTP_PORT}:${BOB_HTTP_PORT}
       - ${BOB_ADMIN_PORT}:${BOB_ADMIN_PORT}
@@ -152,7 +149,7 @@ services:
       args:
         - jupyter_port=${BOB_JUPYTER_PORT}
     depends_on:
-      - BOB-agent
+      - bob-agent
     networks:
       - indy_demo
     volumes:

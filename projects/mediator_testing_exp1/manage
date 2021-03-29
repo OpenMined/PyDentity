@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="ngrok-ALICE alice-agent ngrok-BOB BOB-agent bob-notebook alice-notebook ngrok-MEDIATOR1 mediator1-agent mediator1-notebook ngrok-MEDIATOR2 mediator2-agent mediator2-notebook "
+DEFAULT_CONTAINERS="ngrok-ALICE alice-agent ngrok-BOB bob-agent bob-notebook alice-notebook ngrok-MEDIATOR1 mediator1-agent mediator1-notebook ngrok-MEDIATOR2 mediator2-agent mediator2-notebook "
 
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
