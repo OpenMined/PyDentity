@@ -30,6 +30,34 @@ services:
       - indy_demo
     volumes:
       - dataowner-wallet:/home/indy/.indy_client/wallet
+  dataowner-notebook:
+    build:
+      context: ../../
+      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
+      args:
+        - jupyter_port=${DATAOWNER_JUPYTER_PORT}
+    depends_on:
+      - dataowner-agent
+    networks:
+      - indy_demo
+    volumes:
+      - ${PWD}/notebooks/dataowner:/workspace
+    ports:
+      - "8889:8888"
+      - ${DATAOWNER_WEBHOOK_PORT}:${DATAOWNER_WEBHOOK_PORT}
+  om-authority-wallet-db:
+    image: postgres:11
+    container_name: om-authority-wallet-db
+    command: postgres -c listen_addresses='*'
+    environment:
+      POSTGRES_PASSWORD: dbpass
+      POSTGRES_USER: postgres
+      POSTGRES_DB: wallets
+    volumes:
+      - ./resources/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - indy_demo
+    tty: true
   ngrok-om-authority:
     image: wernight/ngrok
     command: ngrok http om-authority-agent:${OM_AUTHORITY_HTTP_PORT} --log stdout
@@ -53,6 +81,9 @@ services:
       - WALLET_TYPE=${WALLET_TYPE}
       - ACAPY_ADMIN_INSECURE_MODE=${OM_AUTHORITY_ADMIN_SECURE}
       - GENESIS_URL=${GENESIS_URL}
+      - ACAPY_WALLET_STORAGE_TYPE=postgres_storage
+      - ACAPY_WALLET_STORAGE_CONFIG={"url":"om-authority-wallet-db:5432","wallet_scheme":"MultiWalletSingleTable"}
+      - ACAPY_WALLET_STORAGE_CREDS={"account":"postgres","password":"dbpass","admin_account":"postgres","admin_password":"dbpass"}
     ports:
       - ${OM_AUTHORITY_HTTP_PORT}:${OM_AUTHORITY_HTTP_PORT}
       - ${OM_AUTHORITY_ADMIN_PORT}:${OM_AUTHORITY_ADMIN_PORT}
@@ -75,21 +106,6 @@ services:
     ports:
       - "8888:8888"
       - ${OM_AUTHORITY_WEBHOOK_PORT}:${OM_AUTHORITY_WEBHOOK_PORT}
-  dataowner-notebook:
-    build:
-      context: ../../
-      dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
-      args:
-        - jupyter_port=${DATAOWNER_JUPYTER_PORT}
-    depends_on:
-      - dataowner-agent
-    networks:
-      - indy_demo
-    volumes:
-      - ${PWD}/notebooks/dataowner:/workspace
-    ports:
-      - "8889:8888"
-      - ${DATAOWNER_WEBHOOK_PORT}:${DATAOWNER_WEBHOOK_PORT}
 
   ngrok-datascientist:
     image: wernight/ngrok
