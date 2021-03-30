@@ -28,8 +28,6 @@ services:
       - ${DATAOWNER_ADMIN_PORT}:${DATAOWNER_ADMIN_PORT}
     networks:
       - indy_demo
-    volumes:
-      - dataowner-wallet:/home/indy/.indy_client/wallet
   dataowner-notebook:
     build:
       context: ../../
@@ -135,8 +133,6 @@ services:
       - ${DATASCIENTIST_ADMIN_PORT}:${DATASCIENTIST_ADMIN_PORT}
     networks:
       - indy_demo
-    volumes:
-      - datascientist-wallet:/home/indy/.indy_client/wallet
   datascientist-notebook:
     build:
       context: ../../
@@ -155,6 +151,3 @@ services:
 
 networks:
   indy_demo:
-volumes:
-  datascientist-wallet:
-  dataowner-wallet:
