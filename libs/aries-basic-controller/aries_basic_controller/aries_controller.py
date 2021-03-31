@@ -79,6 +79,7 @@ class AriesAgentController:
     revocations: bool = True
     api_key: str = None
     tenant_jwt: str = None
+    wallet_id: str = "base"
 
 
     def __post_init__(self):
@@ -97,6 +98,7 @@ class AriesAgentController:
 
         if self.tenant_jwt:
             self.headers.update({'Authorization': 'Bearer ' + self.tenant_jwt, 'content-type': "application/json"})
+
 
         self.client_session: ClientSession = ClientSession(headers=self.headers)
     
@@ -134,6 +136,7 @@ class AriesAgentController:
                 self.admin_url,
                 self.client_session
             )
+
 
     
     def update_tenant_jwt(self, tenant_jwt: str): 
@@ -218,8 +221,13 @@ class AriesAgentController:
             A dictionary comprised of a "handler": handler (fct) and a "topic":"topicname" key-value pairs
         """
         try:
-            pub.subscribe(listener["handler"], listener["topic"])
-            logger.debug("Lister added for topic : ", listener["topic"])
+            pub_topic_path = listener['topic']
+            if self.wallet_id:
+                pub_topic_path = f"{self.wallet_id}.{pub_topic_path}"
+            print("Subscribing too: " + pub_topic_path)
+            pub.subscribe(listener["handler"], pub_topic_path)
+
+            logger.debug("Lister added for topic : ", pub_topic_path)
         except Exception as exc:
             print(f"Adding webhooks listener failed! {exc!r} occurred.")
             logger.warn(f"Adding webhooks listener failed! {exc!r} occurred.")
@@ -267,7 +275,7 @@ class AriesAgentController:
         """Create a server to listen to webhooks"""
         try:
             app = web.Application()
-            app.add_routes([web.post(self.webhook_base + "/topic/{topic}/", self._receive_webhook)])
+            app.add_routes([web.post(self.webhook_base + "/{wallet}/topic/{topic}/", self._receive_webhook)])
             runner = web.AppRunner(app)
             await runner.setup()
             self.webhook_site = web.TCPSite(runner, self.webhook_host, self.webhook_port)
@@ -292,17 +300,18 @@ class AriesAgentController:
             A response with status 200
         """
         topic = request.match_info["topic"]
-
+        wallet = request.match_info["wallet"]
+        print("wallet", wallet)
         try:
             payload = await request.json()
-            await self._handle_webhook(topic, payload)
+            await self._handle_webhook(wallet, topic, payload)
             return web.Response(status=200)
         except Exception as exc:
             logger.warn(f"Receiving webhooks failed! {exc!r} occurred.")
         
 
 
-    async def _handle_webhook(self, topic, payload):
+    async def _handle_webhook(self, wallet, topic, payload):
         """Helper handling a webhook
         
         Args:
@@ -313,8 +322,10 @@ class AriesAgentController:
             A JSON-like dictionary representation of the payload
         """
         try:
-            logging.debug(f"Handle Webhook - {topic}", payload)
-            pub.sendMessage(topic, payload=payload)
+            pub_topic_path = f"{wallet}.{topic}"
+            print(f"Handle Webhook - {pub_topic_path}", payload)
+            logging.debug(f"Handle Webhook - {pub_topic_path}", payload)
+            pub.sendMessage(pub_topic_path, payload=payload)
             # return web.Response(status=200)
         except Exception as exc:
             logger.warn(f"Handling webhooks failed! {exc!r} occurred when trying to handle this topic: {topic}")
