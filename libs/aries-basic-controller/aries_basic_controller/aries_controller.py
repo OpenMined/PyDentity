@@ -23,6 +23,8 @@ from .controllers.oob import OOBController
 from .controllers.action_menu import ActionMenuController
 from .controllers.revocation import RevocationController
 
+from .aries_webhook_listener import AriesWebhookListener
+
 import logging
 
 logger = logging.getLogger("aries_controller")
@@ -48,7 +50,7 @@ class AriesAgentController:
         Specify whether to create connecitons (default is True)
     messaging : bool
         Initialise the messaging interface (default is True)
-    multitenant : bool
+    is_multitenant : bool
         Initialise the multitenant interface (default is False)
     mediation : bool
         Initialise the mediation interface (default is False)
@@ -62,24 +64,26 @@ class AriesAgentController:
         The API key (default is None)
     tenant_jwt: str
         The tenant JW token (default is None)
+    wallet_id : str
+        The tenant wallet identifier
     """
     
     ## TODO rethink how to initialise. Too many args?
     ## is it important to let users config connections/issuer etc
-    webhook_host: str
-    webhook_port: int
     admin_url: str
+    webhook_host: str = None
+    webhook_port: int = None
     webhook_base: str = ""
     connections: bool = True
     messaging: bool = True
-    multitenant: bool = False
+    is_multitenant: bool = False
     mediation: bool = False
     issuer: bool = True
     action_menu: bool = True
     revocations: bool = True
     api_key: str = None
     tenant_jwt: str = None
-    wallet_id: str = "base"
+    wallet_id: str = None
 
 
     def __post_init__(self):
@@ -101,7 +105,9 @@ class AriesAgentController:
 
 
         self.client_session: ClientSession = ClientSession(headers=self.headers)
-    
+
+        self.webhook_listener: AriesWebhookListener = AriesWebhookListener(webhook_host=self.webhook_host, webhook_port=self.webhook_port, webhook_base=self.webhook_base, is_multitenant=self.is_multitenant)
+
         # Instantiate controllers based on the provided attributes
         if self.connections:
             self.connections = ConnectionsController(self.admin_url, self.client_session)
@@ -115,7 +121,7 @@ class AriesAgentController:
         self.server = ServerController(self.admin_url, self.client_session)
         self.oob = OOBController(self.admin_url, self.client_session)
 
-        if self.multitenant:
+        if self.is_multitenant:
             self.multitenant = MultitenancyController(self.admin_url, self.client_session)
 
         if self.mediation:
@@ -137,17 +143,29 @@ class AriesAgentController:
                 self.client_session
             )
 
+    def update_wallet_id(self, wallet_id: str):
+        """This wallet_id is used to register for webhooks specific to this sub_wallet
+
+        Args:
+        ----
+        wallet_id : str
+            The tenant wallet identifier
+        """
+        self.wallet_id = wallet_id
 
     
-    def update_tenant_jwt(self, tenant_jwt: str): 
+    def update_tenant_jwt(self, tenant_jwt: str, wallet_id: str):
         """Update the tenant JW token attribute and the header
         
         Args:
         ----
         tenant_jwt : str 
             The tenant's JW token
+        wallet_id : str
+            The tenant wallet identifier
         """
         self.tenant_jwt = tenant_jwt
+        self.update_wallet_id(wallet_id)
         self.headers.update({'Authorization': 'Bearer ' + tenant_jwt, 'content-type': "application/json"})
         self.client_session.headers.update(self.headers)
         
@@ -210,8 +228,6 @@ class AriesAgentController:
             print(f"Register webhooks listeners failed! {exc!r} occurred.")
             logger.warn(f"Register webhooks listeners failed! {exc!r} occurred.")
 
-
-
     def add_listener(self, listener):
         """Subscribe to a listeners for a topic
         
@@ -267,77 +283,15 @@ class AriesAgentController:
             pub.unsubAll(topicName=topic)
         except Exception as exc:
             print(f"Removing all webhooks listeners failed! {exc!r} occurred.")
-            logger.warn(f"Removing all webhooks listeners failed! {exc!r} occurred.")
-            
+            logger.warning(f"Removing all webhooks listeners failed! {exc!r} occurred.")
 
 
     async def listen_webhooks(self):
-        """Create a server to listen to webhooks"""
-        try:
-            app = web.Application()
-            app.add_routes([web.post(self.webhook_base + "/{wallet}/topic/{topic}/", self._receive_webhook)])
-            runner = web.AppRunner(app)
-            await runner.setup()
-            self.webhook_site = web.TCPSite(runner, self.webhook_host, self.webhook_port)
-            await self.webhook_site.start()
-        except Exception as exc:
-            print(f"Listening webhooks failed! {exc!r} occurred.")
-            logger.warn(f"Listening webhooks failed! {exc!r} occurred.")
+        # self.webhook_listener: AriesWebhookListener = AriesWebhookListener(webhook_host=webhook_host, webhook_port=webhook_port, webhook_base=webhook_base, is_multitenant=is_multitenant)
 
-
-
-    async def _receive_webhook(self, request: ClientRequest):
-        """Helper to receive webhooks by requesting it
-        
-        Args:
-        ----
-        request : ClientRequest
-            The client request to which the corresponding webhooks shall be received
-            
-        Returns:
-        -------
-        Response:
-            A response with status 200
-        """
-        topic = request.match_info["topic"]
-        wallet = request.match_info["wallet"]
-        print("wallet", wallet)
-        try:
-            payload = await request.json()
-            await self._handle_webhook(wallet, topic, payload)
-            return web.Response(status=200)
-        except Exception as exc:
-            logger.warn(f"Receiving webhooks failed! {exc!r} occurred.")
-        
-
-
-    async def _handle_webhook(self, wallet, topic, payload):
-        """Helper handling a webhook
-        
-        Args:
-        ----
-        topic : str
-            The topic to handle webhooks for
-        payload : dict
-            A JSON-like dictionary representation of the payload
-        """
-        try:
-            pub_topic_path = f"{wallet}.{topic}"
-            print(f"Handle Webhook - {pub_topic_path}", payload)
-            logging.debug(f"Handle Webhook - {pub_topic_path}", payload)
-            pub.sendMessage(pub_topic_path, payload=payload)
-            # return web.Response(status=200)
-        except Exception as exc:
-            logger.warn(f"Handling webhooks failed! {exc!r} occurred when trying to handle this topic: {topic}")
-            
-
+        if self.webhook_listener:
+            await self.webhook_listener.listen_webhooks()
 
     async def terminate(self):
-        """Terminate the controller client session and webhook listeners"""
-        try:
-            await self.client_session.close()
-            if self.webhook_site:
-                await self.webhook_site.stop()
-        except Exception as exc:
-            print(f"Terminating webhooks listener failed! {exc!r} occurred.")
-            logger.warn(f"Terminating webhooks listener failed! {exc!r} occurred.")
+        await self.client_session.close()
+        await self.webhook_listener.terminate()
