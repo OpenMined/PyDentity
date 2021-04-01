@@ -58,6 +58,7 @@ class AriesAgentController:
     issuer : bool
         Initialise the issuer interface (defautl is True)
     action_menu : bool
+        Initialise the action menu interface (default is True)
     revocations : bool
         Initialise revocation interface for credentials (default is True)
     api_key : str
@@ -82,7 +83,7 @@ class AriesAgentController:
     # action_menu: bool = True
     # revocations: bool = True
     api_key: str = None
-    # tenant_jwt: str = None
+    tenant_jwt: str = None
     wallet_id: str = None
 
     def __post_init__(self):
@@ -99,8 +100,8 @@ class AriesAgentController:
         if self.api_key:
             self.headers.update({"X-API-Key": self.api_key})
 
-        # if self.tenant_jwt:
-        #     self.headers.update({'Authorization': 'Bearer ' + self.tenant_jwt, 'content-type': "application/json"})
+        if self.tenant_jwt:
+            self.headers.update({'Authorization': 'Bearer ' + self.tenant_jwt, 'content-type': "application/json"})
 
         self.client_session: ClientSession = ClientSession(headers=self.headers)
 
@@ -152,20 +153,20 @@ class AriesAgentController:
         self.wallet_id = wallet_id
 
     
-    # def update_tenant_jwt(self, tenant_jwt: str, wallet_id: str):
-    #     """Update the tenant JW token attribute and the header
+    def update_tenant_jwt(self, tenant_jwt: str, wallet_id: str):
+        """Update the tenant JW token attribute and the header
         
-    #     Args:
-    #     ----
-    #     tenant_jwt : str 
-    #         The tenant's JW token
-    #     wallet_id : str
-    #         The tenant wallet identifier
-    #     """
-    #     self.tenant_jwt = tenant_jwt
-    #     self.update_wallet_id(wallet_id)
-    #     self.headers.update({'Authorization': 'Bearer ' + tenant_jwt, 'content-type': "application/json"})
-    #     self.client_session.headers.update(self.headers)
+        Args:
+        ----
+        tenant_jwt : str 
+            The tenant's JW token
+        wallet_id : str
+            The tenant wallet identifier
+        """
+        self.tenant_jwt = tenant_jwt
+        self.update_wallet_id(wallet_id)
+        self.headers.update({'Authorization': 'Bearer ' + tenant_jwt, 'content-type': "application/json"})
+        self.client_session.headers.update(self.headers)
         
         
     def update_api_key(self, api_key: str):
@@ -189,15 +190,15 @@ class AriesAgentController:
             del self.headers['X-API-Key']
       
       
-    # def remove_tenant_jwt(self):
-    #     """Removes the tenant's JW Token attribute and corresponding headers from the Client Session"""
-    #     self.tenant_jwt = None
-    #     if 'Authorization' in self.client_session.headers:
-    #         del self.client_session.headers['Authorization']
-    #         del self.headers['Authorization']
-    #     if 'content-type' in self.client_session.headers:
-    #         del self.client_session.headers['content-type']
-    #         del self.headers['content-type']
+    def remove_tenant_jwt(self):
+        """Removes the tenant's JW Token attribute and corresponding headers from the Client Session"""
+        self.tenant_jwt = None
+        if 'Authorization' in self.client_session.headers:
+            del self.client_session.headers['Authorization']
+            del self.headers['Authorization']
+        if 'content-type' in self.client_session.headers:
+            del self.client_session.headers['content-type']
+            del self.headers['content-type']
 
 
     def register_listeners(self, listeners, defaults=True):
