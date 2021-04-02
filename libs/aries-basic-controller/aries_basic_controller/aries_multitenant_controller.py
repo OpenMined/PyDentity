@@ -35,9 +35,6 @@ class AriesMultitenantController(AriesAgentController):
 
         super().__post_init__()
 
-        if self.api_key:
-            self.headers.update({"X-API-Key": self.api_key})
-
         if self.tenant_jwt:
             self.headers.update(
                 {'Authorization': 'Bearer ' + self.tenant_jwt,

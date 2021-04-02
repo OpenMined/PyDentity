@@ -47,7 +47,6 @@ class AriesAgentController:
 
     admin_url: str
     is_multitenant: bool = False
-    mediation: bool = False
     api_key: str = None
 
     def __post_init__(self):
@@ -102,10 +101,9 @@ class AriesAgentController:
                 self.admin_url,
                 self.client_session)
 
-        if self.mediation:
-            self.mediation = MediationController(
-                self.admin_url,
-                self.client_session)
+        self.mediation = MediationController(
+            self.admin_url,
+            self.client_session)
 
         self.schema = SchemaController(
             self.admin_url,
