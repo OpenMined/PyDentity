@@ -143,7 +143,7 @@ services:
     networks:
       - indy_demo
     volumes:
-      - ./notebooks/datascientist:'/workspace'
+      - ./notebooks/datascientist:/workspace
     ports:
       - "8890:8888"
       - ${DATASCIENTIST_WEBHOOK_PORT}:${DATASCIENTIST_WEBHOOK_PORT}
