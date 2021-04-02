@@ -23,8 +23,6 @@ class AriesWebhookListener:
         The exposed port for webhooks on the host
     webhook_base : str
         The base url for webhooks (default is "")
-    wallet_id : str
-        The tenant wallet identifier
     is_multitenant : bool
         Initialise the multitenant interface (default is False)
     """
