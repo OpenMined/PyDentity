@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from pubsub import pub
 
 from .aries_controller import AriesAgentController
 
@@ -15,18 +16,6 @@ class AriesMultitenantController(AriesAgentController):
 
     Attributes:
     ----------
-    admin_url : str
-        The URL for the Admin API
-    webhook_host : str
-        The url of the webhook host
-    webhook_port : int
-        The exposed port for webhooks on the host
-    webhook_base : str
-        The base url for webhooks (default is "")
-    mediation : bool
-        Initialise the mediation interface (default is False)
-    api_key : str
-        The API key (default is None)
     wallet_id : str
         The tenant wallet identifier (default is None)
     is_multitenant : bool
@@ -35,6 +24,7 @@ class AriesMultitenantController(AriesAgentController):
         The tenant JW token (default is None)
     """
 
+    wallet_id: str = None
     is_multitenant: bool = True
     tenant_jwt: str = None
 
@@ -55,6 +45,40 @@ class AriesMultitenantController(AriesAgentController):
 
         # Update the current client session instantiated in the parent class
         self.client_session.headers.update(self.headers)
+
+    def add_listener(self, listener):
+        """Subscribe to a listeners for a topic
+        Overrides parent method and uses the tenant's wallet ID to
+        listen for that wallet's webhooks under the url defined
+        by the wallet ID.
+        Args:
+        ----
+        listener : dict
+            A dictionary comprised of "handler": handler (fct) and
+            "topic":"topicname" key-value pairs
+        """
+        try:
+            pub_topic_path = listener['topic']
+            if self.wallet_id:
+                pub_topic_path = f"{self.wallet_id}.{pub_topic_path}"
+            print("Subscribing too: " + pub_topic_path)
+            pub.subscribe(listener["handler"], pub_topic_path)
+
+            logger.debug("Lister added for topic : ", pub_topic_path)
+        except Exception as exc:
+            logger.warning(
+                f"Adding webhooks listener failed! {exc!r} occurred.")
+
+    def update_wallet_id(self, wallet_id: str):
+        """This wallet_id is used to register for webhooks
+        specific to this sub_wallet
+
+        Args:
+        ----
+        wallet_id : str
+            The tenant wallet identifier
+        """
+        self.wallet_id = wallet_id
 
     def update_tenant_jwt(self, tenant_jwt: str, wallet_id: str):
         """Update the tenant JW token attribute and the header

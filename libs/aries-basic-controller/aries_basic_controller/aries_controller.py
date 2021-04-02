@@ -37,38 +37,23 @@ class AriesAgentController:
     ----------
     admin_url : str
         The URL for the Admin API
-    webhook_host : str
-        The url of the webhook host
-    webhook_port : int
-        The exposed port for webhooks on the host
-    webhook_base : str
-        The base url for webhooks (default is "")
     is_multitenant : bool
         Initialise the multitenant interface (default is False)
     mediation : bool
         Initialise the mediation interface (default is False)
     api_key : str
         The API key (default is None)
-    wallet_id : str
-        The tenant wallet identifier (default is None)
     """
 
-    # TODO rethink how to initialise. Too many args?
-    # We can factor out webhook host etc further in future versions
-    # We could also remove the wallet id from this class if we wanted
-    # and enforce use of multitenant controller for multitenant use entirely
     admin_url: str
-    webhook_host: str = None
-    webhook_port: int = None
-    webhook_base: str = ""
     is_multitenant: bool = False
     mediation: bool = False
     api_key: str = None
-    wallet_id: str = None
 
     def __post_init__(self):
-        """Constructs additional attributes,
-        and logic defined by attributes set during initial instantiation
+        """Constructs additional attributes and logic
+        Creates headers, instantiates a client sessions and initialises
+        the controller interfaces for the aries swagger API.
         """
 
         self.webhook_site = None
@@ -82,12 +67,6 @@ class AriesAgentController:
 
         self.client_session: ClientSession = ClientSession(
             headers=self.headers)
-
-        self.webhook_listener: AriesWebhookListener = AriesWebhookListener(
-            webhook_host=self.webhook_host,
-            webhook_port=self.webhook_port,
-            webhook_base=self.webhook_base,
-            is_multitenant=self.is_multitenant)
 
         # Instantiate controllers
         self.connections = ConnectionsController(
@@ -156,19 +135,27 @@ class AriesAgentController:
             self.client_session
         )
 
-    # TODO: Consider whether we want this to only be available in the
-    # multitennant controller. This still required here to update the
-    # base wallet for the current tutorials
-    def update_wallet_id(self, wallet_id: str):
-        """This wallet_id is used to register for webhooks
-        specific to this sub_wallet
+    def webhook_listener(
+                        self,
+                        webhook_host: str = None,
+                        webhook_port: str = None,
+                        webhook_base: str = ""):
+        """Create a webhooklisteners
 
         Args:
         ----
-        wallet_id : str
-            The tenant wallet identifier
+        webhook_host : str
+            The url of the webhook host (default is None)
+        webhook_port : int
+            The exposed port for webhooks on the host (default is None)
+        webhook_base : str
+            The base url for webhooks (default is "")
         """
-        self.wallet_id = wallet_id
+        self.webhook_listener: AriesWebhookListener = AriesWebhookListener(
+            webhook_host=webhook_host,
+            webhook_port=webhook_port,
+            webhook_base=webhook_base,
+            is_multitenant=self.is_multitenant)
 
     def update_api_key(self, api_key: str):
         """Update the API Key attribute and the header
@@ -234,11 +221,8 @@ class AriesAgentController:
         """
         try:
             pub_topic_path = listener['topic']
-            if self.wallet_id:
-                pub_topic_path = f"{self.wallet_id}.{pub_topic_path}"
             print("Subscribing too: " + pub_topic_path)
             pub.subscribe(listener["handler"], pub_topic_path)
-
             logger.debug("Lister added for topic : ", pub_topic_path)
         except Exception as exc:
             logger.warning(
@@ -281,12 +265,21 @@ class AriesAgentController:
                 f"Removing all webhooks listeners failed! {exc!r} occurred.")
 
     async def listen_webhooks(self):
-        if self.webhook_listener:
+        try:
             await self.webhook_listener.listen_webhooks()
+        except AttributeError:
+            logger.warning("Missing webhook listener.")
+        except Exception as exc:
+            logger.warning(
+                f"Listening webhooks failed! {exc!r} occurred.")
 
     async def terminate(self):
         await self.client_session.close()
         try:
             await self.webhook_listener.terminate()
         except AttributeError:
-            pass
+            # There is no webhook listener
+            return
+        except Exception as exc:
+            logger.warning(
+                f"Terminate webhooks listener exception!\n {exc!r} occurred.")
