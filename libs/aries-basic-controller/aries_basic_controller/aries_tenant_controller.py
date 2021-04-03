@@ -5,11 +5,11 @@ from .aries_controller import AriesAgentController
 
 import logging
 
-logger = logging.getLogger("aries_controller")
+logger = logging.getLogger("aries_tenant_controller")
 
 
 @dataclass
-class AriesMultitenantController(AriesAgentController):
+class AriesTenantController(AriesAgentController):
     """The Aries Agent Controller class
 
     This class allows you to interact with Aries by exposing the aca-py API. 
@@ -17,16 +17,13 @@ class AriesMultitenantController(AriesAgentController):
     Attributes:
     ----------
     wallet_id : str
-        The tenant wallet identifier (default is None)
-    is_multitenant : bool
-        Initialise the multitenant interface (default is True)
+        The tenant wallet identifier
     tenant_jwt : str
-        The tenant JW token (default is None)
+        The tenant JW token
     """
 
-    wallet_id: str = None
-    is_multitenant: bool = True
-    tenant_jwt: str = None
+    wallet_id: str
+    tenant_jwt: str
 
     def __post_init__(self):
         """Constructs additional attributes,
@@ -34,6 +31,8 @@ class AriesMultitenantController(AriesAgentController):
         """
 
         super().__post_init__()
+
+        self.is_multitenant: bool = True
 
         if self.api_key:
             self.headers.update({"X-API-Key": self.api_key})
@@ -45,6 +44,10 @@ class AriesMultitenantController(AriesAgentController):
 
         # Update the current client session instantiated in the parent class
         self.client_session.headers.update(self.headers)
+
+    def webhook_server():
+        raise NotImplementedError(
+            "Please, use an AriesAgentController to start a webhook server.")
 
     def add_listener(self, listener):
         """Subscribe to a listeners for a topic

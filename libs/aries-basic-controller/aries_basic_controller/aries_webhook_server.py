@@ -6,11 +6,11 @@ from dataclasses import dataclass
 from pubsub import pub
 import logging
 
-logger = logging.getLogger("aries_webhook_listener")
+logger = logging.getLogger("aries_webhook_server")
 
 
 @dataclass
-class AriesWebhookListener:
+class AriesWebhookServer:
     """The Aries Webhook Listener class
 
     This class allows you to interact with Aries by exposing the aca-py API.

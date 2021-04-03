@@ -20,7 +20,7 @@ from .controllers.oob import OOBController
 from .controllers.action_menu import ActionMenuController
 from .controllers.revocation import RevocationController
 
-from .aries_webhook_listener import AriesWebhookListener
+from .aries_webhook_server import AriesWebhookServer
 
 import logging
 
@@ -135,7 +135,7 @@ class AriesAgentController:
             self.client_session
         )
 
-    def webhook_listener(
+    def webhook_server(
                         self,
                         webhook_host: str = None,
                         webhook_port: str = None,
@@ -151,7 +151,7 @@ class AriesAgentController:
         webhook_base : str
             The base url for webhooks (default is "")
         """
-        self.webhook_listener: AriesWebhookListener = AriesWebhookListener(
+        self.webhook_server: AriesWebhookServer = AriesWebhookServer(
             webhook_host=webhook_host,
             webhook_port=webhook_port,
             webhook_base=webhook_base,
@@ -266,7 +266,7 @@ class AriesAgentController:
 
     async def listen_webhooks(self):
         try:
-            await self.webhook_listener.listen_webhooks()
+            await self.webhook_server.listen_webhooks()
         except AttributeError:
             logger.warning("Missing webhook listener.")
         except Exception as exc:
@@ -276,7 +276,7 @@ class AriesAgentController:
     async def terminate(self):
         await self.client_session.close()
         try:
-            await self.webhook_listener.terminate()
+            await self.webhook_server.terminate()
         except AttributeError:
             # There is no webhook listener
             return
