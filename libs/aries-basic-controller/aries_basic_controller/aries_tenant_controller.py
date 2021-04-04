@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pubsub import pub
 
-from .aries_controller import AriesAgentController
+from .aries_controller_base import AriesAgentControllerBase
 
 import logging
 
@@ -9,7 +9,7 @@ logger = logging.getLogger("aries_tenant_controller")
 
 
 @dataclass
-class AriesTenantController(AriesAgentController):
+class AriesTenantController(AriesAgentControllerBase):
     """The Aries Agent Controller class
 
     This class allows you to interact with Aries by exposing the aca-py API. 
@@ -48,6 +48,10 @@ class AriesTenantController(AriesAgentController):
     def webhook_server():
         raise NotImplementedError(
             "Please, use an AriesAgentController to start a webhook server.")
+
+    def listen_webhooks(self):
+        raise NotImplementedError(
+            "Please, use an AriesAgentController to listen to webhooks.")
 
     def add_listener(self, listener):
         """Subscribe to a listeners for a topic
