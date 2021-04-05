@@ -15,6 +15,8 @@ class AriesAgentController(AriesAgentControllerBase):
 
     This class allows you to interact with Aries by exposing the aca-py API.
 
+    Attributes:
+    ----------
     is_multitenant : bool
         Initialise the multitenant interface (default is False)
     """
