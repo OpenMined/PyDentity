@@ -1,15 +1,15 @@
 from dataclasses import dataclass
 from pubsub import pub
 
-from .aries_controller import AriesAgentController
+from .aries_controller_base import AriesAgentControllerBase
 
 import logging
 
-logger = logging.getLogger("aries_controller")
+logger = logging.getLogger("aries_tenant_controller")
 
 
 @dataclass
-class AriesMultitenantController(AriesAgentController):
+class AriesTenantController(AriesAgentControllerBase):
     """The Aries Agent Controller class
 
     This class allows you to interact with Aries by exposing the aca-py API. 
@@ -17,16 +17,13 @@ class AriesMultitenantController(AriesAgentController):
     Attributes:
     ----------
     wallet_id : str
-        The tenant wallet identifier (default is None)
-    is_multitenant : bool
-        Initialise the multitenant interface (default is True)
+        The tenant wallet identifier
     tenant_jwt : str
-        The tenant JW token (default is None)
+        The tenant JW token
     """
 
-    wallet_id: str = None
-    is_multitenant: bool = True
-    tenant_jwt: str = None
+    wallet_id: str
+    tenant_jwt: str
 
     def __post_init__(self):
         """Constructs additional attributes,
@@ -35,6 +32,9 @@ class AriesMultitenantController(AriesAgentController):
 
         super().__post_init__()
 
+        # if self.api_key:
+        #     self.headers.update({"X-API-Key": self.api_key})
+
         if self.tenant_jwt:
             self.headers.update(
                 {'Authorization': 'Bearer ' + self.tenant_jwt,
@@ -42,6 +42,14 @@ class AriesMultitenantController(AriesAgentController):
 
         # Update the current client session instantiated in the parent class
         self.client_session.headers.update(self.headers)
+
+    def webhook_server(self):
+        raise NotImplementedError(
+            "Please, use an AriesAgentController to start a webhook server.")
+
+    def listen_webhooks(self):
+        raise NotImplementedError(
+            "Please, use an AriesAgentController to listen to webhooks.")
 
     def add_listener(self, listener):
         """Subscribe to a listeners for a topic
