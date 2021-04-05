@@ -3,8 +3,6 @@ from dataclasses import dataclass
 from .aries_controller_base import AriesAgentControllerBase
 from .aries_webhook_server import AriesWebhookServer
 from .controllers.multitenant import MultitenancyController
-from pubsub import pub
-from pubsub import pub
 
 import logging
 
