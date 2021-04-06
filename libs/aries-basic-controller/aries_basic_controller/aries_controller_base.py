@@ -89,8 +89,6 @@ class AriesAgentControllerBase(ABC):
             self.admin_url,
             self.client_session)
 
-
-
         self.mediation = MediationController(
             self.admin_url,
             self.client_session)
@@ -123,7 +121,7 @@ class AriesAgentControllerBase(ABC):
             self.client_session
         )
 
-    def webhook_server(self):
+    def init_webhook_server(self):
         raise NotImplementedError
 
     def update_api_key(self, api_key: str):
@@ -159,8 +157,8 @@ class AriesAgentControllerBase(ABC):
             basicmessage and present_proof (default is True)
         """
         try:
-            ## TODO figure out if we should actually use these defaults
-            ## If so lets do it consistently
+            # TODO figure out if we should actually use these defaults
+            # If so lets do it consistently
             if defaults:
                 if self.connections:
                     pub.subscribe(

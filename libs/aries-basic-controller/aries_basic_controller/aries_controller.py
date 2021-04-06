@@ -36,7 +36,7 @@ class AriesAgentController(AriesAgentControllerBase):
                 self.admin_url,
                 self.client_session)
 
-    def webhook_server(
+    def init_webhook_server(
                         self,
                         webhook_host: str = None,
                         webhook_port: int = None,
@@ -57,7 +57,6 @@ class AriesAgentController(AriesAgentControllerBase):
             webhook_port=webhook_port,
             webhook_base=webhook_base,
             is_multitenant=self.is_multitenant)
-
 
     async def listen_webhooks(self):
         try:

@@ -32,9 +32,6 @@ class AriesTenantController(AriesAgentControllerBase):
 
         super().__post_init__()
 
-        # if self.api_key:
-        #     self.headers.update({"X-API-Key": self.api_key})
-
         if self.tenant_jwt:
             self.headers.update(
                 {'Authorization': 'Bearer ' + self.tenant_jwt,
@@ -43,13 +40,15 @@ class AriesTenantController(AriesAgentControllerBase):
         # Update the current client session instantiated in the parent class
         self.client_session.headers.update(self.headers)
 
-    def webhook_server(self):
+    def init_webhook_server(self):
         raise NotImplementedError(
-            "Please, use an AriesAgentController to start a webhook server.")
+            ("Please, use an AriesAgentController to start a webhook server\n"
+                "Webhook server fct is disallowed for tenant controllers."))
 
     def listen_webhooks(self):
         raise NotImplementedError(
-            "Please, use an AriesAgentController to listen to webhooks.")
+            ("Please, use an AriesAgentController to start a webhook server\n"
+                "Webhook server fct is disallowed for tenant controllers."))
 
     def add_listener(self, listener):
         """Subscribe to a listeners for a topic
@@ -63,13 +62,14 @@ class AriesTenantController(AriesAgentControllerBase):
             "topic":"topicname" key-value pairs
         """
         try:
-            pub_topic_path = listener['topic']
-            if self.wallet_id:
-                pub_topic_path = f"{self.wallet_id}.{pub_topic_path}"
+            pub_topic_path_base = listener['topic']
+            pub_topic_path = f"{self.wallet_id}.{pub_topic_path_base}"
             print("Subscribing too: " + pub_topic_path)
             pub.subscribe(listener["handler"], pub_topic_path)
-
             logger.debug("Lister added for topic : ", pub_topic_path)
+        except self.wallet_id is "":
+            logger.error(
+                "Cannot add listener for empty wallet_id.")
         except Exception as exc:
             logger.warning(
                 f"Adding webhooks listener failed! {exc!r} occurred.")

@@ -24,7 +24,7 @@ class AriesWebhookServer:
     webhook_base : str
         The base url for webhooks (default is "")
     is_multitenant : bool
-        Initialise the multitenant interface (default is False)
+        Handles a multitenant setup (default is False)
     """
 
     webhook_host: str
