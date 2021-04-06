@@ -36,11 +36,11 @@ class AriesAgentControllerBase(ABC):
     admin_url : str
         The URL for the Admin API
     api_key : str
-        The API key
+        The API key (default is None)
     """
 
     admin_url: str
-    api_key: str
+    api_key: str = None
 
     def __post_init__(self):
         """Constructs additional attributes and logic
@@ -54,7 +54,7 @@ class AriesAgentControllerBase(ABC):
         # Construct headers for Client Session and the session itself
         self.headers = {}
 
-        if self.api_key not in [None, ""]:
+        if self.api_key:
             self.headers.update({"X-API-Key": self.api_key})
 
         self.client_session: ClientSession = ClientSession(

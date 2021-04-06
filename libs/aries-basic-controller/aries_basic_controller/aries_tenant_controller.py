@@ -7,6 +7,8 @@ import logging
 
 logger = logging.getLogger("aries_tenant_controller")
 
+_required = object()
+
 
 @dataclass
 class AriesTenantController(AriesAgentControllerBase):
@@ -22,13 +24,19 @@ class AriesTenantController(AriesAgentControllerBase):
         The tenant JW token
     """
 
-    wallet_id: str
-    tenant_jwt: str
+    wallet_id: str = _required
+    tenant_jwt: str = _required
 
     def __post_init__(self):
         """Constructs additional attributes,
         and logic defined by attributes set during instantiation
         """
+
+        if (self.wallet_id is _required):
+            raise TypeError("__init__ missing required wallet_id (str)")
+
+        if (self.tenant_jwt is _required):
+            raise TypeError("__init__ missing required tenant_jwt (str)")
 
         super().__post_init__()
 

@@ -61,6 +61,7 @@ class AriesAgentController(AriesAgentControllerBase):
     async def listen_webhooks(self):
         try:
             await self.webhook_server.listen_webhooks()
+            logger.info("Webhook server started.")
         except AttributeError:
             logger.warning("Missing webhook listener.")
         except Exception as exc:
