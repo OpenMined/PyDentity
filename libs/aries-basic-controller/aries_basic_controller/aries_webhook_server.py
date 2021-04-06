@@ -72,7 +72,7 @@ class AriesWebhookServer:
         wallet_id = None
         if self.is_multitenant:
             wallet_id = request.match_info["wallet_id"]
-        print("wallet", wallet_id)
+            logger.info(f"Received webhook from wallet id: {wallet_id}")
         try:
             payload = await request.json()
             await self._handle_webhook(wallet_id, topic, payload)

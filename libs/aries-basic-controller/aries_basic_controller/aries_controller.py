@@ -63,7 +63,7 @@ class AriesAgentController(AriesAgentControllerBase):
             await self.webhook_server.listen_webhooks()
             logger.info("Webhook server started.")
         except AttributeError:
-            logger.warning("Missing webhook listener.")
+            logger.warning("Webhook server not initialised.")
         except Exception as exc:
             logger.warning(
                 f"Listening webhooks failed! {exc!r} occurred.")
