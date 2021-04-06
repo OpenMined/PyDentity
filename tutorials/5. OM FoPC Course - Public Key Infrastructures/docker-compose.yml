@@ -104,7 +104,6 @@ services:
     ports:
       - "8888:8888"
       - ${OM_AUTHORITY_WEBHOOK_PORT}:${OM_AUTHORITY_WEBHOOK_PORT}
-
   ngrok-datascientist:
     image: wernight/ngrok
     command: ngrok http datascientist-agent:${DATASCIENTIST_HTTP_PORT} --log stdout
