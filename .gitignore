@@ -1,4 +1,5 @@
 .idea/
+.venv
 .code
 dist
 *.egg-info

@@ -19,22 +19,22 @@ BOB_WEBHOOK_HOST = os.getenv('BOB_WEBHOOK_HOST')
 BOB_WEBHOOK_BASE = os.getenv('BOB_WEBHOOK_BASE')
 
 
-
-
-
 async def start_agent():
 
     time.sleep(10)
 
     # Inviter
-    bob_agent_controller = AriesAgentController(webhook_host=BOB_WEBHOOK_HOST, webhook_port=BOB_WEBHOOK_PORT,
-                                               webhook_base=BOB_WEBHOOK_BASE, admin_url=BOB_ADMIN_URL)
-
+    bob_agent_controller = AriesAgentController(admin_url=BOB_ADMIN_URL)
 
     # Invitee
-    alice_agent_controller = AriesAgentController(webhook_host=ALICE_WEBHOOK_HOST, webhook_port=ALICE_WEBHOOK_PORT,
-                                               webhook_base=ALICE_WEBHOOK_BASE, admin_url=ALICE_ADMIN_URL, api_key=ALICE_API_KEY)
+    alice_agent_controller = AriesAgentController(
+                                                admin_url=ALICE_ADMIN_URL,
+                                                api_key=ALICE_API_KEY)
 
+    # alice_agent_controller.init_webhook_server(
+    #                                         webhook_host=ALICE_WEBHOOK_HOST,
+    #                                         webhook_port=ALICE_WEBHOOK_PORT,
+    #                                         webhook_base=ALICE_WEBHOOK_BASE)
 
     # await alice_agent_controller.listen_webhooks()
     #
@@ -113,4 +113,3 @@ if __name__ == "__main__":
         asyncio.get_event_loop().run_until_complete(start_agent())
     except KeyboardInterrupt:
         os._exit(1)
-

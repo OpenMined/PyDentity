@@ -38,8 +38,9 @@ class Researcher:
     
     def __init__(self, agent_config, validation_data_path, model):
         
-        self.agent_controller = AriesAgentController(webhook_host=agent_config["webhook_host"],webhook_port=agent_config["webhook_port"],                                       webhook_base=agent_config["webhook_base"], admin_url=agent_config["admin_url"])
-        
+        self.agent_controller = AriesAgentController(admin_url=agent_config["admin_url"])
+        self.agent_controller.init_webhook_server(webhook_host=agent_config["webhook_host"],webhook_port=agent_config["webhook_port"],webhook_base=agent_config["webhook_base"])
+
         self._register_agent_listeners()
         
         self.pending_dataowner_connections = []
