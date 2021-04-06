@@ -22,7 +22,7 @@ def parse_requirements(filename):
 if __name__ == "__main__":
     setup(
         name=PACKAGE_NAME,
-        version="0.2",
+        version="0.4",
         author="Will Abramson",
         description="A simple python package for controlling an aries agent through the admin-api interface",
         long_description=long_description,
@@ -32,7 +32,7 @@ if __name__ == "__main__":
         include_package_data=True,
         package_data={"aries_basic_controller": ["requirements.txt"]},
         install_requires=parse_requirements("requirements.txt"),
-        python_requires=">=3.6.3",
+        python_requires=">=3.7.3",
         classifiers=[
             "Programming Language :: Python :: 3",
             "License :: OSI Approved :: Apache Software License",

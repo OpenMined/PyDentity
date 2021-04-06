@@ -12,7 +12,7 @@ logger = logging.getLogger("aries_tenant_controller")
 class AriesTenantController(AriesAgentControllerBase):
     """The Aries Agent Controller class
 
-    This class allows you to interact with Aries by exposing the aca-py API. 
+    This class allows you to interact with Aries by exposing the aca-py API.
 
     Attributes:
     ----------
@@ -55,6 +55,7 @@ class AriesTenantController(AriesAgentControllerBase):
         Overrides parent method and uses the tenant's wallet ID to
         listen for that wallet's webhooks under the url defined
         by the wallet ID.
+
         Args:
         ----
         listener : dict
@@ -64,10 +65,9 @@ class AriesTenantController(AriesAgentControllerBase):
         try:
             pub_topic_path_base = listener['topic']
             pub_topic_path = f"{self.wallet_id}.{pub_topic_path_base}"
-            print("Subscribing too: " + pub_topic_path)
             pub.subscribe(listener["handler"], pub_topic_path)
             logger.debug("Lister added for topic : ", pub_topic_path)
-        except self.wallet_id is "":
+        except self.wallet_id == "":
             logger.error(
                 "Cannot add listener for empty wallet_id.")
         except Exception as exc:
@@ -83,7 +83,10 @@ class AriesTenantController(AriesAgentControllerBase):
         wallet_id : str
             The tenant wallet identifier
         """
-        self.wallet_id = wallet_id
+        try:
+            self.wallet_id = wallet_id
+        except wallet_id == "":
+            raise Exception("wallet_id must not be empty")
 
     def update_tenant_jwt(self, tenant_jwt: str, wallet_id: str):
         """Update the tenant JW token attribute and the header
@@ -102,6 +105,8 @@ class AriesTenantController(AriesAgentControllerBase):
                 {'Authorization': 'Bearer ' + tenant_jwt,
                     'content-type': "application/json"})
             self.client_session.headers.update(self.headers)
+        except tenant_jwt == "":
+            raise Exception("tenant_jwt must not be empty")
         except Exception as exc:
             logger.warning(
                 (f"Updating tenant JW token"
