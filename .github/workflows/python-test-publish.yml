@@ -30,7 +30,13 @@ jobs:
         pip install setuptools wheel twine pylint
     - name: Analysing the code with pylint
       run: |
-        pylint `ls -R|grep .py$|xargs`
+        python -m pylint --fail-under=10 `find -regextype egrep -regex '(.*.py)$'` |
+        tee pylint.txt
+    - name: Upload pylint.txt as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: pylint report
+        path: pylint.txt
     - name: Build and publish
       env:
         TWINE_USERNAME: ${{ secrets.TEST_PYPI_USERNAME }}
