@@ -1,1 +1,0 @@
-from hospital.hospital import Hospital

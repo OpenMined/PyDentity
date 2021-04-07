@@ -4,12 +4,12 @@ import os
 import runpy
 from setuptools import setup, find_packages
 
-PACKAGE_NAME = "attachment_controller"
+PACKAGE_NAME = "aries_basic_controller"
 # version_meta = runpy.run_path("./{}/version.py".format(PACKAGE_NAME))
 # VERSION = version_meta["__version__"]
 
 
-with open(os.path.abspath("./README.md"), "r") as fh:
+with open(os.path.abspath("README.md"), "r") as fh:
     long_description = fh.read()
 
 
@@ -22,17 +22,17 @@ def parse_requirements(filename):
 if __name__ == "__main__":
     setup(
         name=PACKAGE_NAME,
-        version="0.0.1",
+        version="0.3",
         author="Will Abramson",
-        description="A python package for an OpenMined specific Aries Controller",
+        description="A simple python package for controlling an aries agent through the admin-api interface",
         long_description=long_description,
         long_description_content_type="text/markdown",
-        # url="https://github.com/wip-abramson/aries-basic-controller-python",
+        url="https://github.com/OpenMined/PyDentity/tree/master/libs/aries-basic-controller",
         packages=find_packages(),
         include_package_data=True,
-        package_data={"attachment_controller": ["requirements.txt"]},
+        package_data={"aries_basic_controller": ["requirements.txt"]},
         install_requires=parse_requirements("requirements.txt"),
-        python_requires=">=3.6.3",
+        python_requires=">=3.7.3",
         classifiers=[
             "Programming Language :: Python :: 3",
             "License :: OSI Approved :: Apache Software License",
