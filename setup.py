@@ -22,12 +22,12 @@ def parse_requirements(filename):
 if __name__ == "__main__":
     setup(
         name=PACKAGE_NAME,
-        version="0.3",
-        author="Will Abramson",
+        version="0.1",
+        author="Openmined & DIDx (Will Abramson & Lohan Spies)",
         description="A simple python package for controlling an aries agent through the admin-api interface",
         long_description=long_description,
         long_description_content_type="text/markdown",
-        url="https://github.com/OpenMined/PyDentity/tree/master/libs/aries-basic-controller",
+        url="https://github.com/didx-xyz/aries-cloudcontroller-python/tree/main/aries_cloudcontroller",
         packages=find_packages(),
         include_package_data=True,
         package_data={"aries_cloudcontroller": ["requirements.txt"]},
