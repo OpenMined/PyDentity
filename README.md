@@ -1,3 +1,5 @@
+[![Upload Python Package](https://github.com/didx-xyz/aries-cloudcontroller-python/actions/workflows/python-publish.yml/badge.svg)](https://github.com/didx-xyz/aries-cloudcontroller-python/actions/workflows/python-publish.yml)
+
 # Aries Basic Controller - Python
 
 A simple pip installable package for controlling aries agents through admin API calls.
