@@ -6,11 +6,11 @@ A simple pip installable package for controlling aries agents through admin API 
 
 Current version 0.3
 
-`python3 -m pip install aries_basic_controller`
+`python3 -m pip install aries_cloudcontroller`
 
 
 ## Tutorial
 
-Find out how to use this package by taking our [jupyter notebook tutorial series](../../tutorials/).
+Find out how to use this package by taking our [jupyter notebook tutorial series](https://github.com/OpenMined/PyDentity/tree/master/tutorials).
 
 
