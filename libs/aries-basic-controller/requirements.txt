@@ -8,3 +8,4 @@ termcolor
 pillow
 qrcode
 beautifulsoup4
+pytest~=6.2.3

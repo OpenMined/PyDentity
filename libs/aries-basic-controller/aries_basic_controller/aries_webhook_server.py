@@ -108,6 +108,7 @@ class AriesWebhookServer:
         """Terminate the controller client session and webhook listeners"""
         try:
             await self.webhook_site.stop()
+            logger.info("Webhook server terminated.")
         except AttributeError:
             # Do nothing if no webhook site server is running
             return

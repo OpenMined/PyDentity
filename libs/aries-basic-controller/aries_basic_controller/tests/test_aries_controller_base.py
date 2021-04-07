@@ -1,3 +1,4 @@
+import logging
 import pytest
 import pytest_asyncio
 from aiohttp import (
@@ -20,18 +21,17 @@ from ..controllers.oob import OOBController
 from ..controllers.action_menu import ActionMenuController
 from ..controllers.revocation import RevocationController
 
-# @pytest.fixture()
-# def base_controller(**kwargs):
-#     return AriesAgentControllerBase(**kwargs)
+LOGGER = logging.getLogger(__name__)
+
 
 class TestAriesAgentControllerBase():
 
     @pytest.mark.asyncio
     async def test_init_args_missing(self):
         with pytest.raises(TypeError) as te:
-            AriesAgentControllerBase()
+            ac = AriesAgentControllerBase()
             assert "__init__() missing 1 required positional argument: 'admin_url'" \
-                in str(tf.value)
+                in str(te.value)
     
     @pytest.mark.asyncio
     async def test_default_args(self):
@@ -124,9 +124,11 @@ class TestAriesAgentControllerBase():
         await ac.terminate()
 
     @pytest.mark.asyncio
-    async def test_terminate(self):
+    async def test_terminate(self, caplog):
+        caplog.set_level(logging.INFO)
         ac = AriesAgentControllerBase(admin_url="0.0.0.0")
         await ac.terminate()
+        assert "Client Session closed." in caplog.text
         assert ac.client_session.closed == True
         with pytest.raises(AttributeError):
             assert ac.webhook_server == None
