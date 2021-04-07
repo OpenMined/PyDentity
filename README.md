@@ -1,4 +1,4 @@
-[![Upload Python Package](https://github.com/didx-xyz/aries-cloudcontroller-python/actions/workflows/python-publish.yml/badge.svg)](https://github.com/didx-xyz/aries-cloudcontroller-python/actions/workflows/python-publish.yml)
+[![Upload Test Python Package](https://github.com/didx-xyz/aries-cloudcontroller-python/actions/workflows/python-test-publish.yml/badge.svg)](https://github.com/didx-xyz/aries-cloudcontroller-python/actions/workflows/python-test-publish.yml)
 
 # Aries Basic Controller - Python
 
