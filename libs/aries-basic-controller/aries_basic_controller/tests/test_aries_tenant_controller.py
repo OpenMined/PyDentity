@@ -1,14 +1,6 @@
 import logging
 import re
 import pytest
-import pytest_asyncio
-from aiohttp import (
-    web,
-    ClientSession,
-)
-
-from ..aries_webhook_server import AriesWebhookServer
-from ..controllers.multitenant import MultitenancyController
 
 from ..aries_tenant_controller import AriesTenantController
 
@@ -27,16 +19,18 @@ class TestAriesTenantController():
     @pytest.mark.asyncio
     async def test_init_args_missing_wallet_id(self):
         with pytest.raises(
-                TypeError, 
+                TypeError,
                 match=re.escape("__init__ missing required wallet_id (str)")):
             AriesTenantController(admin_url=self.admin_url)
 
     @pytest.mark.asyncio
     async def test_init_args_missing_tenant_jwt(self):
         with pytest.raises(
-                TypeError, 
+                TypeError,
                 match=re.escape("__init__ missing required tenant_jwt (str)")):
-            AriesTenantController(admin_url=self.admin_url, wallet_id=self.wallet_id)
+            AriesTenantController(
+                admin_url=self.admin_url,
+                wallet_id=self.wallet_id)
 
     @pytest.mark.asyncio
     async def test_init_webhook_server(self):
@@ -46,7 +40,8 @@ class TestAriesTenantController():
             tenant_jwt=self.tenant_jwt)
         with pytest.raises(
                 NotImplementedError,
-                match=("Please, use an AriesAgentController to start a webhook server\n"
+                match=(
+                    "Please, use an AriesAgentController to start a webhook server\n"
                     "Webhook server fct is disallowed for tenant controllers.")):
             ac.init_webhook_server()
         await ac.terminate()
@@ -59,7 +54,8 @@ class TestAriesTenantController():
             tenant_jwt=self.tenant_jwt)
         with pytest.raises(
                 NotImplementedError,
-                match=("Please, use an AriesAgentController to start a webhook server\n"
+                match=(
+                    "Please, use an AriesAgentController to start a webhook server\n"
                     "Webhook server fct is disallowed for tenant controllers.")):
             ac.listen_webhooks()
         await ac.terminate()
@@ -92,7 +88,9 @@ class TestAriesTenantController():
             wallet_id=self.wallet_id,
             tenant_jwt=self.tenant_jwt)
         assert ac.tenant_jwt != new_tenant_jwt
-        ac.update_tenant_jwt(wallet_id=self.wallet_id, tenant_jwt=new_tenant_jwt)
+        ac.update_tenant_jwt(
+            wallet_id=self.wallet_id,
+            tenant_jwt=new_tenant_jwt)
         assert ac.tenant_jwt == new_tenant_jwt
         with pytest.raises(
                 AssertionError,
@@ -113,7 +111,7 @@ class TestAriesTenantController():
         ac.remove_tenant_jwt()
         assert not ac.tenant_jwt
         assert 'Authorization' not in ac.headers
-        assert 'Authorization' not in  ac.client_session.headers
-        assert 'content-type' not in  ac.client_session.headers
-        assert 'content-type' not in  ac.headers
+        assert 'Authorization' not in ac.client_session.headers
+        assert 'content-type' not in ac.client_session.headers
+        assert 'content-type' not in ac.headers
         await ac.terminate()

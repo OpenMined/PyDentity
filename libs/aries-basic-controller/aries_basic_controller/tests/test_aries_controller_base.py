@@ -1,6 +1,5 @@
 import logging
 import pytest
-import pytest_asyncio
 from aiohttp import (
     ClientSession,
 )
@@ -29,17 +28,17 @@ class TestAriesAgentControllerBase():
     @pytest.mark.asyncio
     async def test_init_args_missing(self):
         with pytest.raises(TypeError) as te:
-            ac = AriesAgentControllerBase()
-            assert "__init__() missing 1 required positional argument: 'admin_url'" \
-                in str(te.value)
-    
+            AriesAgentControllerBase()
+            assert "__init__() missing 1 required positional \
+                argument: 'admin_url'" in str(te.value)
+
     @pytest.mark.asyncio
     async def test_default_args(self):
         ac = AriesAgentControllerBase(admin_url="0.0.0.0")
         assert ac.admin_url == "0.0.0.0"
-        assert ac.api_key == None
-        assert ac.webhook_site == None
-        assert ac.connections_controller == None
+        assert ac.api_key is None
+        assert ac.webhook_site is None
+        assert ac.connections_controller is None
         assert type(ac.client_session) == ClientSession
         assert type(ac.connections) == ConnectionsController
         assert type(ac.messaging) == MessagingController
@@ -87,17 +86,19 @@ class TestAriesAgentControllerBase():
         assert ac.client_session.headers == new_exp_headers
 
         await ac.terminate()
-    
+
     @pytest.mark.asyncio
     async def test_remove_api_key(self):
         api_key = "123456789"
+
         ac = AriesAgentControllerBase(admin_url="", api_key=api_key)
-        exp_headers = {"X-API-Key": api_key}
         ac.remove_api_key()
+
         assert ac.headers == {}
         assert ac.client_session.headers == {}
+
         await ac.terminate()
-    
+
     # TODO create mock for pubsub listening webhooks
     # Maybe this makes more sense in aries_controller
     @pytest.mark.asyncio
@@ -129,7 +130,7 @@ class TestAriesAgentControllerBase():
         ac = AriesAgentControllerBase(admin_url="0.0.0.0")
         await ac.terminate()
         assert "Client Session closed." in caplog.text
-        assert ac.client_session.closed == True
+        assert ac.client_session.closed
         with pytest.raises(AttributeError):
-            assert ac.webhook_server == None
+            assert ac.webhook_server is None
         await ac.terminate()

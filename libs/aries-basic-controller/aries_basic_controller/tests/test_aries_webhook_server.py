@@ -1,11 +1,6 @@
 import logging
 import re
 import pytest
-import pytest_asyncio
-from aiohttp import (
-    web,
-    ClientSession,
-)
 
 from ..aries_webhook_server import AriesWebhookServer
 
@@ -21,7 +16,7 @@ class TestAriesWebhookServer():
     @pytest.mark.asyncio
     async def test_init_args_missing_webhook_host(self):
         with pytest.raises(
-                TypeError, 
+                TypeError,
                 match=re.escape(
                     "__init__() missing 1 required positional argument: 'webhook_host'"
                 )):
@@ -52,7 +47,7 @@ class TestAriesWebhookServer():
 
     # TODO create mocks for pubsub webhook handling
     # Not quite sure how to do this best
-    
+
     @pytest.mark.asyncio
     async def test_terminate(self, caplog):
         caplog.set_level(logging.INFO)
