@@ -26,7 +26,7 @@ class TestAriesAgentControllerBase():
         with pytest.raises(TypeError) as te:
             AriesAgentController()
             assert "__init__() missing 1 required positional argument: 'admin_url'" \
-                in str(tf.value)
+                in str(te.value)
 
     @pytest.mark.asyncio
     async def test_init_args_multi_default(self):
