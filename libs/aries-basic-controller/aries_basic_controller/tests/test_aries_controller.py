@@ -14,7 +14,7 @@ from ..aries_controller import AriesAgentController
 LOGGER = logging.getLogger(__name__)
 
 
-class TestAriesAgentControllerBase():
+class TestAriesAgentController():
 
     admin_url = "0.0.0.0"
     webhook_host = ""
