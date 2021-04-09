@@ -16,14 +16,14 @@ class Presentation():
             logger.error('Presentation Object Verification not verified')
             raise Exception('Presentation Object Verification not verified')
 
-    def get_self_attested(self):
+    def get_self_attested_attrs(self):
         if self.is_verified():
             data = {}
             for (name, val) in self.json_data['presentation']['requested_proof']['self_attested_attrs'].items():
                 data[name] = val['raw']
             return json.dumps(data)
 
-    def get_revealed(self):
+    def get_revealed_attrs(self):
         if self.is_verified():
             data = {}
             for (name, val) in self.json_data['presentation']['requested_proof']['revealed_attrs'].items():
@@ -101,7 +101,7 @@ class Presentation():
     def get_presxid(self):
         return self.json_data['presentation_exchange_id']
 
-    def from_conn_id(self):
+    def get_from_conn_id(self):
         return self.json_data['connection_id']
 
     def is_verified(self):
