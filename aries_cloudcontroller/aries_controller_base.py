@@ -57,7 +57,7 @@ class AriesAgentControllerBase(ABC):
         if self.api_key:
             self.headers.update({"X-API-Key": self.api_key})
 
-        self.client_session: ClientSession = await ClientSession(
+        self.client_session: ClientSession = ClientSession(
             headers=self.headers)
 
         # Instantiate controllers
