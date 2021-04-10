@@ -98,7 +98,7 @@ class BaseController:
                 path,
                 repr_json(response),
             )
-            return response.json()
+            return response
         except ClientError as e:
             self.log(f"Error during POST {path}: {str(e)}")
             raise
