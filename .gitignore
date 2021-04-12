@@ -1,20 +1,9 @@
-.coverage
 .idea/
 .code
 dist
 *.egg-info
 build
 .env
-.ipynb_checkpoints/
-__pycache__/
-
-**/received_files/*
-
-.vscode/
-# exception to the rule
-
-**/model.pt
-**/trained_model.pt
-**/untrained_model.pt
-**/part_trained.pt
 .venv
+.pytest_cache/*
+.vscode/
