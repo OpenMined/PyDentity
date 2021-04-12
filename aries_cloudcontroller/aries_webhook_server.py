@@ -51,8 +51,11 @@ class AriesWebhookServer:
                 self.webhook_host,
                 self.webhook_port)
             await self.webhook_site.start()
+            logger.info(
+                f"Listening Webhooks on {self.webhook_host}:{self.webhook_port}")
         except Exception as exc:
             logger.warning(f"Listening webhooks failed! {exc!r} occurred.")
+            raise
 
     async def _receive_webhook(self, request: ClientRequest):
         """Helper to receive webhooks by requesting it
@@ -79,6 +82,7 @@ class AriesWebhookServer:
             return web.Response(status=200)
         except Exception as exc:
             logger.warning(f"Receiving webhooks failed! {exc!r} occurred.")
+            raise
 
     async def _handle_webhook(self, wallet_id, topic, payload):
         """Helper handling a webhook
@@ -103,14 +107,17 @@ class AriesWebhookServer:
             logger.warning(
                 (f"Handling webhooks failed! {exc!r} occurred"
                     f" when trying to handle this topic: {topic}"))
+            raise
 
     async def terminate(self):
         """Terminate the controller client session and webhook listeners"""
         try:
             await self.webhook_site.stop()
+            logger.info("Webhook server terminated.")
         except AttributeError:
             # Do nothing if no webhook site server is running
             return
         except Exception as exc:
             logger.warning(
                 f"Terminating webhooks listener failed! {exc!r} occurred.")
+            raise
