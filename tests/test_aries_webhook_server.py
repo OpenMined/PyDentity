@@ -2,7 +2,7 @@ import logging
 import re
 import pytest
 
-from ..aries_webhook_server import AriesWebhookServer
+from aries_cloudcontroller import AriesWebhookServer
 
 LOGGER = logging.getLogger(__name__)
 

@@ -4,21 +4,21 @@ from aiohttp import (
     ClientSession,
 )
 
-from ..aries_controller_base import AriesAgentControllerBase
-from ..controllers.connections import ConnectionsController
-from ..controllers.messaging import MessagingController
-from ..controllers.mediation import MediationController
-from ..controllers.schema import SchemaController
-from ..controllers.wallet import WalletController
-from ..controllers.definitions import DefinitionsController
-from ..controllers.issuer import IssuerController
-from ..controllers.proof import ProofController
-from ..controllers.ledger import LedgerController
-from ..controllers.credential import CredentialController
-from ..controllers.server import ServerController
-from ..controllers.oob import OOBController
-from ..controllers.action_menu import ActionMenuController
-from ..controllers.revocation import RevocationController
+from aries_cloudcontroller import AriesAgentControllerBase
+from aries_cloudcontroller.controllers.connections import ConnectionsController
+from aries_cloudcontroller.controllers.messaging import MessagingController
+from aries_cloudcontroller.controllers.mediation import MediationController
+from aries_cloudcontroller.controllers.schema import SchemaController
+from aries_cloudcontroller.controllers.wallet import WalletController
+from aries_cloudcontroller.controllers.definitions import DefinitionsController
+from aries_cloudcontroller.controllers.issuer import IssuerController
+from aries_cloudcontroller.controllers.proof import ProofController
+from aries_cloudcontroller.controllers.ledger import LedgerController
+from aries_cloudcontroller.controllers.credential import CredentialController
+from aries_cloudcontroller.controllers.server import ServerController
+from aries_cloudcontroller.controllers.oob import OOBController
+from aries_cloudcontroller.controllers.action_menu import ActionMenuController
+from aries_cloudcontroller.controllers.revocation import RevocationController
 
 LOGGER = logging.getLogger(__name__)
 

@@ -1,10 +1,9 @@
 import logging
 import pytest
 
-from ..aries_webhook_server import AriesWebhookServer
-from ..controllers.multitenant import MultitenancyController
-
-from ..aries_controller import AriesAgentController
+from aries_cloudcontroller import AriesAgentController
+from aries_cloudcontroller import AriesWebhookServer
+from aries_cloudcontroller.controllers.multitenant import MultitenancyController
 
 LOGGER = logging.getLogger(__name__)
 

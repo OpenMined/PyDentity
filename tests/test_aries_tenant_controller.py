@@ -2,7 +2,7 @@ import logging
 import re
 import pytest
 
-from ..aries_tenant_controller import AriesTenantController
+from aries_cloudcontroller import AriesTenantController
 
 LOGGER = logging.getLogger(__name__)
 
