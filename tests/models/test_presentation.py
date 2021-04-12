@@ -2,7 +2,7 @@ import pytest
 import json
 import logging
 
-from ..models.presentation import Presentation
+from aries_cloudcontroller.models.presentation import Presentation
 
 LOGGER = logging.getLogger(__name__)
 
