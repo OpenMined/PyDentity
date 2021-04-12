@@ -1,18 +1,10 @@
 .idea/
-.venv
 .code
 dist
 *.egg-info
 build
 .env
 .ipynb_checkpoints/
-__pycache__/
-
-**/received_files/*
-libs/om-aries-controller/demo/bob/image_received.png
-
+.venv
 .vscode/
-# exception to the rule
-!libs/om-aries-controller/demo/bob/received_files/.gitkeep
-
-**/*.pt
+__pycache__/
