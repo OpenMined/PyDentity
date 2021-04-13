@@ -11,7 +11,7 @@ LOGGER = logging.getLogger(__name__)
 class TestAriesAgentController:
 
     admin_url = "0.0.0.0"
-    webhook_host = ""
+    webhook_host = "0.0.0.0"
     webhook_port = 8000
     webhook_base = ""
 
@@ -49,6 +49,24 @@ class TestAriesAgentController:
         assert ac.webhook_server.webhook_host == self.webhook_host
         assert ac.webhook_server.is_multitenant
         await ac.terminate()
+
+    @pytest.mark.asyncio
+    async def test_init_webhook_server_args_host_type(self):
+        with pytest.raises(AssertionError):
+            ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
+            ac.init_webhook_server(webhook_host=1234, webhook_port=1234, webhook_base=self.webhook_base)
+
+    @pytest.mark.asyncio
+    async def test_init_webhook_server_args_host_non_empty(self):
+        with pytest.raises(AssertionError):
+            ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
+            ac.init_webhook_server(webhook_host="", webhook_port=1234, webhook_base=self.webhook_base)
+
+    @pytest.mark.asyncio
+    async def test_init_webhook_server_args_port(self):
+        with pytest.raises(AssertionError):
+            ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
+            ac.init_webhook_server(webhook_host="", webhook_port="1234", webhook_base=self.webhook_base)
 
     @pytest.mark.asyncio
     async def test_listen_webhooks_error(self, caplog):

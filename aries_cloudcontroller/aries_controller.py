@@ -37,19 +37,22 @@ class AriesAgentController(AriesAgentControllerBase):
             )
 
     def init_webhook_server(
-        self, webhook_host: str = None, webhook_port: int = None, webhook_base: str = ""
+        self, webhook_host: str, webhook_port: int, webhook_base: str = ""
     ):
         """Create a webhooklisteners
 
         Args:
         ----
         webhook_host : str
-            The url of the webhook host (default is None)
+            The url of the webhook host
         webhook_port : int
-            The exposed port for webhooks on the host (default is None)
+            The exposed port for webhooks on the host
         webhook_base : str
             The base url for webhooks (default is "")
         """
+        assert type(webhook_host) is str
+        assert webhook_host != ""
+        assert type(webhook_port) is int
         self.webhook_server: AriesWebhookServer = AriesWebhookServer(
             webhook_host=webhook_host,
             webhook_port=webhook_port,
