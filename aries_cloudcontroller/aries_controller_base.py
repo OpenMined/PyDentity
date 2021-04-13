@@ -190,7 +190,7 @@ class AriesAgentControllerBase(ABC):
         """
         try:
             pub_topic_path = listener['topic']
-            print("Subscribing too: " + pub_topic_path)
+            logger.INFO("Subscribing too: " + pub_topic_path)
             pub.subscribe(listener["handler"], pub_topic_path)
             logger.debug("Lister added for topic : ", pub_topic_path)
         except Exception as exc:
