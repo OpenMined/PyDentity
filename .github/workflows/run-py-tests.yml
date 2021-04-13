@@ -1,14 +1,14 @@
 name: Run Python Tests
 on:
   push:
-  #   branches:
-  #     - master
-  # pull_request:
-  #   branches:
-  #     - master
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  RunPytest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
