@@ -1,4 +1,4 @@
-name: 'CI'
+name: 'Create release and changelog'
 on:
   push:
     tags:
