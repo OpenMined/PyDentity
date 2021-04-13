@@ -238,6 +238,7 @@ class AriesAgentControllerBase(ABC):
 
     async def terminate(self):
         await self.client_session.close()
+        logger.info("Client Session closed.")
         try:
             await self.webhook_server.terminate()
         except AttributeError:

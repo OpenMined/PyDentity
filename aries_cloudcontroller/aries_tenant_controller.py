@@ -71,16 +71,19 @@ class AriesTenantController(AriesAgentControllerBase):
             "topic":"topicname" key-value pairs
         """
         try:
+            assert (type(wallet_id) is str), "wallet_id must be a string"
+            assert (wallet_id.__ne__("")), "Cannot add listener for empty wallet_id."
             pub_topic_path_base = listener['topic']
             pub_topic_path = f"{self.wallet_id}.{pub_topic_path_base}"
             pub.subscribe(listener["handler"], pub_topic_path)
             logger.debug("Lister added for topic : ", pub_topic_path)
-        except self.wallet_id == "":
-            logger.error(
-                "Cannot add listener for empty wallet_id.")
+        except AssertionError as err:
+            logger.error(err)
+            raise
         except Exception as exc:
             logger.warning(
                 f"Adding webhooks listener failed! {exc!r} occurred.")
+            raise
 
     def update_wallet_id(self, wallet_id: str):
         """This wallet_id is used to register for webhooks
@@ -92,9 +95,12 @@ class AriesTenantController(AriesAgentControllerBase):
             The tenant wallet identifier
         """
         try:
+            assert (type(wallet_id) is str), "wallet_id must be a string" 
+            assert (wallet_id.__ne__("")), "wallet_id must not be empty"
             self.wallet_id = wallet_id
-        except wallet_id == "":
-            raise Exception("wallet_id must not be empty")
+        except AssertionError as err:
+            logger.info(f"{err!r}")
+            raise
 
     def update_tenant_jwt(self, tenant_jwt: str, wallet_id: str):
         """Update the tenant JW token attribute and the header
@@ -107,18 +113,22 @@ class AriesTenantController(AriesAgentControllerBase):
             The tenant wallet identifier
         """
         try:
+            assert (type(tenant_jwt) is str), "tenant_jwt must be a string" 
+            assert (tenant_jwt.__ne__("")), "tenant_jwt must not be empty"
             self.tenant_jwt = tenant_jwt
             self.update_wallet_id(wallet_id)
             self.headers.update(
                 {'Authorization': 'Bearer ' + tenant_jwt,
                     'content-type': "application/json"})
             self.client_session.headers.update(self.headers)
-        except tenant_jwt == "":
-            raise Exception("tenant_jwt must not be empty")
+        except AssertionError as err:
+            logger.info(f"{err!r}")
+            raise
         except Exception as exc:
             logger.warning(
                 (f"Updating tenant JW token"
                     f" failed! {exc!r} occurred."))
+            raise
 
     def remove_tenant_jwt(self):
         """Removes the tenant's JW Token attribute and corresponding
@@ -134,3 +144,4 @@ class AriesTenantController(AriesAgentControllerBase):
         except Exception as exc:
             logger.warning(
                 f"Removing JW token failed! {exc!r} occurred.")
+            raise
