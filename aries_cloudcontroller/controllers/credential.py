@@ -4,8 +4,8 @@ import logging
 
 logger = logging.getLogger("aries_controller.credentials")
 
-class CredentialController(BaseController):
 
+class CredentialController(BaseController):
     def __init__(self, admin_url: str, client_session: ClientSession):
         super().__init__(admin_url, client_session)
 
@@ -18,7 +18,9 @@ class CredentialController(BaseController):
     async def remove_credential(self, credential_id):
         return await self.admin_DELETE(f"/credential/{credential_id}")
 
-    async def get_all(self, wql_query: str = None, count: int = None, start: int = None):
+    async def get_all(
+        self, wql_query: str = None, count: int = None, start: int = None
+    ):
         params = {}
         if wql_query:
             params["wql"] = wql_query

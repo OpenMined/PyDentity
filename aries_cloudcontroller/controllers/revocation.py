@@ -8,15 +8,18 @@ import asyncio
 
 
 class RevocationController(BaseController):
-
     def __init__(self, admin_url: str, client_session: ClientSession):
         super().__init__(admin_url, client_session)
         self.base_url = "/revocation"
-        self.revocation_states = set([
-            "init", "generated", "posted", "active", "full"
-        ])
+        self.revocation_states = set(["init", "generated", "posted", "active", "full"])
 
-    async def revoke_credential(self, cred_ex_id: str = "", cred_rev_id: str = "", rev_reg_id: str = "", publish: bool = False):
+    async def revoke_credential(
+        self,
+        cred_ex_id: str = "",
+        cred_rev_id: str = "",
+        rev_reg_id: str = "",
+        publish: bool = False,
+    ):
         """
         Revoke an issued credential.
 
@@ -24,9 +27,7 @@ class RevocationController(BaseController):
         Either (cred_ex_id) OR (cred_rev_id AND rev_reg_id) are required.
         """
 
-        req_body = {
-            "publish": publish
-        }
+        req_body = {"publish": publish}
         if cred_ex_id:
             req_body["cred_ex_id"] = cred_ex_id
         elif cred_rev_id and rev_reg_id:
@@ -49,9 +50,7 @@ class RevocationController(BaseController):
         eg. pending_revs = [{ "sample-rev-reg-id": "sample-cred-rev-id" }]
         """
 
-        req_body = {
-            "rrid2crid": {}
-        }
+        req_body = {"rrid2crid": {}}
 
         for rev in pending_revs:
             # check if revocation registry id already exists in map, if so, simply append to array
@@ -60,7 +59,9 @@ class RevocationController(BaseController):
             else:
                 req_body["rrid2crid"][rev.rev_reg_id] = [rev.cred_rev_id]
 
-        return await self.admin_POST(f"{self.base_url}/publish-revocations", json_data=req_body)
+        return await self.admin_POST(
+            f"{self.base_url}/publish-revocations", json_data=req_body
+        )
 
     async def clear_pending_revocations(self, pending_revs):
         """
@@ -72,9 +73,7 @@ class RevocationController(BaseController):
         eg. pending_revs = [{ "sample-rev-reg-id": "sample-cred-rev-id" }]
         """
 
-        req_body = {
-            "purge": {}
-        }
+        req_body = {"purge": {}}
 
         for rev in pending_revs:
             # check if revocation registry id already exists in map, if so, simply append to array
@@ -83,9 +82,13 @@ class RevocationController(BaseController):
             else:
                 req_body["purge"][rev.rev_reg_id] = [rev.cred_rev_id]
 
-        return await self.admin_POST(f"{self.base_url}/clear-pending-revocations", json_data=req_body)
+        return await self.admin_POST(
+            f"{self.base_url}/clear-pending-revocations", json_data=req_body
+        )
 
-    async def get_credential_revocation_status(self, cred_ex_id: str, cred_rev_id: str, rev_reg_id: str):
+    async def get_credential_revocation_status(
+        self, cred_ex_id: str, cred_rev_id: str, rev_reg_id: str
+    ):
         """
         Get credential revocation status.
         """
@@ -100,7 +103,9 @@ class RevocationController(BaseController):
 
         return await self.admin_GET(f"{self.base_url}/credential-record", params=params)
 
-    async def get_created_revocation_registries(self, cred_def_id: str, rev_reg_state: str):
+    async def get_created_revocation_registries(
+        self, cred_def_id: str, rev_reg_state: str
+    ):
         """
         Search for matching revocation registries that current agnet created.
         """
@@ -113,7 +118,9 @@ class RevocationController(BaseController):
                 raise InputError("invalid revocation registry state input")
             params["state"] = rev_reg_state
 
-        return await self.admin_GET(f"{self.base_url}/registries/created", params=params)
+        return await self.admin_GET(
+            f"{self.base_url}/registries/created", params=params
+        )
 
     async def get_revocation_registry(self, rev_reg_id: str):
         """
@@ -122,16 +129,18 @@ class RevocationController(BaseController):
 
         return await self.admin_GET(f"{self.base_url}/registry/{rev_reg_id}")
 
-    async def update_revocation_registry_tails_file(self, rev_reg_id: str, tail_file_uri: str):
+    async def update_revocation_registry_tails_file(
+        self, rev_reg_id: str, tail_file_uri: str
+    ):
         """
         Update revocation registry by revocation registry id.
         """
 
-        req_body = {
-            "tails_public_uri": tail_file_uri
-        }
+        req_body = {"tails_public_uri": tail_file_uri}
 
-        return await self.admin_PATCH(f"{self.base_url}/registry/{rev_reg_id}", json_data=req_body)
+        return await self.admin_PATCH(
+            f"{self.base_url}/registry/{rev_reg_id}", json_data=req_body
+        )
 
     async def get_active_revocation_registry_by_cred_def(self, cred_def_id: str):
         """
@@ -155,17 +164,21 @@ class RevocationController(BaseController):
 
         req_body = {
             "credential_definition_id": cred_def_id,
-            "max_cred_num": max_cred_num
+            "max_cred_num": max_cred_num,
         }
 
-        return await self.admin_POST(f"{self.base_url}/create-registry", json_data=req_body)
+        return await self.admin_POST(
+            f"{self.base_url}/create-registry", json_data=req_body
+        )
 
     async def send_revocation_registry_definition(self, rev_reg_id: str):
         """
         Send revocation registry definition to ledger.
         """
 
-        return await self.admin_POST(f"{self.base_url}/registry/{rev_reg_id}/definition")
+        return await self.admin_POST(
+            f"{self.base_url}/registry/{rev_reg_id}/definition"
+        )
 
     async def send_revocation_registry_entry(self, rev_reg_id: str):
         """
@@ -202,7 +215,9 @@ class RevocationController(BaseController):
                 raise InputError("invalid revocation registry state input")
             params["state"] = state
 
-        return await self.admin_PATCH(f"{self.base_url}/registry/{rev_reg_id}/set-state", params=params)
+        return await self.admin_PATCH(
+            f"{self.base_url}/registry/{rev_reg_id}/set-state", params=params
+        )
 
     """
     Private utility methods.
