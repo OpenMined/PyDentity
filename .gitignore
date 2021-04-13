@@ -4,5 +4,8 @@ dist
 *.egg-info
 build
 .env
-.ipynb_checkpoints/
 .venv
+.pytest_cache/*
+__pycache__/
+.vscode/
+.coverage
