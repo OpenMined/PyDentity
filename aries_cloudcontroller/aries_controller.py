@@ -36,7 +36,7 @@ class AriesAgentController(AriesAgentControllerBase):
                 self.admin_url, self.client_session
             )
 
-    def init_webhook_server(
+    async def init_webhook_server(
         self, webhook_host: str, webhook_port: int, webhook_base: str = ""
     ):
         """Create a webhooklisteners
@@ -53,21 +53,15 @@ class AriesAgentController(AriesAgentControllerBase):
         assert type(webhook_host) is str
         assert webhook_host != ""
         assert type(webhook_port) is int
-        self.webhook_server: AriesWebhookServer = AriesWebhookServer(
-            webhook_host=webhook_host,
-            webhook_port=webhook_port,
-            webhook_base=webhook_base,
-            is_multitenant=self.is_multitenant,
-        )
-
-    async def listen_webhooks(self):
         try:
+            self.webhook_server: AriesWebhookServer = AriesWebhookServer(
+                webhook_host=webhook_host,
+                webhook_port=webhook_port,
+                webhook_base=webhook_base,
+                is_multitenant=self.is_multitenant,
+            )
             await self.webhook_server.listen_webhooks()
             logger.info("Webhook server started.")
-        except AttributeError:
-            warning = "Webhook server not initialised."
-            logger.warning(warning)
-            raise AttributeError(warning)
         except Exception as exc:
-            logger.warning(f"Listening webhooks failed! {exc!r} occurred.")
+            logger.error(f"Listening webhooks failed! {exc!r} occurred.")
             raise Exception(f"{exc!r}")

@@ -42,7 +42,9 @@ class TestAriesAgentController:
     @pytest.mark.asyncio
     async def test_init_webhook_server(self):
         ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
-        ac.init_webhook_server(self.webhook_host, self.webhook_port, self.webhook_base)
+        await ac.init_webhook_server(
+            self.webhook_host, self.webhook_port, self.webhook_base
+        )
         assert type(ac.webhook_server) == AriesWebhookServer
         assert ac.webhook_server.webhook_base == self.webhook_base
         assert ac.webhook_server.webhook_port == self.webhook_port
@@ -54,36 +56,33 @@ class TestAriesAgentController:
     async def test_init_webhook_server_args_host_type(self):
         with pytest.raises(AssertionError):
             ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
-            ac.init_webhook_server(webhook_host=1234, webhook_port=1234, webhook_base=self.webhook_base)
+            await ac.init_webhook_server(
+                webhook_host=1234, webhook_port=1234, webhook_base=self.webhook_base
+            )
 
     @pytest.mark.asyncio
     async def test_init_webhook_server_args_host_non_empty(self):
         with pytest.raises(AssertionError):
             ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
-            ac.init_webhook_server(webhook_host="", webhook_port=1234, webhook_base=self.webhook_base)
+            await ac.init_webhook_server(
+                webhook_host="", webhook_port=1234, webhook_base=self.webhook_base
+            )
 
     @pytest.mark.asyncio
     async def test_init_webhook_server_args_port(self):
         with pytest.raises(AssertionError):
             ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
-            ac.init_webhook_server(webhook_host="", webhook_port="1234", webhook_base=self.webhook_base)
-
-    @pytest.mark.asyncio
-    async def test_listen_webhooks_error(self, caplog):
-        caplog.set_level(logging.WARNING)
-        ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
-        with pytest.raises(AttributeError) as ae:
-            await ac.listen_webhooks()
-        assert "Webhook server not initialised." in str(ae.value)
-        assert "Webhook server not initialised." in caplog.text
-        await ac.terminate()
+            await ac.init_webhook_server(
+                webhook_host="", webhook_port="1234", webhook_base=self.webhook_base
+            )
 
     @pytest.mark.asyncio
     async def test_init_webhook_server_terminate(self, caplog):
         caplog.set_level(logging.INFO)
         ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
-        ac.init_webhook_server(self.webhook_host, self.webhook_port, self.webhook_base)
-        await ac.listen_webhooks()
+        await ac.init_webhook_server(
+            self.webhook_host, self.webhook_port, self.webhook_base
+        )
         assert "Webhook server started." in caplog.text
         res = await ac.webhook_server.terminate()
         assert "Webhook server terminated." in caplog.text
