@@ -7,8 +7,8 @@ from aiohttp import (
 import logging
 import asyncio
 
-class ActionMenuController(BaseController):
 
+class ActionMenuController(BaseController):
     def __init__(self, admin_url: str, client_session: ClientSession):
         super().__init__(admin_url, client_session)
 
@@ -21,13 +21,12 @@ class ActionMenuController(BaseController):
     async def request_menu(self, connection_id: str):
         return await self.admin_POST(f"/action-menu/{connection_id}/request")
 
-    async def perform(self, connection_id: str, menu_params,  menu_option_name):
-        body = {
-            "params": menu_params,
-            "name": menu_option_name
-        }
+    async def perform(self, connection_id: str, menu_params, menu_option_name):
+        body = {"params": menu_params, "name": menu_option_name}
 
-        return await self.admin_POST(f"/action-menu/{connection_id}/perform", json_data=body)
+        return await self.admin_POST(
+            f"/action-menu/{connection_id}/perform", json_data=body
+        )
 
     async def send_menu(
         self,
@@ -42,8 +41,10 @@ class ActionMenuController(BaseController):
                 "description": menu_description,
                 "errormsg": menu_errormsg,
                 "title": menu_title,
-                "options": menu_options
+                "options": menu_options,
             }
         }
 
-        return await self.admin_POST(f"/connections/{connection_id}/send-menu", json_data=body)
+        return await self.admin_POST(
+            f"/connections/{connection_id}/send-menu", json_data=body
+        )

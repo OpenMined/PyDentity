@@ -33,14 +33,12 @@ class AriesAgentController(AriesAgentControllerBase):
 
         if self.is_multitenant:
             self.multitenant = MultitenancyController(
-                self.admin_url,
-                self.client_session)
+                self.admin_url, self.client_session
+            )
 
     def init_webhook_server(
-                        self,
-                        webhook_host: str = None,
-                        webhook_port: int = None,
-                        webhook_base: str = ""):
+        self, webhook_host: str = None, webhook_port: int = None, webhook_base: str = ""
+    ):
         """Create a webhooklisteners
 
         Args:
@@ -56,7 +54,8 @@ class AriesAgentController(AriesAgentControllerBase):
             webhook_host=webhook_host,
             webhook_port=webhook_port,
             webhook_base=webhook_base,
-            is_multitenant=self.is_multitenant)
+            is_multitenant=self.is_multitenant,
+        )
 
     async def listen_webhooks(self):
         try:
@@ -67,6 +66,5 @@ class AriesAgentController(AriesAgentControllerBase):
             logger.warning(warning)
             raise AttributeError(warning)
         except Exception as exc:
-            logger.warning(
-                f"Listening webhooks failed! {exc!r} occurred.")
+            logger.warning(f"Listening webhooks failed! {exc!r} occurred.")
             raise Exception(f"{exc!r}")
