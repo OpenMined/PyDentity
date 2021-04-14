@@ -23,14 +23,16 @@ from aries_cloudcontroller.controllers.revocation import RevocationController
 LOGGER = logging.getLogger(__name__)
 
 
-class TestAriesAgentControllerBase():
-
+class TestAriesAgentControllerBase:
     @pytest.mark.asyncio
     async def test_init_args_missing(self):
         with pytest.raises(TypeError) as te:
             AriesAgentControllerBase()
-            assert "__init__() missing 1 required positional \
-                argument: 'admin_url'" in str(te.value)
+            assert (
+                "__init__() missing 1 required positional \
+                argument: 'admin_url'"
+                in str(te.value)
+            )
 
     @pytest.mark.asyncio
     async def test_default_args(self):
