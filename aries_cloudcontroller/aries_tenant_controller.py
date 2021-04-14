@@ -5,7 +5,7 @@ from .aries_controller_base import AriesAgentControllerBase
 
 import logging
 
-logger = logging.getLogger("aries_tenant_controller")
+logger = logging.getLogger(__name__)
 
 _required = object()
 

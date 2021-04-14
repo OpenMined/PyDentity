@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pubsub import pub
 import logging
 
-logger = logging.getLogger("aries_webhook_server")
+logger = logging.getLogger(__name__)
 
 
 @dataclass

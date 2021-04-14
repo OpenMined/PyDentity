@@ -6,7 +6,7 @@ from .controllers.multitenant import MultitenancyController
 
 import logging
 
-logger = logging.getLogger("aries_controller")
+logger = logging.getLogger(__name__)
 
 
 @dataclass

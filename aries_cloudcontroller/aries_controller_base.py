@@ -22,7 +22,7 @@ from .controllers.revocation import RevocationController
 
 import logging
 
-logger = logging.getLogger("aries_controller")
+logger = logging.getLogger(__name__)
 
 
 @dataclass
