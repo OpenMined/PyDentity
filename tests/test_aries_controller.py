@@ -99,7 +99,7 @@ class TestAriesAgentController:
         await ac.init_webhook_server(
             self.webhook_host, self.webhook_port, self.webhook_base
         )
-        assert "Webhook server started." in caplog.text
+        assert "Webhook server started" in caplog.text
         res = await ac.webhook_server.terminate()
         assert "Webhook server terminated." in caplog.text
         assert res is None
