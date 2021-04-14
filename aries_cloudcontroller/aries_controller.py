@@ -5,6 +5,7 @@ from .aries_webhook_server import AriesWebhookServer
 from .controllers.multitenant import MultitenancyController
 
 import logging
+import ipaddress
 
 logger = logging.getLogger("aries_controller")
 
@@ -51,7 +52,7 @@ class AriesAgentController(AriesAgentControllerBase):
             The base url for webhooks (default is "")
         """
         assert type(webhook_host) is str
-        assert webhook_host != ""
+        assert ipaddress.ip_address(webhook_host)
         assert type(webhook_port) is int
         try:
             self.webhook_server: AriesWebhookServer = AriesWebhookServer(

@@ -61,8 +61,22 @@ class TestAriesAgentController:
             )
 
     @pytest.mark.asyncio
-    async def test_init_webhook_server_args_host_non_empty(self):
-        with pytest.raises(AssertionError):
+    async def test_init_webhook_server_invalid_ip(self):
+        with pytest.raises(
+            ValueError, match="does not appear to be an IPv4 or IPv6 address"
+        ):
+            ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
+            await ac.init_webhook_server(
+                webhook_host="12345.123456.1234.0",
+                webhook_port=1234,
+                webhook_base=self.webhook_base,
+            )
+
+    @pytest.mark.asyncio
+    async def test_init_webhook_server_empty_invalid_ip(self):
+        with pytest.raises(
+            ValueError, match="does not appear to be an IPv4 or IPv6 address"
+        ):
             ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
             await ac.init_webhook_server(
                 webhook_host="", webhook_port=1234, webhook_base=self.webhook_base
@@ -73,7 +87,9 @@ class TestAriesAgentController:
         with pytest.raises(AssertionError):
             ac = AriesAgentController(admin_url=self.admin_url, is_multitenant=True)
             await ac.init_webhook_server(
-                webhook_host="", webhook_port="1234", webhook_base=self.webhook_base
+                webhook_host=self.webhook_host,
+                webhook_port="1234",
+                webhook_base=self.webhook_base,
             )
 
     @pytest.mark.asyncio
