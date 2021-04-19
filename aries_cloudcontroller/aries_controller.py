@@ -62,7 +62,9 @@ class AriesAgentController(AriesAgentControllerBase):
                 is_multitenant=self.is_multitenant,
             )
             await self.webhook_server.listen_webhooks()
-            logger.info(f"Webhook server started on {self.webhook_server.webhook_host}.")
+            logger.info(
+                f"Webhook server started on {self.webhook_server.webhook_host}."
+            )
         except Exception as exc:
             logger.error(f"Listening webhooks failed! {exc!r} occurred.")
             raise Exception(f"{exc!r}")
