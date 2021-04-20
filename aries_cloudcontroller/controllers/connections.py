@@ -83,9 +83,11 @@ class ConnectionsController(BaseController):
             params["alias"] = alias
         if auto_accept:
             params["auto_accept"] = auto_accept
-        if public:
+        if public in [True, False]:
+            public = str(public).lower()
             params["public"] = public
-        if multi_use:
+        if multi_use in [True, False]:
+            multi_use = str(multi_use).lower()
             params["multi_use"] = multi_use
 
         invite_details = await self.admin_POST(
