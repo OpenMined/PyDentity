@@ -75,8 +75,8 @@ class ConnectionsController(BaseController):
         self,
         alias: str = None,
         auto_accept: bool = None,
-        public: str = None,
-        multi_use: str = None,
+        public: bool = None,
+        multi_use: bool = None,
     ):
         params = {}
         if alias:
