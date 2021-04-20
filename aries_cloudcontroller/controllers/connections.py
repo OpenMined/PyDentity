@@ -29,13 +29,6 @@ class ConnectionsController(BaseController):
                 connection.update_state(state)
                 logger.debug(f"{connection_id} state updated")
 
-    # Combines receive and accept connection api calls
-    async def accept_connection(self, invitation):
-        response = await self.receive_invitation(invitation)
-
-        accepted = await self.accept_invitation(response["connection_id"])
-        return accepted
-
     ### TODO refactor to extract out generic base - /connections
 
     async def get_connections(
