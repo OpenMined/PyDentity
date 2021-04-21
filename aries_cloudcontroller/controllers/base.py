@@ -14,7 +14,7 @@ import json
 
 from ..helpers.utils import log_msg
 
-EVENT_LOGGER = logging.getLogger("event")
+EVENT_LOGGER = logging.getLogger("__name__")
 
 
 class repr_json:
