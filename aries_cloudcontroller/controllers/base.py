@@ -55,7 +55,6 @@ class BaseController:
     async def admin_request(
         self, method, path, json_data=None, text=False, params=None, data=None
     ) -> ClientResponse:
-        params = json.dumps(params)
         params = {k: v for (k, v) in (params or {}).items() if v is not None}
         async with self.client_session.request(
             method, self.admin_url + path, json=json_data, params=params, data=data

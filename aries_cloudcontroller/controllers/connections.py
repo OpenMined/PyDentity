@@ -29,6 +29,13 @@ class ConnectionsController(BaseController):
                 connection.update_state(state)
                 logger.debug(f"{connection_id} state updated")
 
+    # Combines receive and accept connection api calls
+    async def accept_connection(self, invitation):
+        response = await self.receive_invitation(invitation)
+
+        accepted = await self.accept_invitation(response["connection_id"])
+        return accepted
+
     ### TODO refactor to extract out generic base - /connections
 
     async def get_connections(
@@ -68,34 +75,18 @@ class ConnectionsController(BaseController):
         self,
         alias: str = None,
         auto_accept: bool = None,
-        public: bool = None,
-        multi_use: bool = None,
-        invite_options: dict = None,
+        public: str = None,
+        multi_use: str = None,
     ):
         params = {}
         if alias:
             params["alias"] = alias
-        if auto_accept in [True, False]:
+        if auto_accept:
             params["auto_accept"] = auto_accept
-        if public in [True, False]:
+        if public:
             params["public"] = public
-        if multi_use in [True, False]:
+        if multi_use:
             params["multi_use"] = multi_use
-        if invite_option:
-            """A dictionary of the form:
-            {
-                "mediation_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "metadata": {},
-                "recipient_keys": [
-                    "H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV"
-                ],
-                "routing_keys": [
-                    "H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV"
-                ],
-                "service_endpoint": "http://192.168.56.102:8020"
-            }
-            """
-            params['body'] = invite_options
 
         invite_details = await self.admin_POST(
             "/connections/create-invitation", params=params
@@ -110,7 +101,7 @@ class ConnectionsController(BaseController):
         params = {}
         if alias:
             params["alias"] = alias
-        if auto_accept in [True, False]:
+        if auto_accept:
             params["auto_accept"] = auto_accept
 
         response = await self.admin_POST(
