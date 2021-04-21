@@ -75,13 +75,10 @@ class ConnectionsController(BaseController):
         if alias:
             params["alias"] = alias
         if auto_accept in [True, False]:
-            auto_accept = str(auto_accept).lower()
             params["auto_accept"] = auto_accept
         if public in [True, False]:
-            public = str(public).lower()
             params["public"] = public
         if multi_use in [True, False]:
-            multi_use = str(multi_use).lower()
             params["multi_use"] = multi_use
 
         invite_details = await self.admin_POST(
@@ -98,7 +95,6 @@ class ConnectionsController(BaseController):
         if alias:
             params["alias"] = alias
         if auto_accept in [True, False]:
-            auto_accept = str(auto_accept).lower()
             params["auto_accept"] = auto_accept
 
         response = await self.admin_POST(
