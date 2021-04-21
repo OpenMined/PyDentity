@@ -74,7 +74,8 @@ class ConnectionsController(BaseController):
         params = {}
         if alias:
             params["alias"] = alias
-        if auto_accept:
+        if auto_accept in [True, False]:
+            auto_accept = str(auto_accept).lower()
             params["auto_accept"] = auto_accept
         if public in [True, False]:
             public = str(public).lower()
