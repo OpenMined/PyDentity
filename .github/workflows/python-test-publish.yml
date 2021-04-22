@@ -8,16 +8,6 @@ on:
   # but only for the main branch
   release:
     types: [created]
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*'
-  pull_request:
-    branches:
-      - main
-    tags:
-      - 'v*'
 
 jobs:
   deploy:
