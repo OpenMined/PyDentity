@@ -2,7 +2,14 @@ name: 'CI'
 on:
   push:
     tags:
-      - 'v.*'
+      - 'v*'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    tags:
+      - 'v*'
 
 jobs:
   release:
