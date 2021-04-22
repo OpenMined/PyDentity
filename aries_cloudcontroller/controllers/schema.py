@@ -6,7 +6,6 @@ logger = logging.getLogger("aries_controller.schema")
 
 
 class SchemaController(BaseController):
-
     def __init__(self, admin_url: str, client_session: ClientSession):
         super().__init__(admin_url, client_session)
         self.base_url = "/schemas"
@@ -16,7 +15,13 @@ class SchemaController(BaseController):
         response = await self.admin_GET(f"{self.base_url}/{schema_id}")
         return response
 
-    async def get_created_schema(self, schema_id=None, schema_issuer_did=None, schema_name=None, schema_version=None):
+    async def get_created_schema(
+        self,
+        schema_id=None,
+        schema_issuer_did=None,
+        schema_name=None,
+        schema_version=None,
+    ):
 
         params = {}
         if schema_id:
@@ -37,14 +42,8 @@ class SchemaController(BaseController):
         schema_body = {
             "schema_name": schema_name,
             "attributes": attributes,
-            "schema_version": schema_version
+            "schema_version": schema_version,
         }
 
         response = await self.admin_POST(f"{self.base_url}", schema_body)
         return response
-
-
-
-
-
-

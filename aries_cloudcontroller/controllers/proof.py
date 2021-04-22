@@ -5,10 +5,12 @@ from typing import List
 
 logger = logging.getLogger("aries_controller.proof")
 
-PRES_PREVIEW = "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/present-proof/1.0/presentation-preview"
+PRES_PREVIEW = (
+    "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/present-proof/1.0/presentation-preview"
+)
+
 
 class ProofController(BaseController):
-
     def __init__(self, admin_url: str, client_session: ClientSession):
         super().__init__(admin_url, client_session)
         self.base_url = "/present-proof"
@@ -16,16 +18,22 @@ class ProofController(BaseController):
     def default_handler(self, payload):
         logger.debug("Present Proof Message received", payload)
 
-
-     # Creates a presentation request not bound to any proposal or existing connection
+    # Creates a presentation request not bound to any proposal or existing connection
     async def create_request(self, request):
         # TODO How should proof request object be broken up? Complex.
         #  Do we want user to have to know how to build this object?
-        return await self.admin_POST(f"{self.base_url}/create-request", json_data=request)
-
+        return await self.admin_POST(
+            f"{self.base_url}/create-request", json_data=request
+        )
 
     # Fetch all present-proof exchange records
-    async def get_records(self, connection_id: str = None, thread_id: str = None, state: str = None, role: str = None):
+    async def get_records(
+        self,
+        connection_id: str = None,
+        thread_id: str = None,
+        state: str = None,
+        role: str = None,
+    ):
         params = {}
         if connection_id:
             params["connection_id"] = connection_id
@@ -38,19 +46,23 @@ class ProofController(BaseController):
 
         return await self.admin_GET(f"{self.base_url}/records", params=params)
 
-
     # Fetch a single presentation exchange record
     async def get_record_by_id(self, pres_ex_id):
         return await self.admin_GET(f"{self.base_url}/records/{pres_ex_id}")
-    
 
     # Remove an existing presentation exchange record
     async def remove_presentation_record(self, pres_ex_id):
         return await self.admin_DELETE(f"{self.base_url}/records/{pres_ex_id}")
 
-
     # Fetch credentials for a presentation request from wallet
-    async def get_presentation_credentials(self, pres_ex_id, count: int = None, wql_query: str = None, start: int = None, referent: str = None):
+    async def get_presentation_credentials(
+        self,
+        pres_ex_id,
+        count: int = None,
+        wql_query: str = None,
+        start: int = None,
+        referent: str = None,
+    ):
         params = {}
         if count:
             params["count"] = count
@@ -63,38 +75,42 @@ class ProofController(BaseController):
         if referent:
             params["referent"] = referent
 
-        return await self.admin_GET(f"{self.base_url}/records/{pres_ex_id}/credentials", params=params)
-    
+        return await self.admin_GET(
+            f"{self.base_url}/records/{pres_ex_id}/credentials", params=params
+        )
 
     # Send a problem report for presentation exchange
     async def send_problem_report(self, pres_ex_id, request):
-        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/problem-report", json_data=request)
-
+        return await self.admin_POST(
+            f"{self.base_url}/records/{pres_ex_id}/problem-report", json_data=request
+        )
 
     # Sends a proof presentation
     async def send_presentation(self, pres_ex_id, request):
-        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-presentation", json_data=request)
-
+        return await self.admin_POST(
+            f"{self.base_url}/records/{pres_ex_id}/send-presentation", json_data=request
+        )
 
     # Sends a presentation request in reference to a proposal
     async def send_request_for_proposal(self, pres_ex_id, request):
-        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/send-request", json_data=request)
+        return await self.admin_POST(
+            f"{self.base_url}/records/{pres_ex_id}/send-request", json_data=request
+        )
 
-    
     # Verify a received presentation
     async def verify_presentation(self, pres_ex_id):
-        return await self.admin_POST(f"{self.base_url}/records/{pres_ex_id}/verify-presentation")
-
+        return await self.admin_POST(
+            f"{self.base_url}/records/{pres_ex_id}/verify-presentation"
+        )
 
     # Sends a presentation proposal
     async def send_proposal(self, request):
-        return await self.admin_POST(f"{self.base_url}/send-proposal", json_data=request)
+        return await self.admin_POST(
+            f"{self.base_url}/send-proposal", json_data=request
+        )
 
-
-   # Sends a free presentation request not bound to any proposal
+    # Sends a free presentation request not bound to any proposal
     async def send_request(self, request):
         return await self.admin_POST(f"{self.base_url}/send-request", json_data=request)
 
- 
     # def build_proof_request(self, name, version, requested_attributes, requested_predicates):
-

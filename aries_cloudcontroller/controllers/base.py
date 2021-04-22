@@ -28,7 +28,6 @@ class repr_json:
 
 
 class BaseController:
-
     def __init__(self, admin_url: str, client_session):
         self.admin_url = admin_url
         self.client_session = client_session
@@ -76,7 +75,9 @@ class BaseController:
             EVENT_LOGGER.debug("Controller GET %s request to Agent", path)
             response = await self.admin_request("GET", path, None, text, params)
             EVENT_LOGGER.debug(
-                "Response from GET %s received: \n%s", path, repr_json(response),
+                "Response from GET %s received: \n%s",
+                path,
+                repr_json(response),
             )
             return response
         except ClientError as e:
@@ -84,7 +85,7 @@ class BaseController:
             raise
 
     async def admin_POST(
-            self, path, json_data=None, text=False, params=None, data=None
+        self, path, json_data=None, text=False, params=None, data=None
     ) -> ClientResponse:
         try:
             EVENT_LOGGER.debug(
@@ -92,7 +93,9 @@ class BaseController:
                 path,
                 (" with data: \n{}".format(repr_json(json_data)) if json_data else ""),
             )
-            response = await self.admin_request("POST", path, json_data, text, params, data)
+            response = await self.admin_request(
+                "POST", path, json_data, text, params, data
+            )
             EVENT_LOGGER.debug(
                 "Response from POST %s received: \n%s",
                 path,
@@ -112,11 +115,11 @@ class BaseController:
                 path,
                 (" with data: \n{}".format(repr_json(json_data)) if json_data else ""),
             )
-            response = await self.admin_request("PATCH", path, json_data, text, params, data)
+            response = await self.admin_request(
+                "PATCH", path, json_data, text, params, data
+            )
             EVENT_LOGGER.debug(
-                "Response from PATCH %s received: \n%s",
-                path,
-                repr_json(response)
+                "Response from PATCH %s received: \n%s", path, repr_json(response)
             )
             return response
         except ClientError as e:
@@ -132,26 +135,26 @@ class BaseController:
                 path,
                 (" with data: \n{}".format(repr_json(json_data)) if json_data else ""),
             )
-            response = await self.admin_request("PUT", path, json_data, text, params, data)
+            response = await self.admin_request(
+                "PUT", path, json_data, text, params, data
+            )
             EVENT_LOGGER.debug(
-                "Response from PUT %s received: \n%s",
-                path,
-                repr_json(response)
+                "Response from PUT %s received: \n%s", path, repr_json(response)
             )
             return response
         except ClientError as e:
             self.log(f"Error during PUT {path}: {str(e)}")
             raise
 
-    async def admin_DELETE(
-            self, path, text=False, params=None
-    ) -> ClientResponse:
+    async def admin_DELETE(self, path, text=False, params=None) -> ClientResponse:
         try:
             EVENT_LOGGER.debug("Controller DELETE %s request to Agent", path)
 
             response = await self.admin_request("DELETE", path, None, text, params)
             EVENT_LOGGER.debug(
-                "Response from DELETE %s received: \n%s", path, repr_json(response),
+                "Response from DELETE %s received: \n%s",
+                path,
+                repr_json(response),
             )
             return response
         except ClientError as e:

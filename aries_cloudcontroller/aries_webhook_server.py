@@ -36,23 +36,27 @@ class AriesWebhookServer:
         """Create a server to listen to webhooks"""
         try:
             app = web.Application()
-            app.add_routes([web.post(
-                self.webhook_base + "/topic/{topic}/",
-                self._receive_webhook)])
+            app.add_routes(
+                [web.post(self.webhook_base + "/topic/{topic}/", self._receive_webhook)]
+            )
             if self.is_multitenant:
                 app.add_routes(
-                    [web.post(
-                        self.webhook_base + "/{wallet_id}/topic/{topic}/",
-                        self._receive_webhook)])
+                    [
+                        web.post(
+                            self.webhook_base + "/{wallet_id}/topic/{topic}/",
+                            self._receive_webhook,
+                        )
+                    ]
+                )
             runner = web.AppRunner(app)
             await runner.setup()
             self.webhook_site = web.TCPSite(
-                runner,
-                self.webhook_host,
-                self.webhook_port)
+                runner, self.webhook_host, self.webhook_port
+            )
             await self.webhook_site.start()
             logger.info(
-                f"Listening Webhooks on {self.webhook_host}:{self.webhook_port}")
+                f"Listening Webhooks on {self.webhook_host}:{self.webhook_port}"
+            )
         except Exception as exc:
             logger.warning(f"Listening webhooks failed! {exc!r} occurred.")
             raise
@@ -105,8 +109,11 @@ class AriesWebhookServer:
             # return web.Response(status=200)
         except Exception as exc:
             logger.warning(
-                (f"Handling webhooks failed! {exc!r} occurred"
-                    f" when trying to handle this topic: {topic}"))
+                (
+                    f"Handling webhooks failed! {exc!r} occurred"
+                    f" when trying to handle this topic: {topic}"
+                )
+            )
             raise
 
     async def terminate(self):
@@ -118,6 +125,5 @@ class AriesWebhookServer:
             # Do nothing if no webhook site server is running
             return
         except Exception as exc:
-            logger.warning(
-                f"Terminating webhooks listener failed! {exc!r} occurred.")
+            logger.warning(f"Terminating webhooks listener failed! {exc!r} occurred.")
             raise
