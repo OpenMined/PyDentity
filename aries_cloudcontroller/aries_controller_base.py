@@ -57,69 +57,42 @@ class AriesAgentControllerBase(ABC):
         if self.api_key:
             self.headers.update({"X-API-Key": self.api_key})
 
-        self.client_session: ClientSession = ClientSession(
-            headers=self.headers)
+        self.client_session: ClientSession = ClientSession(headers=self.headers)
 
         # Instantiate controllers
-        self.connections = ConnectionsController(
-            self.admin_url,
-            self.client_session)
+        self.connections = ConnectionsController(self.admin_url, self.client_session)
 
-        self.messaging = MessagingController(
-            self.admin_url,
-            self.client_session)
+        self.messaging = MessagingController(self.admin_url, self.client_session)
 
-        self.proofs = ProofController(
-            self.admin_url,
-            self.client_session)
+        self.proofs = ProofController(self.admin_url, self.client_session)
 
-        self.ledger = LedgerController(
-            self.admin_url,
-            self.client_session)
+        self.ledger = LedgerController(self.admin_url, self.client_session)
 
-        self.credentials = CredentialController(
-            self.admin_url,
-            self.client_session)
+        self.credentials = CredentialController(self.admin_url, self.client_session)
 
-        self.server = ServerController(
-            self.admin_url,
-            self.client_session)
+        self.server = ServerController(self.admin_url, self.client_session)
 
-        self.oob = OOBController(
-            self.admin_url,
-            self.client_session)
+        self.oob = OOBController(self.admin_url, self.client_session)
 
-        self.mediation = MediationController(
-            self.admin_url,
-            self.client_session)
+        self.mediation = MediationController(self.admin_url, self.client_session)
 
-        self.schema = SchemaController(
-            self.admin_url,
-            self.client_session)
+        self.schema = SchemaController(self.admin_url, self.client_session)
 
-        self.wallet = WalletController(
-            self.admin_url,
-            self.client_session)
+        self.wallet = WalletController(self.admin_url, self.client_session)
 
-        self.definitions = DefinitionsController(
-            self.admin_url,
-            self.client_session)
+        self.definitions = DefinitionsController(self.admin_url, self.client_session)
 
         self.issuer = IssuerController(
             self.admin_url,
             self.client_session,
             self.connections,
             self.wallet,
-            self.definitions)
-
-        self.action_menu = ActionMenuController(
-            self.admin_url,
-            self.client_session)
-
-        self.revocations = RevocationController(
-            self.admin_url,
-            self.client_session
+            self.definitions,
         )
+
+        self.action_menu = ActionMenuController(self.admin_url, self.client_session)
+
+        self.revocations = RevocationController(self.admin_url, self.client_session)
 
     def init_webhook_server(self):
         raise NotImplementedError
@@ -140,9 +113,9 @@ class AriesAgentControllerBase(ABC):
         """Removes the API key attribute and corresponding headers
         from the Client Session"""
         self.api_key = None
-        if 'X-API-Key' in self.client_session.headers:
-            del self.client_session.headers['X-API-Key']
-            del self.headers['X-API-Key']
+        if "X-API-Key" in self.client_session.headers:
+            del self.client_session.headers["X-API-Key"]
+            del self.headers["X-API-Key"]
 
     def register_listeners(self, listeners, defaults=True):
         """Registers the webhook listners
@@ -161,23 +134,16 @@ class AriesAgentControllerBase(ABC):
             # If so lets do it consistently
             if defaults:
                 if self.connections:
-                    pub.subscribe(
-                        self.connections.default_handler,
-                        "connections")
+                    pub.subscribe(self.connections.default_handler, "connections")
                 if self.messaging:
-                    pub.subscribe(
-                        self.messaging.default_handler,
-                        "basicmessages")
+                    pub.subscribe(self.messaging.default_handler, "basicmessages")
                 if self.proofs:
-                    pub.subscribe(
-                        self.proofs.default_handler,
-                        "present_proof")
+                    pub.subscribe(self.proofs.default_handler, "present_proof")
 
             for listener in listeners:
                 self.add_listener(listener)
         except Exception as exc:
-            logger.warning(
-                f"Register webhooks listeners failed! {exc!r} occurred.")
+            logger.warning(f"Register webhooks listeners failed! {exc!r} occurred.")
 
     def add_listener(self, listener):
         """Subscribe to a listeners for a topic
@@ -194,8 +160,7 @@ class AriesAgentControllerBase(ABC):
             pub.subscribe(listener["handler"], pub_topic_path)
             logger.debug("Lister added for topic : ", pub_topic_path)
         except Exception as exc:
-            logger.warning(
-                f"Adding webhooks listener failed! {exc!r} occurred.")
+            logger.warning(f"Adding webhooks listener failed! {exc!r} occurred.")
 
     def remove_listener(self, listener):
         """Remove a listener for a topic
@@ -212,8 +177,7 @@ class AriesAgentControllerBase(ABC):
             else:
                 logger.debug("Listener not subscribed", listener)
         except Exception as exc:
-            logger.warning(
-                f"Removing webhooks listener failed! {exc!r} occurred.")
+            logger.warning(f"Removing webhooks listener failed! {exc!r} occurred.")
 
     def remove_all_listeners(self, topic: str = None):
         """Remove all listeners for one or all topics
@@ -230,8 +194,7 @@ class AriesAgentControllerBase(ABC):
         try:
             pub.unsubAll(topicName=topic)
         except Exception as exc:
-            logger.warning(
-                f"Removing all webhooks listeners failed! {exc!r} occurred.")
+            logger.warning(f"Removing all webhooks listeners failed! {exc!r} occurred.")
 
     async def listen_webhooks(self):
         raise NotImplementedError
@@ -246,4 +209,5 @@ class AriesAgentControllerBase(ABC):
             return
         except Exception as exc:
             logger.warning(
-                f"Terminate webhooks listener exception!\n {exc!r} occurred.")
+                f"Terminate webhooks listener exception!\n {exc!r} occurred."
+            )

@@ -6,7 +6,8 @@ from timeit import default_timer
 
 import prompt_toolkit
 from prompt_toolkit.application import run_in_terminal
-#from prompt_toolkit.eventloop.defaults import use_asyncio_event_loop
+
+# from prompt_toolkit.eventloop.defaults import use_asyncio_event_loop
 from prompt_toolkit.patch_stdout import patch_stdout
 from prompt_toolkit.shortcuts import ProgressBar
 
@@ -246,6 +247,7 @@ def require_indy():
         print("libindy shared library could not be loaded")
         sys.exit(1)
 
+
 # Used to extract a DID from a schema or credential definition id
 def extract_did(id):
     split = id.split(":")
@@ -262,7 +264,7 @@ def get_schema_details(schema_id):
             "schema_id": schema_id,
             "schema_name": details[2],
             "schema_version": details[3],
-            "schema_issuer_did": details[0]
+            "schema_issuer_did": details[0],
         }
     else:
         raise Exception(f"ID {id} is not is the correct")
