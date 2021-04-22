@@ -138,7 +138,7 @@ class IssuerController(BaseController):
     async def store_credential(self, cred_ex_id, credential_id: str = None):
         body = {}
         if credential_id:
-            body['credential_id'] = credential_id
+            body["credential_id"] = credential_id
         return await self.admin_POST(
             f"{self.base_url}/records/{cred_ex_id}/store", json_data=body
         )
