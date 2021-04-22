@@ -21,8 +21,11 @@ class MessagingController(BaseController):
         )
         return response
 
-    async def trust_ping(self, connection_id: str, msg: str):
-        response = await self.admin_POST(
-            f"/connections/{connection_id}/send-ping", {"content": msg}
-        )
+    async def trust_ping(self, connection_id: str, comment_msg: str = None):
+        if comment_msg:
+            response = await self.admin_POST(
+                f"/connections/{connection_id}/send-ping", {"comment": comment_msg}
+            )
+        else:
+            response = await self.admin_POST(f"/connections/{connection_id}/send-ping", {})
         return response

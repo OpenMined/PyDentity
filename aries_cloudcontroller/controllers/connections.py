@@ -29,6 +29,13 @@ class ConnectionsController(BaseController):
                 connection.update_state(state)
                 logger.debug(f"{connection_id} state updated")
 
+    # Combines receive and accept connection api calls
+    async def accept_connection(self, invitation):
+        response = await self.receive_invitation(invitation)
+
+        accepted = await self.accept_invitation(response["connection_id"])
+        return accepted
+
     ### TODO refactor to extract out generic base - /connections
 
     async def get_connections(
@@ -68,18 +75,17 @@ class ConnectionsController(BaseController):
         self,
         alias: str = None,
         auto_accept: bool = None,
-        public: bool = None,
-        multi_use: bool = None,
-        invite_options: dict = None,
+        public: str = None,
+        multi_use: str = None,
     ):
         params = {}
         if alias:
             params["alias"] = alias
-        if auto_accept in [True, False]:
+        if auto_accept:
             params["auto_accept"] = auto_accept
-        if public in [True, False]:
+        if public:
             params["public"] = public
-        if multi_use in [True, False]:
+        if multi_use:
             params["multi_use"] = multi_use
         if invite_option:
             """A dictionary of the form:
@@ -114,7 +120,7 @@ class ConnectionsController(BaseController):
         params = {}
         if alias:
             params["alias"] = alias
-        if auto_accept in [True, False]:
+        if auto_accept:
             params["auto_accept"] = auto_accept
 
         response = await self.admin_POST(
