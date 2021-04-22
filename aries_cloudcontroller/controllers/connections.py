@@ -95,11 +95,15 @@ class ConnectionsController(BaseController):
                 "service_endpoint": "http://192.168.56.102:8020"
             }
             """
-            params['body'] = invite_options
-
-        invite_details = await self.admin_POST(
-            "/connections/create-invitation", params=params
-        )
+            invite_details = await self.admin_POST(
+                "/connections/create-invitation",
+                params=params,
+                json_data=invite_options
+            )
+        else:
+            invite_details = await self.admin_POST(
+                "/connections/create-invitation", params=params
+            )
         connection = Connection(invite_details["connection_id"], "invitation")
         self.connections.append(connection)
         return invite_details
