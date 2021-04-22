@@ -27,5 +27,7 @@ class MessagingController(BaseController):
                 f"/connections/{connection_id}/send-ping", {"comment": comment_msg}
             )
         else:
-            response = await self.admin_POST(f"/connections/{connection_id}/send-ping", {})
+            response = await self.admin_POST(
+                f"/connections/{connection_id}/send-ping", {}
+            )
         return response
