@@ -136,11 +136,13 @@ class IssuerController(BaseController):
                 f"{self.base_url}/records/{cred_ex_id}/issue", json_data=body
             )
         except Exception as e:
-            logger.warn(f"Could not issue credentials: {e!r}")
+            exc_msg = f"Could not issue credentials: {e!r}"
+            logger.warn(exc_msg)
             ProofController = ProofController(self.admin_url, self.client_session)
             ProofController.send_problem_report(
                 pres_ex_id=self.pres_ex_id, explanation=f"{e!r}"
             )
+            raise e(exc_msg)
 
     # Store a received credential
     async def store_credential(self, cred_ex_id, credential_id):
