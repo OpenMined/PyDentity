@@ -2,6 +2,7 @@ from .base import BaseController
 from aiohttp import ClientSession
 import logging
 from ..helpers.utils import extract_did, get_schema_details
+from .proof import ProofController
 
 logger = logging.getLogger("aries_controller.issuer")
 
@@ -126,13 +127,20 @@ class IssuerController(BaseController):
 
     # Send holder a credential
     async def issue_credential(self, cred_ex_id, comment, attributes):
-        body = {
-            "comment": comment,
-            "credential_preview": {"@type": CRED_PREVIEW, "attributes": attributes},
-        }
-        return await self.admin_POST(
-            f"{self.base_url}/records/{cred_ex_id}/issue", json_data=body
-        )
+        try:
+            body = {
+                "comment": comment,
+                "credential_preview": {"@type": CRED_PREVIEW, "attributes": attributes},
+            }
+            return await self.admin_POST(
+                f"{self.base_url}/records/{cred_ex_id}/issue", json_data=body
+            )
+        except Exception as e:
+            logger.warn(f"Could not issue credentials: {e!r}")
+            ProofController = ProofController(self.admin_url, self.client_session)
+            ProofController.send_problem_report(
+                pres_ex_id=self.pres_ex_id, explanation=f"{e!r}"
+            )
 
     # Store a received credential
     async def store_credential(self, cred_ex_id, credential_id):
