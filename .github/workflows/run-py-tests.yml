@@ -1,10 +1,9 @@
 name: Run Python Tests
 on:
-  release:
-    types: [created]
   pull_request:
     branches:
       - staging
+      - main
 
 jobs:
   RunPytest:
