@@ -234,3 +234,12 @@ class ConnectionsController(BaseController):
         else:
             response = await self.admin_POST(f"/connections/{connection_id}/metadata")
         return response
+
+    async def start_introduction(
+        self, connection_id: str, target_connection_id: str, message: str = None
+    ):
+        route = f"/connections/{connection_id}/start-introduction?target_connection_id={target_connection_id}"
+        if message:
+            route += f"&message={message}"
+        response = self.admin_POST(route)
+        return response
