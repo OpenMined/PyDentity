@@ -16,6 +16,11 @@ class WalletController(BaseController):
     async def create_did(self):
         return await self.admin_POST(f"{self.base_url}/did/create")
 
+    async def rotate_pub_key_pair(self, did: str):
+        return await self.admin_PATCH(
+            f"{self.base_url}/did/local/rotate-keypair?did={did}"
+        )
+
     async def get_public_did(self):
         return await self.admin_GET(f"{self.base_url}/did/public")
 
@@ -32,5 +37,3 @@ class WalletController(BaseController):
         return await self.admin_POST(
             f"{self.base_url}/set-did-endpoint", json_data=body
         )
-
-    ## TODO Patch rotate-keypair
