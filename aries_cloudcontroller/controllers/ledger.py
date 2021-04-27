@@ -37,4 +37,5 @@ class LedgerController(BaseController):
     async def accept_taa(self, data):
         return await self.admin_POST(f"{self.base_url}/taa/accept", json_data=data)
 
-    # TODO PATCH rotate key pair
+    async def rotate_pub_key_pair(self):
+        return await self.admin_PATCH(f"{self.base_url}/rotate-public-did-keypair")
