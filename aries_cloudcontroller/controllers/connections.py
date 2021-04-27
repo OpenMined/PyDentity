@@ -140,6 +140,10 @@ class ConnectionsController(BaseController):
             # TODO create proper error classes
             raise Exception("The connection is not in the request state")
 
+    async def get_remote_endpoints(self, connection_id: str):
+        response = await self.admin_GET(f"/connections/{connection_id}/endpoints")
+        return response
+
     async def establish_inbound(self, connection_id: str, router_conn_id: str):
         response = await self.admin_POST(
             f"/connections/{connection_id}/establish-inbound/{router_conn_id}"
@@ -211,3 +215,22 @@ class ConnectionsController(BaseController):
             logger.error(f"Connection {connection_id} not active")
             raise Exception("Connection must be active to send a credential")
         return
+
+    async def get_connection_metadata(self, connection_id: str, key: str = None):
+        if key:
+            response = await self.admin_GET(
+                f"/connections/{connection_id}/metadata?key={key}"
+            )
+        else:
+            response = await self.admin_GET(f"/connections/{connection_id}/metadata")
+        return response
+
+    async def set_connection_metadata(self, connection_id: str, metadata: dict = None):
+        if metadata:
+            metadata = {"metadata": metadata}
+            response = await self.admin_POST(
+                f"/connections/{connection_id}/metadata", data=metadata
+            )
+        else:
+            response = await self.admin_POST(f"/connections/{connection_id}/metadata")
+        return response
