@@ -1,5 +1,6 @@
 aiohttp~=3.7.3
 asyncio
+black
 prompt_toolkit
 pygments
 PyPubSub
