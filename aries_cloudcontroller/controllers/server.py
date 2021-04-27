@@ -31,4 +31,5 @@ class ServerController(BaseController):
 
         return await self.admin_GET("/features", params=params)
 
-    ## TODO implement shutdown. Should this be a POST?
+    async def shutdown(self):
+        return await self.admin_GET("/shutdown")
