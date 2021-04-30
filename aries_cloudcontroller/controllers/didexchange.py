@@ -62,7 +62,7 @@ class DidExchangeController(BaseController):
         if my_label:
             params["my_label"] = my_label
         response = self.admin_POST(
-            f"/didexchange{connection_id}/accept-invitation", params=params
+            f"/didexchange/{connection_id}/accept-invitation", params=params
         )
         return response
 

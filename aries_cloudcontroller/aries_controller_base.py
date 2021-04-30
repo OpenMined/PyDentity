@@ -19,6 +19,7 @@ from .controllers.server import ServerController
 from .controllers.oob import OOBController
 from .controllers.action_menu import ActionMenuController
 from .controllers.revocation import RevocationController
+from .controllers.didexchange import DidExchangeController
 
 import logging
 
@@ -81,6 +82,8 @@ class AriesAgentControllerBase(ABC):
         self.wallet = WalletController(self.admin_url, self.client_session)
 
         self.definitions = DefinitionsController(self.admin_url, self.client_session)
+
+        self.didexchange = DidExchangeController(self.admin_url, self.client_session)
 
         self.issuer = IssuerController(
             self.admin_url,
