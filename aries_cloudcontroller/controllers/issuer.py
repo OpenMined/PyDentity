@@ -2,7 +2,6 @@ from .base import BaseController
 from aiohttp import ClientSession
 import logging
 from ..helpers.utils import extract_did, get_schema_details
-from .proof import ProofController
 
 logger = logging.getLogger("aries_controller.issuer")
 
@@ -138,10 +137,7 @@ class IssuerController(BaseController):
         except Exception as e:
             exc_msg = f"Could not issue credentials: {e!r}"
             logger.warn(exc_msg)
-            ProofController = ProofController(self.admin_url, self.client_session)
-            ProofController.send_problem_report(
-                pres_ex_id=self.pres_ex_id, explanation=f"{e!r}"
-            )
+            self.send_problem_report(pres_ex_id=self.pres_ex_id, explanation=f"{e!r}")
             raise e(exc_msg)
 
     # Store a received credential
@@ -169,7 +165,7 @@ class IssuerController(BaseController):
         return await self.admin_DELETE(f"{self.base_url}/records/{cred_ex_id}")
 
     # Send a problem report for a credential exchange
-    async def problem_report(self, cred_ex_id, explanation: str):
+    async def send_problem_report(self, cred_ex_id, explanation: str):
         body = {"explain_ltxt": explanation}
 
         return await self.admin_POST(
