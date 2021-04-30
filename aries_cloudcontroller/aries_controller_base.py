@@ -158,7 +158,7 @@ class AriesAgentControllerBase(ABC):
             "topic":"topicname" key-value pairs
         """
         try:
-            pub_topic_path = listener['topic']
+            pub_topic_path = listener["topic"]
             logger.INFO("Subscribing too: " + pub_topic_path)
             pub.subscribe(listener["handler"], pub_topic_path)
             logger.debug("Lister added for topic : ", pub_topic_path)
