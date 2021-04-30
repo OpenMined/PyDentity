@@ -23,7 +23,7 @@ from .controllers.didexchange import DidExchangeController
 
 import logging
 
-logger = logging.getLogger("aries_controller")
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -158,8 +158,8 @@ class AriesAgentControllerBase(ABC):
             "topic":"topicname" key-value pairs
         """
         try:
-            pub_topic_path = listener["topic"]
-            print("Subscribing too: " + pub_topic_path)
+            pub_topic_path = listener['topic']
+            logger.INFO("Subscribing too: " + pub_topic_path)
             pub.subscribe(listener["handler"], pub_topic_path)
             logger.debug("Lister added for topic : ", pub_topic_path)
         except Exception as exc:
