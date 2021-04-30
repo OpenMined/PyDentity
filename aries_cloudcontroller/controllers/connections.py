@@ -77,6 +77,7 @@ class ConnectionsController(BaseController):
         auto_accept: bool = None,
         public: str = None,
         multi_use: str = None,
+        invite_options: {} = None,
     ):
         params = {}
         if alias:
@@ -87,10 +88,29 @@ class ConnectionsController(BaseController):
             params["public"] = public
         if multi_use:
             params["multi_use"] = multi_use
-
-        invite_details = await self.admin_POST(
-            "/connections/create-invitation", params=params
-        )
+        if invite_options:
+            """A dictionary of the form:
+            {
+                "mediation_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "metadata": {},
+                "recipient_keys": [
+                    "H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV"
+                ],
+                "routing_keys": [
+                    "H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV"
+                ],
+                "service_endpoint": "http://192.168.56.102:8020"
+            }
+            """
+            invite_details = await self.admin_POST(
+                "/connections/create-invitation",
+                params=params,
+                json_data=invite_options,
+            )
+        else:
+            invite_details = await self.admin_POST(
+                "/connections/create-invitation", params=params
+            )
         connection = Connection(invite_details["connection_id"], "invitation")
         self.connections.append(connection)
         return invite_details
