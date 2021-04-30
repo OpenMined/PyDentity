@@ -5,6 +5,7 @@ from .aries_webhook_server import AriesWebhookServer
 from .controllers.multitenant import MultitenancyController
 
 import logging
+import ipaddress
 
 logger = logging.getLogger("aries_controller")
 
@@ -36,35 +37,34 @@ class AriesAgentController(AriesAgentControllerBase):
                 self.admin_url, self.client_session
             )
 
-    def init_webhook_server(
-        self, webhook_host: str = None, webhook_port: int = None, webhook_base: str = ""
+    async def init_webhook_server(
+        self, webhook_host: str, webhook_port: int, webhook_base: str = ""
     ):
-        """Create a webhooklisteners
+        """Create a webhook listeners
 
         Args:
         ----
         webhook_host : str
-            The url of the webhook host (default is None)
+            The url of the webhook host
         webhook_port : int
-            The exposed port for webhooks on the host (default is None)
+            The exposed port for webhooks on the host
         webhook_base : str
             The base url for webhooks (default is "")
         """
-        self.webhook_server: AriesWebhookServer = AriesWebhookServer(
-            webhook_host=webhook_host,
-            webhook_port=webhook_port,
-            webhook_base=webhook_base,
-            is_multitenant=self.is_multitenant,
-        )
-
-    async def listen_webhooks(self):
+        assert type(webhook_host) is str
+        assert ipaddress.ip_address(webhook_host)
+        assert type(webhook_port) is int
         try:
+            self.webhook_server: AriesWebhookServer = AriesWebhookServer(
+                webhook_host=webhook_host,
+                webhook_port=webhook_port,
+                webhook_base=webhook_base,
+                is_multitenant=self.is_multitenant,
+            )
             await self.webhook_server.listen_webhooks()
-            logger.info("Webhook server started.")
-        except AttributeError:
-            warning = "Webhook server not initialised."
-            logger.warning(warning)
-            raise AttributeError(warning)
+            logger.info(
+                f"Webhook server started on {self.webhook_server.webhook_host}."
+            )
         except Exception as exc:
-            logger.warning(f"Listening webhooks failed! {exc!r} occurred.")
+            logger.error(f"Listening webhooks failed! {exc!r} occurred.")
             raise Exception(f"{exc!r}")

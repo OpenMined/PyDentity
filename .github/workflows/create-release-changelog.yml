@@ -1,11 +1,11 @@
-name: 'CI'
+name: 'Create release and changelog'
 on:
   release:
     types: [created]
 
 jobs:
   release:
-    if: startsWith(github.ref, 'refs/tags/')
+    if: ${{ startsWith(github.ref, 'refs/tags/') && github.event.base_ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Build Changelog
