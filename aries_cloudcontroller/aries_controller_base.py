@@ -19,6 +19,7 @@ from .controllers.server import ServerController
 from .controllers.oob import OOBController
 from .controllers.action_menu import ActionMenuController
 from .controllers.revocation import RevocationController
+from .controllers.didexchange import DidExchangeController
 
 import logging
 
@@ -81,6 +82,8 @@ class AriesAgentControllerBase(ABC):
         self.wallet = WalletController(self.admin_url, self.client_session)
 
         self.definitions = DefinitionsController(self.admin_url, self.client_session)
+
+        self.didexchange = DidExchangeController(self.admin_url, self.client_session)
 
         self.issuer = IssuerController(
             self.admin_url,
@@ -155,7 +158,7 @@ class AriesAgentControllerBase(ABC):
             "topic":"topicname" key-value pairs
         """
         try:
-            pub_topic_path = listener['topic']
+            pub_topic_path = listener["topic"]
             logger.INFO("Subscribing too: " + pub_topic_path)
             pub.subscribe(listener["handler"], pub_topic_path)
             logger.debug("Lister added for topic : ", pub_topic_path)
