@@ -77,6 +77,7 @@ class ConnectionsController(BaseController):
         auto_accept: bool = None,
         public: str = None,
         multi_use: str = None,
+        invite_options: {} = None,
     ):
         params = {}
         if alias:
@@ -87,7 +88,7 @@ class ConnectionsController(BaseController):
             params["public"] = public
         if multi_use:
             params["multi_use"] = multi_use
-        if invite_option:
+        if invite_options:
             """A dictionary of the form:
             {
                 "mediation_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -104,7 +105,7 @@ class ConnectionsController(BaseController):
             invite_details = await self.admin_POST(
                 "/connections/create-invitation",
                 params=params,
-                json_data=invite_options
+                json_data=invite_options,
             )
         else:
             invite_details = await self.admin_POST(
