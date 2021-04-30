@@ -26,8 +26,6 @@ class DidExchangeController(BaseController):
         response = self.admin_POST(f"/didexchange/create-request", params=params)
         return response
 
-    print(params)
-
     async def receive_request_against_invite(
         self,
         body: {} = None,
