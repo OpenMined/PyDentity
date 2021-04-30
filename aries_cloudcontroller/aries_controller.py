@@ -7,7 +7,7 @@ from .controllers.multitenant import MultitenancyController
 import logging
 import ipaddress
 
-logger = logging.getLogger("aries_controller")
+logger = logging.getLogger(__name__)
 
 
 @dataclass
