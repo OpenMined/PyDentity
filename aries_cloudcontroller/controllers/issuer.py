@@ -126,13 +126,19 @@ class IssuerController(BaseController):
 
     # Send holder a credential
     async def issue_credential(self, cred_ex_id, comment, attributes):
-        body = {
-            "comment": comment,
-            "credential_preview": {"@type": CRED_PREVIEW, "attributes": attributes},
-        }
-        return await self.admin_POST(
-            f"{self.base_url}/records/{cred_ex_id}/issue", json_data=body
-        )
+        try:
+            body = {
+                "comment": comment,
+                "credential_preview": {"@type": CRED_PREVIEW, "attributes": attributes},
+            }
+            return await self.admin_POST(
+                f"{self.base_url}/records/{cred_ex_id}/issue", json_data=body
+            )
+        except Exception as e:
+            exc_msg = f"Could not issue credentials: {e!r}"
+            logger.warn(exc_msg)
+            self.send_problem_report(pres_ex_id=self.pres_ex_id, explanation=f"{e!r}")
+            raise e(exc_msg)
 
     # Store a received credential
     async def store_credential(self, cred_ex_id, credential_id: str = None):
@@ -161,7 +167,7 @@ class IssuerController(BaseController):
         return await self.admin_DELETE(f"{self.base_url}/records/{cred_ex_id}")
 
     # Send a problem report for a credential exchange
-    async def problem_report(self, cred_ex_id, explanation: str):
+    async def send_problem_report(self, cred_ex_id, explanation: str):
         body = {"explain_ltxt": explanation}
 
         return await self.admin_POST(

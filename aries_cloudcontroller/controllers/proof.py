@@ -80,9 +80,11 @@ class ProofController(BaseController):
         )
 
     # Send a problem report for presentation exchange
-    async def send_problem_report(self, pres_ex_id, request):
+    async def send_problem_report(self, pres_ex_id, explanation: str):
+        body = {"explain_ltxt": explanation}
         return await self.admin_POST(
-            f"{self.base_url}/records/{pres_ex_id}/problem-report", json_data=request
+            f"{self.base_url}/records/{pres_ex_id}/problem-report",
+            json_data=body,
         )
 
     # Sends a proof presentation
