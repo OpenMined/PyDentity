@@ -15,9 +15,9 @@ class RevocationController(BaseController):
 
     async def revoke_credential(
         self,
-        cred_ex_id: str = "",
-        cred_rev_id: str = "",
-        rev_reg_id: str = "",
+        cred_ex_id: str = None,
+        cred_rev_id: str = None,
+        rev_reg_id: str = None,
         publish: bool = False,
     ):
         """

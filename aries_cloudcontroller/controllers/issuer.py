@@ -26,9 +26,24 @@ class IssuerController(BaseController):
         self.definitions = definition_controller
 
     # Fetch all credential exchange records
-    async def get_records(self):
+    async def get_records(
+            self,
+            connection_id: str = None,
+            thread_id: str = None,
+            state: str = None,
+            role: str = None,
+    ):
+        params = {}
+        if connection_id:
+            params["connection_id"] = connection_id
+        if thread_id:
+            params["thread_id"] = thread_id
+        if state:
+            params["state"] = state
+        if role:
+            params["role"] = role
 
-        return await self.admin_GET(f"{self.base_url}/records")
+        return await self.admin_GET(f"{self.base_url}/records", params=params)
 
     async def get_record_by_id(self, cred_ex_id):
         return await self.admin_GET(f"{self.base_url}/records/{cred_ex_id}")
