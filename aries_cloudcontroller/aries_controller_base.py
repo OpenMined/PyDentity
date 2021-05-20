@@ -148,7 +148,6 @@ class AriesAgentControllerBase(ABC):
         except Exception as exc:
             logger.warning(f"Register webhooks listeners failed! {exc!r} occurred.")
 
-
     def is_subscribed(self, listener):
         """Check if listener is subscribed
 
@@ -164,8 +163,6 @@ class AriesAgentControllerBase(ABC):
             return pub.isSubscribed(pub_hanlder, pub_topic_path)
         except Exception as exc:
             logger.warning(f"Unable to check if listener subscribed {exc!r} occurred.")
-
-
 
     def add_listener(self, listener):
         """Subscribe to a listeners for a topic

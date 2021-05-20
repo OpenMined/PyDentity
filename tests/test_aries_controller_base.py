@@ -109,22 +109,16 @@ class TestAriesAgentControllerBase:
         listeners = []
         # Receive connection messages
         def connections_handler(payload):
-            print("Connections Handler")
+            LOGGER.info("Connections Handler")
 
-        connection_listener = {
-            "handler": connections_handler,
-            "topic": "connections"
-        }
+        connection_listener = {"handler": connections_handler, "topic": "connections"}
 
         listeners.append(connection_listener)
 
         def issuer_handler(payload):
-            print("Issuer handler")
+            LOGGER.info("Issuer handler")
 
-        issuer_listener = {
-            "topic": "issue_credential",
-            "handler": issuer_handler
-        }
+        issuer_listener = {"topic": "issue_credential", "handler": issuer_handler}
 
         listeners.append(issuer_listener)
 
@@ -135,7 +129,6 @@ class TestAriesAgentControllerBase:
 
         await ac.terminate()
 
-
     @pytest.mark.asyncio
     async def test_add_listener(self):
         ac = AriesAgentControllerBase(admin_url="0.0.0.0")
@@ -144,10 +137,7 @@ class TestAriesAgentControllerBase:
         def connections_handler(payload):
             print("Connections Handler")
 
-        connection_listener = {
-            "handler": connections_handler,
-            "topic": "connections"
-        }
+        connection_listener = {"handler": connections_handler, "topic": "connections"}
 
         ac.add_listener(connection_listener)
 
@@ -162,10 +152,7 @@ class TestAriesAgentControllerBase:
         def connections_handler(payload):
             print("Connections Handler")
 
-        connection_listener = {
-            "handler": connections_handler,
-            "topic": "connections"
-        }
+        connection_listener = {"handler": connections_handler, "topic": "connections"}
 
         ac.add_listener(connection_listener)
 
@@ -184,20 +171,14 @@ class TestAriesAgentControllerBase:
         def connections_handler(payload):
             print("Connections Handler")
 
-        connection_listener = {
-            "handler": connections_handler,
-            "topic": "connections"
-        }
+        connection_listener = {"handler": connections_handler, "topic": "connections"}
 
         listeners.append(connection_listener)
 
         def issuer_handler(payload):
             print("Issuer handler")
 
-        issuer_listener = {
-            "topic": "issue_credential",
-            "handler": issuer_handler
-        }
+        issuer_listener = {"topic": "issue_credential", "handler": issuer_handler}
 
         listeners.append(issuer_listener)
 
