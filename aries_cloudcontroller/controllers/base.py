@@ -1,20 +1,14 @@
 from aiohttp import (
-    web,
-    ClientSession,
-    ClientRequest,
     ClientResponse,
     ClientError,
-    ClientTimeout,
 )
 
-import asyncio
 import logging
 
 import json
 
-from ..helpers.utils import log_msg
 
-EVENT_LOGGER = logging.getLogger("__name__")
+LOGGER = logging.getLogger("__name__")
 
 
 class repr_json:
@@ -34,23 +28,10 @@ class BaseController:
         self.color = None
         self.prefix = None
 
-    def log(self, *msg, **kwargs):
-        self.handle_output(*msg, **kwargs)
-
     @property
     def prefix_str(self):
         if self.prefix:
             return f"{self.prefix:10s} |"
-
-    def handle_output(self, *output, source: str = None, **kwargs):
-        end = "" if source else "\n"
-        if source == "stderr":
-            color = "fg:ansired"
-        elif not source:
-            color = self.color or "fg:ansiblue"
-        else:
-            color = None
-        log_msg(*output, color=color, prefix=self.prefix_str, end=end, **kwargs)
 
     async def admin_request(
         self, method, path, json_data=None, text=False, params=None, data=None
@@ -72,23 +53,23 @@ class BaseController:
 
     async def admin_GET(self, path, text=False, params=None) -> ClientResponse:
         try:
-            EVENT_LOGGER.debug("Controller GET %s request to Agent", path)
+            LOGGER.debug("Controller GET %s request to Agent", path)
             response = await self.admin_request("GET", path, None, text, params)
-            EVENT_LOGGER.debug(
+            LOGGER.debug(
                 "Response from GET %s received: \n%s",
                 path,
                 repr_json(response),
             )
             return response
         except ClientError as e:
-            self.log(f"Error during GET {path}: {str(e)}")
+            LOGGER.error(f"Error during GET {path}: {str(e)}")
             raise
 
     async def admin_POST(
         self, path, json_data=None, text=False, params=None, data=None
     ) -> ClientResponse:
         try:
-            EVENT_LOGGER.debug(
+            LOGGER.debug(
                 "Controller POST %s request to Agent%s",
                 path,
                 (" with data: \n{}".format(repr_json(json_data)) if json_data else ""),
@@ -96,21 +77,21 @@ class BaseController:
             response = await self.admin_request(
                 "POST", path, json_data, text, params, data
             )
-            EVENT_LOGGER.debug(
+            LOGGER.debug(
                 "Response from POST %s received: \n%s",
                 path,
                 repr_json(response),
             )
             return response
         except ClientError as e:
-            self.log(f"Error during POST {path}: {str(e)}")
+            LOGGER.error(f"Error during POST {path}: {str(e)}")
             raise
 
     async def admin_PATCH(
         self, path, json_data=None, text=False, params=None, data=None
     ) -> ClientResponse:
         try:
-            EVENT_LOGGER.debug(
+            LOGGER.debug(
                 "Controller PATCH %s request to Agent%s",
                 path,
                 (" with data: \n{}".format(repr_json(json_data)) if json_data else ""),
@@ -118,19 +99,19 @@ class BaseController:
             response = await self.admin_request(
                 "PATCH", path, json_data, text, params, data
             )
-            EVENT_LOGGER.debug(
+            LOGGER.debug(
                 "Response from PATCH %s received: \n%s", path, repr_json(response)
             )
             return response
         except ClientError as e:
-            self.log(f"Error during PATCH {path}: {str(e)}")
+            LOGGER.error(f"Error during PATCH {path}: {str(e)}")
             raise
 
     async def admin_PUT(
         self, path, json_data=None, text=False, params=None, data=None
     ) -> ClientResponse:
         try:
-            EVENT_LOGGER.debug(
+            LOGGER.debug(
                 "Controller PUT %s request to Agent%s",
                 path,
                 (" with data: \n{}".format(repr_json(json_data)) if json_data else ""),
@@ -138,25 +119,25 @@ class BaseController:
             response = await self.admin_request(
                 "PUT", path, json_data, text, params, data
             )
-            EVENT_LOGGER.debug(
+            LOGGER.debug(
                 "Response from PUT %s received: \n%s", path, repr_json(response)
             )
             return response
         except ClientError as e:
-            self.log(f"Error during PUT {path}: {str(e)}")
+            LOGGER.error(f"Error during PUT {path}: {str(e)}")
             raise
 
     async def admin_DELETE(self, path, text=False, params=None) -> ClientResponse:
         try:
-            EVENT_LOGGER.debug("Controller DELETE %s request to Agent", path)
+            LOGGER.debug("Controller DELETE %s request to Agent", path)
 
             response = await self.admin_request("DELETE", path, None, text, params)
-            EVENT_LOGGER.debug(
+            LOGGER.debug(
                 "Response from DELETE %s received: \n%s",
                 path,
                 repr_json(response),
             )
             return response
         except ClientError as e:
-            self.log(f"Error during DELETE {path}: {str(e)}")
+            LOGGER.error(f"Error during DELETE {path}: {str(e)}")
             raise
