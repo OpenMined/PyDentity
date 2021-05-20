@@ -101,23 +101,98 @@ class TestAriesAgentControllerBase:
 
         await ac.terminate()
 
-    # TODO create mock for pubsub listening webhooks
-    # Maybe this makes more sense in aries_controller
+    # TODO Maybe this makes more sense in aries_controller
     @pytest.mark.asyncio
-    async def test_register_listners(self):
-        pass
+    async def test_register_listeners(self):
+        ac = AriesAgentControllerBase(admin_url="0.0.0.0")
+
+        listeners = []
+        # Receive connection messages
+        def connections_handler(payload):
+            LOGGER.info("Connections Handler")
+
+        connection_listener = {"handler": connections_handler, "topic": "connections"}
+
+        listeners.append(connection_listener)
+
+        def issuer_handler(payload):
+            LOGGER.info("Issuer handler")
+
+        issuer_listener = {"topic": "issue_credential", "handler": issuer_handler}
+
+        listeners.append(issuer_listener)
+
+        ac.register_listeners(listeners)
+
+        for listener in listeners:
+            assert ac.is_subscribed(listener)
+
+        await ac.terminate()
 
     @pytest.mark.asyncio
     async def test_add_listener(self):
-        pass
+        ac = AriesAgentControllerBase(admin_url="0.0.0.0")
+
+        # Receive connection messages
+        def connections_handler(payload):
+            print("Connections Handler")
+
+        connection_listener = {"handler": connections_handler, "topic": "connections"}
+
+        ac.add_listener(connection_listener)
+
+        assert ac.is_subscribed(connection_listener)
+        await ac.terminate()
 
     @pytest.mark.asyncio
     async def test_remove_listener(self):
-        pass
+        ac = AriesAgentControllerBase(admin_url="0.0.0.0")
+
+        # Receive connection messages
+        def connections_handler(payload):
+            print("Connections Handler")
+
+        connection_listener = {"handler": connections_handler, "topic": "connections"}
+
+        ac.add_listener(connection_listener)
+
+        ac.remove_listener(connection_listener)
+
+        assert not ac.is_subscribed(connection_listener)
+        await ac.terminate()
 
     @pytest.mark.asyncio
     async def test_remove_all_listeners(self):
-        pass
+        ac = AriesAgentControllerBase(admin_url="0.0.0.0")
+
+        listeners = []
+
+        # Receive connection messages
+        def connections_handler(payload):
+            print("Connections Handler")
+
+        connection_listener = {"handler": connections_handler, "topic": "connections"}
+
+        listeners.append(connection_listener)
+
+        def issuer_handler(payload):
+            print("Issuer handler")
+
+        issuer_listener = {"topic": "issue_credential", "handler": issuer_handler}
+
+        listeners.append(issuer_listener)
+
+        ac.register_listeners(listeners)
+
+        ac.remove_all_listeners("issue_credential")
+
+        assert not ac.is_subscribed(issuer_listener)
+        assert ac.is_subscribed(connection_listener)
+
+        ac.remove_all_listeners()
+
+        assert not ac.is_subscribed(connection_listener)
+        await ac.terminate()
 
     @pytest.mark.asyncio
     async def test_listen_webhooks(self):
