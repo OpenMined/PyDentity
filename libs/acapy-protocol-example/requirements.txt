@@ -1,3 +1,4 @@
 aries-cloudagent[indy]@git+https://github.com/hyperledger/aries-cloudagent-python
 flake8
 python-dateutil
+pyyaml>=5.4 # not directly required, pinned by Snyk to avoid a vulnerability
