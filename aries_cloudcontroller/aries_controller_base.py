@@ -97,6 +97,12 @@ class AriesAgentControllerBase(ABC):
 
         self.revocations = RevocationController(self.admin_url, self.client_session)
 
+    def __enter__(self):
+        return self
+
+    async def __exit__(self, exc_type, exc_value, exc_traceback):
+        await self.terminate()
+
     def init_webhook_server(self):
         raise NotImplementedError
 
