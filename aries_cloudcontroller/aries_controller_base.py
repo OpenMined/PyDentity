@@ -1,7 +1,7 @@
 from aiohttp import (
     ClientSession,
 )
-from abc import ABC
+from contextlib import AbstractAsyncContextManager
 from dataclasses import dataclass
 from pubsub import pub
 
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class AriesAgentControllerBase(ABC):
+class AriesAgentControllerBase(AbstractAsyncContextManager):
     """The Aries Agent Controller class
 
     This class allows you to interact with Aries by exposing the aca-py API.
@@ -97,7 +97,7 @@ class AriesAgentControllerBase(ABC):
 
         self.revocations = RevocationController(self.admin_url, self.client_session)
 
-    def __enter__(self):
+    async def __aenter__(self):
         return self
 
     async def __aexit__(self, exc_type, exc_value, exc_traceback):
