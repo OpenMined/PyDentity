@@ -1,6 +1,5 @@
 import logging
 import pytest
-import unittest
 from aiohttp import (
     ClientSession,
 )
