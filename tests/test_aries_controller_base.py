@@ -211,3 +211,19 @@ class TestAriesAgentControllerBase:
         with pytest.raises(AttributeError):
             assert ac.webhook_server is None
         await ac.terminate()
+
+    @pytest.mark.asyncio
+    async def test_context_manager(self, caplog):
+        caplog.set_level(logging.INFO)
+        api_key = "123456789"
+
+        async with AriesAgentControllerBase(admin_url="", api_key=api_key) as ac:
+            assert ac.client_session
+            assert ac.api_key == api_key
+            assert ac.headers == {"X-API-Key": api_key}
+            ac.remove_api_key()
+
+        assert ac.headers == {}
+        assert ac.api_key is None
+        assert ac.client_session.headers == {}
+        assert "Client Session closed." in caplog.text
