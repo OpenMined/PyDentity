@@ -48,4 +48,4 @@ class MultitenancyController(BaseController):
         if wallet_name:
             params["wallet_name"] = wallet_name
 
-        return await self.admin_GET(f"{self.base_url}/wallets")
+        return await self.admin_GET(f"{self.base_url}/wallets", params=params)
