@@ -12,6 +12,7 @@ from .controllers.schema import SchemaController
 from .controllers.wallet import WalletController
 from .controllers.definitions import DefinitionsController
 from .controllers.issuer import IssuerController
+from .controllers.issuer_v2 import IssuerV2Controller
 from .controllers.proof import ProofController
 from .controllers.ledger import LedgerController
 from .controllers.credential import CredentialController
@@ -84,6 +85,14 @@ class AriesAgentControllerBase(AbstractAsyncContextManager):
         self.definitions = DefinitionsController(self.admin_url, self.client_session)
 
         self.didexchange = DidExchangeController(self.admin_url, self.client_session)
+
+        self.issuer_v2 = IssuerV2Controller(
+            self.admin_url,
+            self.client_session,
+            self.connections,
+            self.wallet,
+            self.definitions,
+        )
 
         self.issuer = IssuerController(
             self.admin_url,
