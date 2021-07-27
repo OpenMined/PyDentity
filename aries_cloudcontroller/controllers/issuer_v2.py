@@ -182,7 +182,7 @@ class IssuerV2Controller(BaseController):
         comment: str = "",
         auto_remove: bool = True,
         trace: bool = False,
-        dif_criterion: str= "",
+        dif_criterion: str = "",
     ):
         # raises error if connection not active
         await self.connections.is_active(connection_id)
@@ -191,21 +191,22 @@ class IssuerV2Controller(BaseController):
 
         issuer_did = extract_did(cred_def_id)
 
-        body={
+        body = {
             "auto_remove": auto_remove,
             "comment": comment,
             "connection_id": connection_id,
             "credential_preview": {
                 "@type": "issue-credential/2.0/credential-preview",
-                "attributes": attributes
+                "attributes": attributes,
             },
             "filter": {
                 "indy": {
-                "cred_def_id": cred_def_id,
-                "schema_id": schema_id,
+                    "cred_def_id": cred_def_id,
+                    "schema_id": schema_id,
+                    "issuer_did": issuer_did,
                 },
             },
-            "trace": trace
+            "trace": trace,
         }
         credential_body = {**body, **schema_details}
         return credential_body
