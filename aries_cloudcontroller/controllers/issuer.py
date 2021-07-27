@@ -183,7 +183,7 @@ class IssuerController(BaseController):
 
     # Send a problem report for a credential exchange
     async def send_problem_report(self, cred_ex_id, explanation: str):
-        body = {"explain_ltxt": explanation}
+        body = {"description": explanation}
 
         return await self.admin_POST(
             f"{self.base_url}/records/{cred_ex_id}/problem-report", json_data=body
