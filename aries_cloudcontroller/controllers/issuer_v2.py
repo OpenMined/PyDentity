@@ -61,7 +61,7 @@ class IssuerV2Controller(BaseController):
         return await self.admin_POST(f"{self.base_url}/create", json_data=body)
 
     # Send holder a credential, automating the entire flow
-    async def send_credential(
+    async def send_credential2(
         self,
         connection_id,
         schema_id,
@@ -182,6 +182,7 @@ class IssuerV2Controller(BaseController):
         comment: str = "",
         auto_remove: bool = True,
         trace: bool = False,
+        dif_criterion: str= "",
     ):
         # raises error if connection not active
         await self.connections.is_active(connection_id)
@@ -190,15 +191,21 @@ class IssuerV2Controller(BaseController):
 
         issuer_did = extract_did(cred_def_id)
 
-        body = {
-            "issuer_did": issuer_did,
+        body={
             "auto_remove": auto_remove,
-            "credential_proposal": {"@type": CRED_PREVIEW, "attributes": attributes},
-            "connection_id": connection_id,
-            "trace": trace,
             "comment": comment,
-            "cred_def_id": cred_def_id,
+            "connection_id": connection_id,
+            "credential_preview": {
+                "@type": "issue-credential/2.0/credential-preview",
+                "attributes": attributes
+            },
+            "filter": {
+                "indy": {
+                "cred_def_id": cred_def_id,
+                "schema_id": schema_id,
+                },
+            },
+            "trace": trace
         }
-
         credential_body = {**body, **schema_details}
         return credential_body

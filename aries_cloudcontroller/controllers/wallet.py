@@ -12,7 +12,6 @@ class WalletController(BaseController):
 
     async def get_dids(self):
         return await self.admin_GET(f"{self.base_url}/did")
-
     async def create_did(self):
         return await self.admin_POST(f"{self.base_url}/did/create")
 
