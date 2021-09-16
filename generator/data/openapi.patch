@@ -1,0 +1,119 @@
+diff --git a/generator/data/openapi.yml b/generator/data/openapi.yml
+index 81a975a..a7d9cd9 100644
+--- a/generator/data/openapi.yml
++++ b/generator/data/openapi.yml
+@@ -705,7 +705,7 @@ paths:
+           content:
+             application/json:
+               schema:
+-                $ref: '#/components/schemas/TxnOrCredentialDefinitionSendResult'
++                $ref: '#/components/schemas/CredentialDefinitionSendResult'
+       x-codegen-request-body-name: body
+       operationId: publish_cred_def
+   /credential-definitions/created:
+@@ -3322,7 +3322,7 @@ paths:
+           content:
+             application/json:
+               schema:
+-                $ref: '#/components/schemas/TxnOrPublishRevocationsResult'
++                $ref: '#/components/schemas/PublishRevocations'
+       x-codegen-request-body-name: body
+       operationId: publish_revocations
+   /revocation/registries/created:
+@@ -3433,7 +3433,7 @@ paths:
+           content:
+             application/json:
+               schema:
+-                $ref: '#/components/schemas/TxnOrRevRegResult'
++                $ref: '#/components/schemas/RevRegResult'
+       operationId: publish_rev_reg_def
+   /revocation/registry/{rev_reg_id}/entry:
+     post:
+@@ -3610,7 +3610,7 @@ paths:
+           content:
+             application/json:
+               schema:
+-                $ref: '#/components/schemas/TxnOrSchemaSendResult'
++                $ref: '#/components/schemas/SchemaSendResult'
+       x-codegen-request-body-name: body
+       operationId: publish_schema
+   /schemas/created:
+@@ -5045,7 +5045,8 @@ components:
+           description: Tag within credential definition identifier
+           example: tag
+         type:
+-          type: object
++          enum:
++            - CL
+           description: 'Signature type: CL for Camenisch-Lysyanskaya'
+           example: CL
+         value:
+@@ -5087,6 +5088,8 @@ components:
+           example: default
+     CredentialDefinitionSendResult:
+       type: object
++      required:
++      - credential_definition_id
+       properties:
+         credential_definition_id:
+           pattern: ^([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}):3:CL:(([1-9][0-9]*)|([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}:2:.+:[0-9.]+)):(.+)?$
+@@ -7394,6 +7397,8 @@ components:
+           example: 0
+     RevRegResult:
+       type: object
++      required:
++      - result
+       properties:
+         result:
+           $ref: '#/components/schemas/IssuerRevRegRecord'
+@@ -7545,6 +7550,7 @@ components:
+     SchemaSendResult:
+       required:
+       - schema_id
++      - schema
+       type: object
+       properties:
+         schema:
+@@ -7683,10 +7689,7 @@ components:
+         mechanism:
+           type: string
+         time:
+-          maximum: 18446744073709551615
+-          minimum: 0
+           type: integer
+-          format: int32
+           example: 1640995199
+     TAAInfo:
+       type: object
+@@ -7831,6 +7834,7 @@ components:
+           example: 2021-12-31 23:59:59+00:00
+     TxnOrCredentialDefinitionSendResult:
+       type: object
++      additionalProperties: false
+       properties:
+         sent:
+           $ref: '#/components/schemas/CredentialDefinitionSendResult'
+@@ -7841,6 +7845,7 @@ components:
+           - $ref: '#/components/schemas/TransactionRecord'
+     TxnOrPublishRevocationsResult:
+       type: object
++      additionalProperties: false
+       properties:
+         sent:
+           $ref: '#/components/schemas/PublishRevocations'
+@@ -7851,6 +7856,7 @@ components:
+           - $ref: '#/components/schemas/TransactionRecord'
+     TxnOrRevRegResult:
+       type: object
++      additionalProperties: false
+       properties:
+         sent:
+           $ref: '#/components/schemas/RevRegResult'
+@@ -7861,6 +7867,7 @@ components:
+           - $ref: '#/components/schemas/TransactionRecord'
+     TxnOrSchemaSendResult:
+       type: object
++      additionalProperties: false
+       properties:
+         sent:
+           type: object

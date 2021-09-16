@@ -1,0 +1,458 @@
+paths:
+  /action-menu/{conn_id}/close:
+    post:
+      operationId: close_active_menu
+  /action-menu/{conn_id}/fetch:
+    post:
+      operationId: fetch_active_menu
+  /action-menu/{conn_id}/perform:
+    post:
+      operationId: perform_action
+  /action-menu/{conn_id}/request:
+    post:
+      operationId: request_active_menu
+  /action-menu/{conn_id}/send-menu:
+    post:
+      operationId: send_menu
+  /connections:
+    get:
+      operationId: get_connections
+  /connections/create-invitation:
+    post:
+      operationId: create_invitation
+  /connections/create-static:
+    post:
+      operationId: create_static_connection
+  /connections/receive-invitation:
+    post:
+      operationId: receive_invitation
+  /connections/{conn_id}:
+    get:
+      operationId: get_connection
+    delete:
+      operationId: delete_connection
+  /connections/{conn_id}/accept-invitation:
+    post:
+      operationId: accept_invitation
+  /connections/{conn_id}/accept-request:
+    post:
+      operationId: accept_request
+  /connections/{conn_id}/endpoints:
+    get:
+      operationId: get_connection_endpoint
+  /connections/{conn_id}/establish-inbound/{ref_id}:
+    post:
+      operationId: establish_inbound
+  /connections/{conn_id}/metadata:
+    get:
+      operationId: get_metadata
+    post:
+      operationId: set_metadata
+  /connections/{conn_id}/send-message:
+    post:
+      operationId: send_message
+  /connections/{conn_id}/send-ping:
+    post:
+      operationId: send_ping
+  /connections/{conn_id}/start-introduction:
+    post:
+      operationId: start_introduction
+  /credential-definitions:
+    post:
+      operationId: publish_cred_def
+  /credential-definitions/created:
+    get:
+      operationId: get_created_cred_defs
+  /credential-definitions/{cred_def_id}:
+    get:
+      operationId: get_cred_def
+  /credential/mime-types/{credential_id}:
+    get:
+      operationId: get_credential_mime_types
+  /credential/revoked/{credential_id}:
+    get:
+      operationId: get_revocation_status
+  /credential/w3c/{credential_id}:
+    get:
+      operationId: get_w3c_credential
+    delete:
+      operationId: delete_w3c_credential
+  /credential/{credential_id}:
+    get:
+      operationId: get_record
+    delete:
+      operationId: delete_record
+  /credentials:
+    get:
+      operationId: get_records
+  /credentials/w3c:
+    post:
+      operationId: get_w3c_credentials
+  /didexchange/create-request:
+    post:
+      operationId: create_request
+  /didexchange/receive-request:
+    post:
+      operationId: receive_request
+  /didexchange/{conn_id}/accept-invitation:
+    post:
+      operationId: accept_invitation
+  /didexchange/{conn_id}/accept-request:
+    post:
+      operationId: accept_request
+  /features:
+    get:
+      operationId: get_features
+  /issue-credential-2.0/create:
+    post:
+      operationId: create_credential
+  /issue-credential-2.0/records:
+    get:
+      operationId: get_records
+  /issue-credential-2.0/records/{cred_ex_id}:
+    get:
+      operationId: get_record
+    delete:
+      operationId: delete_record
+  /issue-credential-2.0/records/{cred_ex_id}/issue:
+    post:
+      operationId: issue_credential
+  /issue-credential-2.0/records/{cred_ex_id}/problem-report:
+    post:
+      operationId: report_problem
+  /issue-credential-2.0/records/{cred_ex_id}/send-offer:
+    post:
+      operationId: send_offer
+  /issue-credential-2.0/records/{cred_ex_id}/send-request:
+    post:
+      operationId: send_request
+  /issue-credential-2.0/records/{cred_ex_id}/store:
+    post:
+      operationId: store_credential
+  /issue-credential-2.0/send:
+    post:
+      operationId: issue_credential_automated
+  /issue-credential-2.0/send-offer:
+    post:
+      operationId: send_offer_free
+  /issue-credential-2.0/send-proposal:
+    post:
+      operationId: send_proposal
+  /issue-credential-2.0/send-request:
+    post:
+      operationId: send_request_free
+  /issue-credential/create:
+    post:
+      operationId: create_credential
+  /issue-credential/create-offer:
+    post:
+      operationId: create_offer
+  /issue-credential/records:
+    get:
+      operationId: get_records
+  /issue-credential/records/{cred_ex_id}:
+    get:
+      operationId: get_record
+    delete:
+      operationId: delete_record
+  /issue-credential/records/{cred_ex_id}/issue:
+    post:
+      operationId: issue_credential
+  /issue-credential/records/{cred_ex_id}/problem-report:
+    post:
+      operationId: report_problem
+  /issue-credential/records/{cred_ex_id}/send-offer:
+    post:
+      operationId: send_offer
+  /issue-credential/records/{cred_ex_id}/send-request:
+    post:
+      operationId: send_request
+  /issue-credential/records/{cred_ex_id}/store:
+    post:
+      operationId: store_credential
+  /issue-credential/send:
+    post:
+      operationId: issue_credential_automated
+  /issue-credential/send-offer:
+    post:
+      operationId: send_offer_free
+  /issue-credential/send-proposal:
+    post:
+      operationId: send_proposal
+  /jsonld/sign:
+    post:
+      operationId: sign
+  /jsonld/verify:
+    post:
+      operationId: verify
+  /ledger/did-endpoint:
+    get:
+      operationId: get_did_endpoint
+  /ledger/did-verkey:
+    get:
+      operationId: get_did_verkey
+  /ledger/get-nym-role:
+    get:
+      operationId: get_did_nym_role
+  /ledger/register-nym:
+    post:
+      operationId: register_nym
+  /ledger/rotate-public-did-keypair:
+    patch:
+      operationId: rotate_public_did_keypair
+  /ledger/taa:
+    get:
+      operationId: fetch_taa
+  /ledger/taa/accept:
+    post:
+      operationId: accept_taa
+  /mediation/default-mediator:
+    get:
+      operationId: get_default_mediator
+    delete:
+      operationId: clear_default_mediator
+  /mediation/keylists:
+    get:
+      operationId: retrieve_keylists
+  /mediation/keylists/{mediation_id}/send-keylist-query:
+    post:
+      operationId: send_keylist_query
+  /mediation/keylists/{mediation_id}/send-keylist-update:
+    post:
+      operationId: send_keylist_update
+  /mediation/request/{conn_id}:
+    post:
+      operationId: request_mediation
+  /mediation/requests:
+    get:
+      operationId: get_records
+  /mediation/requests/{mediation_id}:
+    get:
+      operationId: get_record
+    delete:
+      operationId: delete_record
+  /mediation/requests/{mediation_id}/deny:
+    post:
+      operationId: deny_mediation_request
+  /mediation/requests/{mediation_id}/grant:
+    post:
+      operationId: grant_mediation_request
+  /mediation/{mediation_id}/default-mediator:
+    put:
+      operationId: set_default_mediator
+  /multitenancy/wallet:
+    post:
+      operationId: create_wallet
+  /multitenancy/wallet/{wallet_id}:
+    get:
+      operationId: get_wallet
+    put:
+      operationId: update_wallet
+  /multitenancy/wallet/{wallet_id}/remove:
+    post:
+      operationId: delete_wallet
+  /multitenancy/wallet/{wallet_id}/token:
+    post:
+      operationId: get_auth_token
+  /multitenancy/wallets:
+    get:
+      operationId: get_wallets
+  /out-of-band/create-invitation:
+    post:
+      operationId: create_invitation
+  /out-of-band/receive-invitation:
+    post:
+      operationId: receive_invitation
+  /plugins:
+    get:
+      operationId: get_plugins
+  /present-proof-2.0/create-request:
+    post:
+      operationId: create_proof_request
+  /present-proof-2.0/records:
+    get:
+      operationId: get_records
+  /present-proof-2.0/records/{pres_ex_id}:
+    get:
+      operationId: get_record
+    delete:
+      operationId: delete_record
+  /present-proof-2.0/records/{pres_ex_id}/credentials:
+    get:
+      operationId: get_matching_credentials
+  /present-proof-2.0/records/{pres_ex_id}/problem-report:
+    post:
+      operationId: report_problem
+  /present-proof-2.0/records/{pres_ex_id}/send-presentation:
+    post:
+      operationId: send_presentation
+  /present-proof-2.0/records/{pres_ex_id}/send-request:
+    post:
+      operationId: send_request
+  /present-proof-2.0/records/{pres_ex_id}/verify-presentation:
+    post:
+      operationId: verify_presentation
+  /present-proof-2.0/send-proposal:
+    post:
+      operationId: send_proposal
+  /present-proof-2.0/send-request:
+    post:
+      operationId: send_request_free
+  /present-proof/create-request:
+    post:
+      operationId: create_proof_request
+  /present-proof/records:
+    get:
+      operationId: get_records
+  /present-proof/records/{pres_ex_id}:
+    get:
+      operationId: get_record
+    delete:
+      operationId: delete_record
+  /present-proof/records/{pres_ex_id}/credentials:
+    get:
+      operationId: get_matching_credentials
+  /present-proof/records/{pres_ex_id}/problem-report:
+    post:
+      operationId: report_problem
+  /present-proof/records/{pres_ex_id}/send-presentation:
+    post:
+      operationId: send_presentation
+  /present-proof/records/{pres_ex_id}/send-request:
+    post:
+      operationId: send_request
+  /present-proof/records/{pres_ex_id}/verify-presentation:
+    post:
+      operationId: verify_presentation
+  /present-proof/send-proposal:
+    post:
+      operationId: send_proposal
+  /present-proof/send-request:
+    post:
+      operationId: send_request_free
+  /resolver/resolve/{did}:
+    get:
+      operationId: get_did
+  /revocation/active-registry/{cred_def_id}:
+    get:
+      operationId: get_active_registry_for_cred_def
+  /revocation/clear-pending-revocations:
+    post:
+      operationId: clear_pending_revocations
+  /revocation/create-registry:
+    post:
+      operationId: create_registry
+  /revocation/credential-record:
+    get:
+      operationId: get_revocation_status
+  /revocation/publish-revocations:
+    post:
+      operationId: publish_revocations
+  /revocation/registries/created:
+    get:
+      operationId: get_created_registries
+  /revocation/registry/{rev_reg_id}:
+    get:
+      operationId: get_registry
+    patch:
+      operationId: update_registry
+  /revocation/registry/{rev_reg_id}/definition:
+    post:
+      operationId: publish_rev_reg_def
+  /revocation/registry/{rev_reg_id}/entry:
+    post:
+      operationId: publish_rev_reg_entry
+  /revocation/registry/{rev_reg_id}/issued:
+    get:
+      operationId: get_registry_issued_credentials_count
+  /revocation/registry/{rev_reg_id}/set-state:
+    patch:
+      operationId: set_registry_state
+  /revocation/registry/{rev_reg_id}/tails-file:
+    get:
+      operationId: download_tails_file
+    put:
+      operationId: upload_tails_file
+  /revocation/revoke:
+    post:
+      operationId: revoke_credential
+  /schemas:
+    post:
+      operationId: publish_schema
+  /schemas/created:
+    get:
+      operationId: get_created_schemas
+  /schemas/{schema_id}:
+    get:
+      operationId: get_schema
+  /schemas/{schema_id}/write_record:
+    post:
+      operationId: write_record
+  /shutdown:
+    get:
+      operationId: shutdown_server
+  /status:
+    get:
+      operationId: get_status
+  /status/config:
+    get:
+      operationId: get_config
+  /status/live:
+    get:
+      operationId: check_liveliness
+  /status/ready:
+    get:
+      operationId: get_ready_state
+  /status/reset:
+    post:
+      operationId: reset_statistics
+  /transaction/{tran_id}/resend:
+    post:
+      operationId: resend_transaction_request
+  /transactions:
+    get:
+      operationId: get_records
+  /transactions/create-request:
+    post:
+      operationId: create_request
+  /transactions/{conn_id}/set-endorser-info:
+    post:
+      operationId: set_endorser_info
+  /transactions/{conn_id}/set-endorser-role:
+    post:
+      operationId: set_endorser_role
+  /transactions/{tran_id}:
+    get:
+      operationId: get_transaction
+  /transactions/{tran_id}/cancel:
+    post:
+      operationId: cancel_transaction
+  /transactions/{tran_id}/endorse:
+    post:
+      operationId: endorse_transaction
+  /transactions/{tran_id}/refuse:
+    post:
+      operationId: refuse_transaction
+  /transactions/{tran_id}/write:
+    post:
+      operationId: write_transaction
+  /wallet/did:
+    get:
+      operationId: get_dids
+  /wallet/did/create:
+    post:
+      operationId: create_did
+  /wallet/did/local/rotate-keypair:
+    patch:
+      operationId: rotate_keypair
+  /wallet/did/public:
+    get:
+      operationId: get_public_did
+    post:
+      operationId: set_public_did
+  /wallet/get-did-endpoint:
+    get:
+      operationId: get_did_endpoint
+  /wallet/set-did-endpoint:
+    post:
+      operationId: set_did_endpoint

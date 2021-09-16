@@ -1,0 +1,5 @@
+generatorName: python-uplink
+outputDir: ../generated
+inputSpec: data/openapi.yml
+additionalProperties:
+  packageName: aries_cloudcontroller
