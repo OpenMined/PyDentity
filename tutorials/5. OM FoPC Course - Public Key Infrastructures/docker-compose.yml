@@ -2,55 +2,43 @@ version: "3"
 services:
   ngrok-dataowner:
     image: wernight/ngrok
-    command: ngrok http dataowner-agent:${DATAOWNER_HTTP_PORT} --log stdout
+    command: ngrok http dataowner-agent:3020 --log stdout
+    env_file:
+      - actors/dataowner/.env
     networks:
       - indy_demo
   dataowner-agent:
     build:
       context: ../../
-      dockerfile: dockerfiles/agents/Dockerfile.ngrok
-    environment:
-      - NGROK_NAME=ngrok-dataowner
-      - ADMIN_URL=http://dataowner-agent:${DATAOWNER_ADMIN_PORT}
-      - AGENT_NAME=${DATAOWNER_AGENT_NAME}
-      - ADMIN_PORT=${DATAOWNER_ADMIN_PORT}
-      - HTTP_PORT=${DATAOWNER_HTTP_PORT}
-      - ACAPY_WEBHOOK_URL=${DATAOWNER_WEBHOOK_URL}
-      - AGENT_ENDPOINT=${DATAOWNER_AGENT_ENDPOINT}
-      - WALLET_SEED=${DATAOWNER_WALLET_SEED}
-      - WALLET_NAME=${DATAOWNER_WALLET_NAME}
-      - WALLET_KEY=${DATAOWNER_WALLET_KEY}
-      - WALLET_TYPE=${WALLET_TYPE}
-      - ACAPY_ADMIN_INSECURE_MODE=${DATAOWNER_ADMIN_SECURE}
-      - GENESIS_URL=${GENESIS_URL}
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok-new
+    env_file:
+      - actors/dataowner/.env
     ports:
-      - ${DATAOWNER_HTTP_PORT}:${DATAOWNER_HTTP_PORT}
-      - ${DATAOWNER_ADMIN_PORT}:${DATAOWNER_ADMIN_PORT}
+      - 5020:3020
+      - 5021:3021
     networks:
       - indy_demo
-  dataowner-notebook:
+  dataowner-business-logic:
     build:
       context: ../../
       dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
-      args:
-        - jupyter_port=${DATAOWNER_JUPYTER_PORT}
+    env_file:
+      - actors/dataowner/.env
     depends_on:
       - dataowner-agent
     networks:
       - indy_demo
     volumes:
-      - ${PWD}/notebooks/dataowner:/workspace
+      - ${PWD}/actors/dataowner/notebooks:/workspace
     ports:
       - "8889:8888"
-      - ${DATAOWNER_WEBHOOK_PORT}:${DATAOWNER_WEBHOOK_PORT}
+      - 5010:3010
   om-authority-wallet-db:
     image: postgres:11
     container_name: om-authority-wallet-db
     command: postgres -c listen_addresses='*'
-    environment:
-      POSTGRES_PASSWORD: dbpass
-      POSTGRES_USER: postgres
-      POSTGRES_DB: wallets
+    env_file:
+      - actors/om_authority/.env
     volumes:
       - ./resources/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
@@ -58,95 +46,74 @@ services:
     tty: true
   ngrok-om-authority:
     image: wernight/ngrok
-    command: ngrok http om-authority-agent:${OM_AUTHORITY_HTTP_PORT} --log stdout
+    command: ngrok http om-authority-agent:3020 --log stdout
+    env_file:
+      - actors/om_authority/.env
     networks:
       - indy_demo
   om-authority-agent:
     build:
       context: ../../
-      dockerfile: dockerfiles/agents/Dockerfile.ngrok
-    environment:
-      - NGROK_NAME=ngrok-om-authority
-      - ADMIN_URL=http://om-authority-agent:${OM_AUTHORITY_ADMIN_PORT}
-      - AGENT_NAME=${OM_AUTHORITY_AGENT_NAME}
-      - ADMIN_PORT=${OM_AUTHORITY_ADMIN_PORT}
-      - HTTP_PORT=${OM_AUTHORITY_HTTP_PORT}
-      - ACAPY_WEBHOOK_URL=${OM_AUTHORITY_WEBHOOK_URL}
-      - AGENT_ENDPOINT=${OM_AUTHORITY_AGENT_ENDPOINT}
-      - WALLET_SEED=${OM_AUTHORITY_WALLET_SEED}
-      - WALLET_NAME=${OM_AUTHORITY_WALLET_NAME}
-      - WALLET_KEY=${OM_AUTHORITY_WALLET_KEY}
-      - WALLET_TYPE=${WALLET_TYPE}
-      - ACAPY_ADMIN_INSECURE_MODE=${OM_AUTHORITY_ADMIN_SECURE}
-      - GENESIS_URL=${GENESIS_URL}
-      - ACAPY_WALLET_STORAGE_TYPE=postgres_storage
-      - ACAPY_WALLET_STORAGE_CONFIG={"url":"om-authority-wallet-db:5432","wallet_scheme":"MultiWalletSingleTable"}
-      - ACAPY_WALLET_STORAGE_CREDS={"account":"postgres","password":"dbpass","admin_account":"postgres","admin_password":"dbpass"}
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok-new
+    env_file:
+      - actors/om_authority/.env
     ports:
-      - ${OM_AUTHORITY_HTTP_PORT}:${OM_AUTHORITY_HTTP_PORT}
-      - ${OM_AUTHORITY_ADMIN_PORT}:${OM_AUTHORITY_ADMIN_PORT}
+      - 3020:3020
+      - 3021:3021
     depends_on:
       - om-authority-wallet-db
     networks:
       - indy_demo
-  om-authority-notebook:
+  om-authority-business-logic:
     build:
       context: ../../
       dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
-      args:
-        - jupyter_port=${OM_AUTHORITY_JUPYTER_PORT}
+    env_file:
+      - actors/om_authority/.env
     depends_on:
       - om-authority-agent
     networks:
       - indy_demo
     volumes:
-      - ./notebooks/om_authority:/workspace
+      - ./actors/om_authority/notebooks:/workspace
     ports:
       - "8888:8888"
-      - ${OM_AUTHORITY_WEBHOOK_PORT}:${OM_AUTHORITY_WEBHOOK_PORT}
+      - 3010:3010
   ngrok-datascientist:
     image: wernight/ngrok
-    command: ngrok http datascientist-agent:${DATASCIENTIST_HTTP_PORT} --log stdout
+    command: ngrok http datascientist-agent:3020 --log stdout
+    env_file:
+      - actors/datascientist/.env
     networks:
       - indy_demo
   datascientist-agent:
     build:
       context: ../../
-      dockerfile: dockerfiles/agents/Dockerfile.ngrok
-    environment:
-      - NGROK_NAME=ngrok-datascientist
-      - ADMIN_URL=http://datascientist-agent:${DATASCIENTIST_ADMIN_PORT}
-      - AGENT_NAME=${DATASCIENTIST_AGENT_NAME}
-      - ADMIN_PORT=${DATASCIENTIST_ADMIN_PORT}
-      - HTTP_PORT=${DATASCIENTIST_HTTP_PORT}
-      - ACAPY_WEBHOOK_URL=${DATASCIENTIST_WEBHOOK_URL}
-      - AGENT_ENDPOINT=${DATASCIENTIST_AGENT_ENDPOINT}
-      - WALLET_SEED=${DATASCIENTIST_WALLET_SEED}
-      - WALLET_NAME=${DATASCIENTIST_WALLET_NAME}
-      - WALLET_KEY=${DATASCIENTIST_WALLET_KEY}
-      - WALLET_TYPE=${WALLET_TYPE}
-      - ACAPY_ADMIN_INSECURE_MODE=${DATASCIENTIST_ADMIN_SECURE}
-      - GENESIS_URL=${GENESIS_URL}
+      dockerfile: dockerfiles/agents/Dockerfile.ngrok-new
+    env_file:
+      - actors/datascientist/.env
     ports:
-      - ${DATASCIENTIST_HTTP_PORT}:${DATASCIENTIST_HTTP_PORT}
-      - ${DATASCIENTIST_ADMIN_PORT}:${DATASCIENTIST_ADMIN_PORT}
+      # HTTP_PORT
+      - 4020:3020
+      # ADMIN_PORT
+      - 4021:3021
     networks:
       - indy_demo
-  datascientist-notebook:
+  datascientist-business-logic:
     build:
       context: ../../
       dockerfile: dockerfiles/controllers/Dockerfile.basiccontroller
-      args:
-        - jupyter_port=${DATASCIENTIST_JUPYTER_PORT}
+    env_file:
+      - actors/datascientist/.env
     depends_on:
       - datascientist-agent
     networks:
       - indy_demo
     volumes:
-      - ./notebooks/datascientist:/workspace
+      - ./actors/datascientist/notebooks:/workspace
     ports:
       - "8890:8888"
-      - ${DATASCIENTIST_WEBHOOK_PORT}:${DATASCIENTIST_WEBHOOK_PORT}
+      - 4010:3010
 
 networks:
   indy_demo:

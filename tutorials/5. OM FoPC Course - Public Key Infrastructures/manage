@@ -62,7 +62,7 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Default Settings:
 # -----------------------------------------------------------------------------------------------------------------
-DEFAULT_CONTAINERS="ngrok-dataowner dataowner-agent om-authority-wallet-db ngrok-om-authority om-authority-agent om-authority-notebook dataowner-notebook ngrok-datascientist datascientist-agent datascientist-notebook"
+DEFAULT_CONTAINERS="ngrok-dataowner dataowner-agent om-authority-wallet-db ngrok-om-authority om-authority-agent om-authority-business-logic dataowner-business-logic ngrok-datascientist datascientist-agent datascientist-business-logic"
 # DEFAULT_CONTAINERS="ngrok-dataowner dataowner-agent ngrok-om-authority om-authority-agent ngrok-datascientist datascientist-agent"
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
@@ -111,49 +111,6 @@ configureEnvironment() {
     esac
   done
 
-  # global
-  export COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:controller}"
-  export GENESIS_URL="https://raw.githubusercontent.com/sovrin-foundation/sovrin/master/sovrin/pool_transactions_sandbox_genesis"
-  export WALLET_TYPE="indy"
-
-  # DATAOWNER-agent
-  export DATAOWNER_AGENT_NAME="DATAOWNER"
-  export DATAOWNER_ADMIN_PORT=8051
-  export DATAOWNER_HTTP_PORT=8050
-  export DATAOWNER_WEBHOOK_PORT=8052
-  export DATAOWNER_WEBHOOK_URL=${DATAOWNER_WEBHOOK_URL:-http://$DOCKERHOST:$DATAOWNER_WEBHOOK_PORT}
-  export DATAOWNER_AGENT_ENDPOINT=${DATAOWNER_AGENT_ENDPOINT:-http://$DOCKERHOST:$DATAOWNER_HTTP_PORT}
-  export DATAOWNER_WALLET_SEED="VAGENT_seed_00000000000000000000"
-  export DATAOWNER_WALLET_KEY="DATAOWNER_key_000000000000000000"
-  export DATAOWNER_WALLET_NAME="DATAOWNER Wallet"
-  export DATAOWNER_JUPYTER_PORT="8889"
-  export DATAOWNER_ADMIN_SECURE="true"
-
-  # OM_AUTHORITY-agent
-  export OM_AUTHORITY_AGENT_NAME="OM_AUTHORITY"
-  export OM_AUTHORITY_ADMIN_PORT=8021
-  export OM_AUTHORITY_HTTP_PORT=8020
-  export OM_AUTHORITY_WEBHOOK_PORT=8022
-  export OM_AUTHORITY_WEBHOOK_URL=${OM_AUTHORITY_WEBHOOK_URL:-http://$DOCKERHOST:$OM_AUTHORITY_WEBHOOK_PORT}
-  export OM_AUTHORITY_AGENT_ENDPOINT=${OM_AUTHORITY_AGENT_ENDPOINT:-http://$DOCKERHOST:$OM_AUTHORITY_HTTP_PORT}
-  export OM_AUTHORITY_WALLET_SEED="IAGENT_seed_00000000000000000000"
-  export OM_AUTHORITY_WALLET_KEY="OM_AUTHORITY_key_0000000000000"
-  export OM_AUTHORITY_WALLET_NAME="OM_AUTHORITY Wallet"
-  export OM_AUTHORITY_JUPYTER_PORT="8888"
-  export OM_AUTHORITY_ADMIN_SECURE="true"
-
-  # DATASCIENTIST-agent
-  export DATASCIENTIST_AGENT_NAME="DATASCIENTIST"
-  export DATASCIENTIST_ADMIN_PORT=8061
-  export DATASCIENTIST_HTTP_PORT=8060
-  export DATASCIENTIST_WEBHOOK_PORT=8062
-  export DATASCIENTIST_WEBHOOK_URL=${DATASCIENTIST_WEBHOOK_URL:-http://$DOCKERHOST:$DATASCIENTIST_WEBHOOK_PORT}
-  export DATASCIENTIST_AGENT_ENDPOINT=${DATASCIENTIST_AGENT_ENDPOINT:-http://$DOCKERHOST:$DATASCIENTIST_HTTP_PORT}
-  export DATASCIENTIST_WALLET_SEED="SAGENT_seed_00000000000000000000"
-  export DATASCIENTIST_WALLET_KEY="DATASCIENTIST_key_000000000000"
-  export DATASCIENTIST_WALLET_NAME="DATASCIENTIST Wallet"
-  export DATASCIENTIST_JUPYTER_PORT="8890"
-  export DATASCIENTIST_ADMIN_SECURE="true"
 
 
 
