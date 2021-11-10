@@ -1,0 +1,18 @@
+diff --git a/aries_cloudcontroller/__init__.py b/aries_cloudcontroller/__init__.py
+index 6a771f1..bef48bc 100644
+--- a/aries_cloudcontroller/__init__.py
++++ b/aries_cloudcontroller/__init__.py
+@@ -1,3 +1,5 @@
++from aries_cloudcontroller.acapy_client import AcaPyClient
++
+ from aries_cloudcontroller.api import (
+     ActionMenuApi,
+     BasicmessageApi,
+@@ -276,6 +278,7 @@ from aries_cloudcontroller.model import (
+ )
+ 
+ __all__ = [
++    "AcaPyClient",
+     "AMLRecord",
+     "ActionMenuFetchResult",
+     "AdminAPIMessageTracing",
