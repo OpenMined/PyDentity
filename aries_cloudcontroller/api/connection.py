@@ -15,6 +15,8 @@ from uplink import (
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
+from aries_cloudcontroller.uplink_util import bool_query
+
 from aries_cloudcontroller.model.conn_record import ConnRecord
 from aries_cloudcontroller.model.connection_list import ConnectionList
 from aries_cloudcontroller.model.connection_metadata import ConnectionMetadata
@@ -73,9 +75,9 @@ class ConnectionApi(Consumer):
         """Create a new connection invitation"""
         return await self.__create_invitation(
             alias=alias,
-            auto_accept=auto_accept,
-            multi_use=multi_use,
-            public=public,
+            auto_accept=bool_query(auto_accept),
+            multi_use=bool_query(multi_use),
+            public=bool_query(public),
             body=body,
         )
 
@@ -154,7 +156,7 @@ class ConnectionApi(Consumer):
         """Receive a new connection invitation"""
         return await self.__receive_invitation(
             alias=alias,
-            auto_accept=auto_accept,
+            auto_accept=bool_query(auto_accept),
             mediation_id=mediation_id,
             body=body,
         )

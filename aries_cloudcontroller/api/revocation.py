@@ -15,6 +15,8 @@ from uplink import (
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
+from aries_cloudcontroller.uplink_util import bool_query
+
 from aries_cloudcontroller.model.clear_pending_revocations_request import (
     ClearPendingRevocationsRequest,
 )
@@ -109,7 +111,7 @@ class RevocationApi(Consumer):
         return await self.__publish_rev_reg_def(
             rev_reg_id=rev_reg_id,
             conn_id=conn_id,
-            create_transaction_for_endorser=create_transaction_for_endorser,
+            create_transaction_for_endorser=bool_query(create_transaction_for_endorser),
         )
 
     async def publish_rev_reg_entry(
@@ -123,7 +125,7 @@ class RevocationApi(Consumer):
         return await self.__publish_rev_reg_entry(
             rev_reg_id=rev_reg_id,
             conn_id=conn_id,
-            create_transaction_for_endorser=create_transaction_for_endorser,
+            create_transaction_for_endorser=bool_query(create_transaction_for_endorser),
         )
 
     async def publish_revocations(
@@ -136,7 +138,7 @@ class RevocationApi(Consumer):
         """Publish pending revocations to ledger"""
         return await self.__publish_revocations(
             conn_id=conn_id,
-            create_transaction_for_endorser=create_transaction_for_endorser,
+            create_transaction_for_endorser=bool_query(create_transaction_for_endorser),
             body=body,
         )
 

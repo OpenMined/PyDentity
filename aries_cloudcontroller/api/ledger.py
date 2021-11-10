@@ -15,6 +15,8 @@ from uplink import (
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
+from aries_cloudcontroller.uplink_util import bool_query
+
 from aries_cloudcontroller.model.get_did_endpoint_response import GetDIDEndpointResponse
 from aries_cloudcontroller.model.get_did_verkey_response import GetDIDVerkeyResponse
 from aries_cloudcontroller.model.get_nym_role_response import GetNymRoleResponse

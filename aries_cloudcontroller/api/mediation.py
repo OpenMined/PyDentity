@@ -15,6 +15,8 @@ from uplink import (
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
+from aries_cloudcontroller.uplink_util import bool_query
+
 from aries_cloudcontroller.model.admin_mediation_deny import AdminMediationDeny
 from aries_cloudcontroller.model.keylist import Keylist
 from aries_cloudcontroller.model.keylist_query import KeylistQuery

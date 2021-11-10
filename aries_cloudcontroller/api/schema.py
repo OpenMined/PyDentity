@@ -15,6 +15,8 @@ from uplink import (
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
+from aries_cloudcontroller.uplink_util import bool_query
+
 from aries_cloudcontroller.model.schema_get_result import SchemaGetResult
 from aries_cloudcontroller.model.schema_send_request import SchemaSendRequest
 from aries_cloudcontroller.model.schema_send_result import SchemaSendResult
@@ -54,7 +56,7 @@ class SchemaApi(Consumer):
         """Sends a schema to the ledger"""
         return await self.__publish_schema(
             conn_id=conn_id,
-            create_transaction_for_endorser=create_transaction_for_endorser,
+            create_transaction_for_endorser=bool_query(create_transaction_for_endorser),
             body=body,
         )
 

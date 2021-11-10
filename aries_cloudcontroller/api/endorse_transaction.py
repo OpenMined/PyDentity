@@ -15,6 +15,8 @@ from uplink import (
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
+from aries_cloudcontroller.uplink_util import bool_query
+
 from aries_cloudcontroller.model.date import Date
 from aries_cloudcontroller.model.endorser_info import EndorserInfo
 from aries_cloudcontroller.model.transaction_jobs import TransactionJobs
@@ -39,7 +41,7 @@ class EndorseTransactionApi(Consumer):
         """For author to send a transaction request"""
         return await self.__create_request(
             tran_id=tran_id,
-            endorser_write_txn=endorser_write_txn,
+            endorser_write_txn=bool_query(endorser_write_txn),
             body=body,
         )
 

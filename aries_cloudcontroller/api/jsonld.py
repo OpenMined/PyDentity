@@ -15,6 +15,8 @@ from uplink import (
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
+from aries_cloudcontroller.uplink_util import bool_query
+
 from aries_cloudcontroller.model.sign_request import SignRequest
 from aries_cloudcontroller.model.sign_response import SignResponse
 from aries_cloudcontroller.model.verify_request import VerifyRequest

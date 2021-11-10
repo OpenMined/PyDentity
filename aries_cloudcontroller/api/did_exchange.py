@@ -15,6 +15,8 @@ from uplink import (
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
+from aries_cloudcontroller.uplink_util import bool_query
+
 from aries_cloudcontroller.model.conn_record import ConnRecord
 from aries_cloudcontroller.model.didx_request import DIDXRequest
 
@@ -63,7 +65,7 @@ class DidExchangeApi(Consumer):
             mediation_id=mediation_id,
             my_endpoint=my_endpoint,
             my_label=my_label,
-            use_public_did=use_public_did,
+            use_public_did=bool_query(use_public_did),
         )
 
     async def receive_request(
@@ -78,7 +80,7 @@ class DidExchangeApi(Consumer):
         """Receive request against public DID's implicit invitation"""
         return await self.__receive_request(
             alias=alias,
-            auto_accept=auto_accept,
+            auto_accept=bool_query(auto_accept),
             mediation_id=mediation_id,
             my_endpoint=my_endpoint,
             body=body,

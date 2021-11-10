@@ -15,6 +15,8 @@ from uplink import (
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
+from aries_cloudcontroller.uplink_util import bool_query
+
 from aries_cloudcontroller.model.admin_config import AdminConfig
 from aries_cloudcontroller.model.admin_modules import AdminModules
 from aries_cloudcontroller.model.admin_status import AdminStatus

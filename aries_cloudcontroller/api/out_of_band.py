@@ -15,6 +15,8 @@ from uplink import (
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
+from aries_cloudcontroller.uplink_util import bool_query
+
 from aries_cloudcontroller.model.conn_record import ConnRecord
 from aries_cloudcontroller.model.invitation_create_request import (
     InvitationCreateRequest,
@@ -33,8 +35,8 @@ class OutOfBandApi(Consumer):
     ) -> InvitationRecord:
         """Create a new connection invitation"""
         return await self.__create_invitation(
-            auto_accept=auto_accept,
-            multi_use=multi_use,
+            auto_accept=bool_query(auto_accept),
+            multi_use=bool_query(multi_use),
             body=body,
         )
 
@@ -50,9 +52,9 @@ class OutOfBandApi(Consumer):
         """Receive a new connection invitation"""
         return await self.__receive_invitation(
             alias=alias,
-            auto_accept=auto_accept,
+            auto_accept=bool_query(auto_accept),
             mediation_id=mediation_id,
-            use_existing_connection=use_existing_connection,
+            use_existing_connection=bool_query(use_existing_connection),
             body=body,
         )
 
