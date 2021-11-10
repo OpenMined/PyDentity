@@ -11,4 +11,5 @@ while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080)" != "200" ]
     echo "Converter not yet ready..."
     sleep 1
 done
+
 curl -X POST http://localhost:8080/api/convert -H "Content-Type: application/json" -H "Accept: application/yaml" --data-binary "@../data/swagger.json" -o ../data/openapi.yml

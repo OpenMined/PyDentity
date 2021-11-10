@@ -32,7 +32,11 @@ cd aries-cloudcontroller/generator
 ./scripts/retrieve-openapi.sh py36-1.16-1_0.7.0
 
 # transform to OpenAPI V3
-./scripts/convert-to-openapi3.sh
+./scripts/convert-to-openapi3-local.sh
+
+# If the transform script is not working (e.g. does't work on M1 macs), you can also use an online converter
+# This will upload the content to the cloud however
+# ./scripts/convert-to-openapi3-remote.sh
 
 # Fix the openapi file (add missing operation ids from data/operation-id-map.yml)
 ./scripts/process-openapi.sh

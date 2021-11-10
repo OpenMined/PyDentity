@@ -3,7 +3,7 @@
 cd "$(dirname "$0")" || exit
 
 cp ../data/openapi.yml ../data/openapi-updated.yml
-sh ./convert-to-openapi3.sh
+sh ./convert-to-openapi3-remote.sh
 sh ./process-openapi.sh
 
 cd ..
