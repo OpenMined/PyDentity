@@ -13,7 +13,7 @@ git checkout feature/new-uplink-generator
 mvn -B --no-snapshot-updates clean package -DskipTests=true -Dmaven.javadoc.skip=true -Djacoco.skip=true
 
 # Generate client
-cd aries-cloudcontroller
+cd aries-cloudcontroller-python
 pip install -r requirements.tsx
 cd generator
 ./scripts/generate-client.sh
@@ -26,7 +26,7 @@ Updating the OpenAPI is only needed when a new version of ACA-Py is released. Th
 After that you can run the following commands to update the `data/openapi.yml` file. This file should be committed.
 
 ```sh
-cd aries-cloudcontroller/generator
+cd aries-cloudcontroller-python/generator
 
 # Retrieve the open api file, change py36-1.16-1_0.7.0 if you want another version
 ./scripts/retrieve-openapi.sh py36-1.16-1_0.7.0
@@ -50,7 +50,7 @@ cd aries-cloudcontroller/generator
 1. Make changes to the OpenAPI file and then run:
 
 ```sh
-cd aries-cloudcontroller/generator
+cd aries-cloudcontroller-python/generator
 
 ./scripts/create-patch.sh
 ```
