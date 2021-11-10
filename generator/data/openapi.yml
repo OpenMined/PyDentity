@@ -6114,18 +6114,14 @@ components:
       type: object
       properties:
         from:
-          maximum: 18446744073709551615
           minimum: 0
           type: integer
           description: Earliest time of interest in non-revocation interval
-          format: int32
           example: 1640995199
         to:
-          maximum: 18446744073709551615
           minimum: 0
           type: integer
           description: Latest time of interest in non-revocation interval
-          format: int32
           example: 1640995199
     IndyProofReqPredSpec:
       required:
@@ -6171,18 +6167,14 @@ components:
       type: object
       properties:
         from:
-          maximum: 18446744073709551615
           minimum: 0
           type: integer
           description: Earliest time of interest in non-revocation interval
-          format: int32
           example: 1640995199
         to:
-          maximum: 18446744073709551615
           minimum: 0
           type: integer
           description: Latest time of interest in non-revocation interval
-          format: int32
           example: 1640995199
     IndyProofRequest:
       type: object
@@ -6220,18 +6212,14 @@ components:
       type: object
       properties:
         from:
-          maximum: 18446744073709551615
           minimum: 0
           type: integer
           description: Earliest time of interest in non-revocation interval
-          format: int32
           example: 1640995199
         to:
-          maximum: 18446744073709551615
           minimum: 0
           type: integer
           description: Latest time of interest in non-revocation interval
-          format: int32
           example: 1640995199
     IndyProofRequestedProof:
       type: object

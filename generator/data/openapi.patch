@@ -1,5 +1,5 @@
 diff --git a/generator/data/openapi.yml b/generator/data/openapi.yml
-index 81a975a..a7d9cd9 100644
+index 81a975a..647ae7e 100644
 --- a/generator/data/openapi.yml
 +++ b/generator/data/openapi.yml
 @@ -705,7 +705,7 @@ paths:
@@ -57,7 +57,64 @@ index 81a975a..a7d9cd9 100644
        properties:
          credential_definition_id:
            pattern: ^([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}):3:CL:(([1-9][0-9]*)|([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}:2:.+:[0-9.]+)):(.+)?$
-@@ -7394,6 +7397,8 @@ components:
+@@ -6111,18 +6114,14 @@ components:
+       type: object
+       properties:
+         from:
+-          maximum: 18446744073709551615
+           minimum: 0
+           type: integer
+           description: Earliest time of interest in non-revocation interval
+-          format: int32
+           example: 1640995199
+         to:
+-          maximum: 18446744073709551615
+           minimum: 0
+           type: integer
+           description: Latest time of interest in non-revocation interval
+-          format: int32
+           example: 1640995199
+     IndyProofReqPredSpec:
+       required:
+@@ -6168,18 +6167,14 @@ components:
+       type: object
+       properties:
+         from:
+-          maximum: 18446744073709551615
+           minimum: 0
+           type: integer
+           description: Earliest time of interest in non-revocation interval
+-          format: int32
+           example: 1640995199
+         to:
+-          maximum: 18446744073709551615
+           minimum: 0
+           type: integer
+           description: Latest time of interest in non-revocation interval
+-          format: int32
+           example: 1640995199
+     IndyProofRequest:
+       type: object
+@@ -6217,18 +6212,14 @@ components:
+       type: object
+       properties:
+         from:
+-          maximum: 18446744073709551615
+           minimum: 0
+           type: integer
+           description: Earliest time of interest in non-revocation interval
+-          format: int32
+           example: 1640995199
+         to:
+-          maximum: 18446744073709551615
+           minimum: 0
+           type: integer
+           description: Latest time of interest in non-revocation interval
+-          format: int32
+           example: 1640995199
+     IndyProofRequestedProof:
+       type: object
+@@ -7394,6 +7385,8 @@ components:
            example: 0
      RevRegResult:
        type: object
@@ -66,7 +123,7 @@ index 81a975a..a7d9cd9 100644
        properties:
          result:
            $ref: '#/components/schemas/IssuerRevRegRecord'
-@@ -7545,6 +7550,7 @@ components:
+@@ -7545,6 +7538,7 @@ components:
      SchemaSendResult:
        required:
        - schema_id
@@ -74,7 +131,7 @@ index 81a975a..a7d9cd9 100644
        type: object
        properties:
          schema:
-@@ -7683,10 +7689,7 @@ components:
+@@ -7683,10 +7677,7 @@ components:
          mechanism:
            type: string
          time:
@@ -85,7 +142,7 @@ index 81a975a..a7d9cd9 100644
            example: 1640995199
      TAAInfo:
        type: object
-@@ -7831,6 +7834,7 @@ components:
+@@ -7831,6 +7822,7 @@ components:
            example: 2021-12-31 23:59:59+00:00
      TxnOrCredentialDefinitionSendResult:
        type: object
@@ -93,7 +150,7 @@ index 81a975a..a7d9cd9 100644
        properties:
          sent:
            $ref: '#/components/schemas/CredentialDefinitionSendResult'
-@@ -7841,6 +7845,7 @@ components:
+@@ -7841,6 +7833,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrPublishRevocationsResult:
        type: object
@@ -101,7 +158,7 @@ index 81a975a..a7d9cd9 100644
        properties:
          sent:
            $ref: '#/components/schemas/PublishRevocations'
-@@ -7851,6 +7856,7 @@ components:
+@@ -7851,6 +7844,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrRevRegResult:
        type: object
@@ -109,7 +166,7 @@ index 81a975a..a7d9cd9 100644
        properties:
          sent:
            $ref: '#/components/schemas/RevRegResult'
-@@ -7861,6 +7867,7 @@ components:
+@@ -7861,6 +7855,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrSchemaSendResult:
        type: object
