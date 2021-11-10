@@ -30,6 +30,7 @@ if __name__ == "__main__":
                 "requirements.txt",
             ]
         },
+        tests_require=parse_requirements("requirements.dev.txt"),
         install_requires=parse_requirements("requirements.txt"),
         python_requires=">=3.8",
         classifiers=[
