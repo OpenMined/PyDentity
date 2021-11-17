@@ -3,7 +3,8 @@ This module defines a converter that uses :py:mod:`pydantic` models
 to deserialize and serialize values.
 """
 
-from typing import Any
+from typing import Any, Union
+import typing
 from pydantic.json import ENCODERS_BY_TYPE
 from uplink.converters.interfaces import Factory, Converter
 from uplink.utils import is_subclass
@@ -66,6 +67,16 @@ class _PydanticResponseBody(Converter):
         except AttributeError:
             data = response
 
+        # workaround because uplink doesn't support Union types
+        # see https://github.com/prkumar/uplink/issues/233
+        if typing.get_origin(self._model) is Union:
+
+            class UnionContainer(BaseModel):
+                v: self._model
+
+            data = {"v": data}
+            return UnionContainer.parse_obj(data).v
+
         return self._model.parse_obj(data)
 
 
@@ -97,6 +108,17 @@ class PydanticConverter(Factory):
     def _get_model(self, type_):
         if is_subclass(type_, BaseModel):
             return type_
+        # workaround because uplink doesn't support Union types
+        # see https://github.com/prkumar/uplink/issues/233
+        elif typing.get_origin(type_) is Union:
+            typing_args = typing.get_args(type_)
+            all_are_models = all(
+                [is_subclass(inner_type, BaseModel) for inner_type in typing_args]
+            )
+
+            if all_are_models:
+                return type_
+
         raise ValueError("Expected pydantic.BaseModel subclass or instance")
 
     def _make_converter(self, converter, type_):

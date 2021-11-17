@@ -705,7 +705,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CredentialDefinitionSendResult'
+                oneOf:
+                  - $ref: '#/components/schemas/CredentialDefinitionSendResult'
+                  - $ref: '#/components/schemas/TxnOrCredentialDefinitionSendResult'
       x-codegen-request-body-name: body
       operationId: publish_cred_def
   /credential-definitions/created:
@@ -3322,7 +3324,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublishRevocations'
+                oneOf:
+                  - $ref: '#/components/schemas/PublishRevocations'
+                  - $ref: '#/components/schemas/TxnOrPublishRevocationsResult'
       x-codegen-request-body-name: body
       operationId: publish_revocations
   /revocation/registries/created:
@@ -3433,7 +3437,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RevRegResult'
+                oneOf:
+                  - $ref: '#/components/schemas/RevRegResult'
+                  - $ref: '#/components/schemas/TxnOrRevRegResult'
       operationId: publish_rev_reg_def
   /revocation/registry/{rev_reg_id}/entry:
     post:
@@ -3610,7 +3616,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SchemaSendResult'
+                oneOf:
+                  - $ref: '#/components/schemas/SchemaSendResult'
+                  - $ref: '#/components/schemas/TxnOrSchemaSendResult'
       x-codegen-request-body-name: body
       operationId: publish_schema
   /schemas/created:

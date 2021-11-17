@@ -21,6 +21,7 @@ from aries_cloudcontroller.model.schema_get_result import SchemaGetResult
 from aries_cloudcontroller.model.schema_send_request import SchemaSendRequest
 from aries_cloudcontroller.model.schema_send_result import SchemaSendResult
 from aries_cloudcontroller.model.schemas_created_result import SchemasCreatedResult
+from aries_cloudcontroller.model.txn_or_schema_send_result import TxnOrSchemaSendResult
 
 
 class SchemaApi(Consumer):
@@ -52,7 +53,7 @@ class SchemaApi(Consumer):
         conn_id: Optional[str] = None,
         create_transaction_for_endorser: Optional[bool] = None,
         body: Optional[SchemaSendRequest] = None
-    ) -> SchemaSendResult:
+    ) -> Union[SchemaSendResult, TxnOrSchemaSendResult]:
         """Sends a schema to the ledger"""
         return await self.__publish_schema(
             conn_id=conn_id,
@@ -92,7 +93,7 @@ class SchemaApi(Consumer):
         conn_id: Query = None,
         create_transaction_for_endorser: Query = None,
         body: Body(type=SchemaSendRequest) = {}
-    ) -> SchemaSendResult:
+    ) -> Union[SchemaSendResult, TxnOrSchemaSendResult]:
         """Internal uplink method for publish_schema"""
 
     @returns.json

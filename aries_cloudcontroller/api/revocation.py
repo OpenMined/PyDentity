@@ -30,6 +30,10 @@ from aries_cloudcontroller.model.rev_reg_update_tails_file_uri import (
 )
 from aries_cloudcontroller.model.rev_regs_created import RevRegsCreated
 from aries_cloudcontroller.model.revoke_request import RevokeRequest
+from aries_cloudcontroller.model.txn_or_publish_revocations_result import (
+    TxnOrPublishRevocationsResult,
+)
+from aries_cloudcontroller.model.txn_or_rev_reg_result import TxnOrRevRegResult
 
 
 class RevocationApi(Consumer):
@@ -106,7 +110,7 @@ class RevocationApi(Consumer):
         rev_reg_id: str,
         conn_id: Optional[str] = None,
         create_transaction_for_endorser: Optional[bool] = None
-    ) -> RevRegResult:
+    ) -> Union[RevRegResult, TxnOrRevRegResult]:
         """Send revocation registry definition to ledger"""
         return await self.__publish_rev_reg_def(
             rev_reg_id=rev_reg_id,
@@ -134,7 +138,7 @@ class RevocationApi(Consumer):
         conn_id: Optional[str] = None,
         create_transaction_for_endorser: Optional[bool] = None,
         body: Optional[PublishRevocations] = None
-    ) -> PublishRevocations:
+    ) -> Union[PublishRevocations, TxnOrPublishRevocationsResult]:
         """Publish pending revocations to ledger"""
         return await self.__publish_revocations(
             conn_id=conn_id,
@@ -233,7 +237,7 @@ class RevocationApi(Consumer):
         rev_reg_id: str,
         conn_id: Query = None,
         create_transaction_for_endorser: Query = None
-    ) -> RevRegResult:
+    ) -> Union[RevRegResult, TxnOrRevRegResult]:
         """Internal uplink method for publish_rev_reg_def"""
 
     @returns.json
@@ -256,7 +260,7 @@ class RevocationApi(Consumer):
         conn_id: Query = None,
         create_transaction_for_endorser: Query = None,
         body: Body(type=PublishRevocations) = {}
-    ) -> PublishRevocations:
+    ) -> Union[PublishRevocations, TxnOrPublishRevocationsResult]:
         """Internal uplink method for publish_revocations"""
 
     @returns.json

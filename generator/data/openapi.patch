@@ -1,44 +1,52 @@
 diff --git a/generator/data/openapi.yml b/generator/data/openapi.yml
-index 81a975a..647ae7e 100644
+index 81a975a..ab4c13c 100644
 --- a/generator/data/openapi.yml
 +++ b/generator/data/openapi.yml
-@@ -705,7 +705,7 @@ paths:
+@@ -705,7 +705,9 @@ paths:
            content:
              application/json:
                schema:
 -                $ref: '#/components/schemas/TxnOrCredentialDefinitionSendResult'
-+                $ref: '#/components/schemas/CredentialDefinitionSendResult'
++                oneOf:
++                  - $ref: '#/components/schemas/CredentialDefinitionSendResult'
++                  - $ref: '#/components/schemas/TxnOrCredentialDefinitionSendResult'
        x-codegen-request-body-name: body
        operationId: publish_cred_def
    /credential-definitions/created:
-@@ -3322,7 +3322,7 @@ paths:
+@@ -3322,7 +3324,9 @@ paths:
            content:
              application/json:
                schema:
 -                $ref: '#/components/schemas/TxnOrPublishRevocationsResult'
-+                $ref: '#/components/schemas/PublishRevocations'
++                oneOf:
++                  - $ref: '#/components/schemas/PublishRevocations'
++                  - $ref: '#/components/schemas/TxnOrPublishRevocationsResult'
        x-codegen-request-body-name: body
        operationId: publish_revocations
    /revocation/registries/created:
-@@ -3433,7 +3433,7 @@ paths:
+@@ -3433,7 +3437,9 @@ paths:
            content:
              application/json:
                schema:
 -                $ref: '#/components/schemas/TxnOrRevRegResult'
-+                $ref: '#/components/schemas/RevRegResult'
++                oneOf:
++                  - $ref: '#/components/schemas/RevRegResult'
++                  - $ref: '#/components/schemas/TxnOrRevRegResult'
        operationId: publish_rev_reg_def
    /revocation/registry/{rev_reg_id}/entry:
      post:
-@@ -3610,7 +3610,7 @@ paths:
+@@ -3610,7 +3616,9 @@ paths:
            content:
              application/json:
                schema:
 -                $ref: '#/components/schemas/TxnOrSchemaSendResult'
-+                $ref: '#/components/schemas/SchemaSendResult'
++                oneOf:
++                  - $ref: '#/components/schemas/SchemaSendResult'
++                  - $ref: '#/components/schemas/TxnOrSchemaSendResult'
        x-codegen-request-body-name: body
        operationId: publish_schema
    /schemas/created:
-@@ -5045,7 +5045,8 @@ components:
+@@ -5045,7 +5053,8 @@ components:
            description: Tag within credential definition identifier
            example: tag
          type:
@@ -48,7 +56,7 @@ index 81a975a..647ae7e 100644
            description: 'Signature type: CL for Camenisch-Lysyanskaya'
            example: CL
          value:
-@@ -5087,6 +5088,8 @@ components:
+@@ -5087,6 +5096,8 @@ components:
            example: default
      CredentialDefinitionSendResult:
        type: object
@@ -57,7 +65,7 @@ index 81a975a..647ae7e 100644
        properties:
          credential_definition_id:
            pattern: ^([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}):3:CL:(([1-9][0-9]*)|([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}:2:.+:[0-9.]+)):(.+)?$
-@@ -6111,18 +6114,14 @@ components:
+@@ -6111,18 +6122,14 @@ components:
        type: object
        properties:
          from:
@@ -76,7 +84,7 @@ index 81a975a..647ae7e 100644
            example: 1640995199
      IndyProofReqPredSpec:
        required:
-@@ -6168,18 +6167,14 @@ components:
+@@ -6168,18 +6175,14 @@ components:
        type: object
        properties:
          from:
@@ -95,7 +103,7 @@ index 81a975a..647ae7e 100644
            example: 1640995199
      IndyProofRequest:
        type: object
-@@ -6217,18 +6212,14 @@ components:
+@@ -6217,18 +6220,14 @@ components:
        type: object
        properties:
          from:
@@ -114,7 +122,7 @@ index 81a975a..647ae7e 100644
            example: 1640995199
      IndyProofRequestedProof:
        type: object
-@@ -7394,6 +7385,8 @@ components:
+@@ -7394,6 +7393,8 @@ components:
            example: 0
      RevRegResult:
        type: object
@@ -123,7 +131,7 @@ index 81a975a..647ae7e 100644
        properties:
          result:
            $ref: '#/components/schemas/IssuerRevRegRecord'
-@@ -7545,6 +7538,7 @@ components:
+@@ -7545,6 +7546,7 @@ components:
      SchemaSendResult:
        required:
        - schema_id
@@ -131,7 +139,7 @@ index 81a975a..647ae7e 100644
        type: object
        properties:
          schema:
-@@ -7683,10 +7677,7 @@ components:
+@@ -7683,10 +7685,7 @@ components:
          mechanism:
            type: string
          time:
@@ -142,7 +150,7 @@ index 81a975a..647ae7e 100644
            example: 1640995199
      TAAInfo:
        type: object
-@@ -7831,6 +7822,7 @@ components:
+@@ -7831,6 +7830,7 @@ components:
            example: 2021-12-31 23:59:59+00:00
      TxnOrCredentialDefinitionSendResult:
        type: object
@@ -150,7 +158,7 @@ index 81a975a..647ae7e 100644
        properties:
          sent:
            $ref: '#/components/schemas/CredentialDefinitionSendResult'
-@@ -7841,6 +7833,7 @@ components:
+@@ -7841,6 +7841,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrPublishRevocationsResult:
        type: object
@@ -158,7 +166,7 @@ index 81a975a..647ae7e 100644
        properties:
          sent:
            $ref: '#/components/schemas/PublishRevocations'
-@@ -7851,6 +7844,7 @@ components:
+@@ -7851,6 +7852,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrRevRegResult:
        type: object
@@ -166,7 +174,7 @@ index 81a975a..647ae7e 100644
        properties:
          sent:
            $ref: '#/components/schemas/RevRegResult'
-@@ -7861,6 +7855,7 @@ components:
+@@ -7861,6 +7863,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrSchemaSendResult:
        type: object
