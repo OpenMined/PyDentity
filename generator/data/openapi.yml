@@ -706,8 +706,8 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/CredentialDefinitionSendResult'
-                  - $ref: '#/components/schemas/TxnOrCredentialDefinitionSendResult'
+                - $ref: '#/components/schemas/CredentialDefinitionSendResult'
+                - $ref: '#/components/schemas/TxnOrCredentialDefinitionSendResult'
       x-codegen-request-body-name: body
       operationId: publish_cred_def
   /credential-definitions/created:
@@ -3325,8 +3325,8 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/PublishRevocations'
-                  - $ref: '#/components/schemas/TxnOrPublishRevocationsResult'
+                - $ref: '#/components/schemas/PublishRevocations'
+                - $ref: '#/components/schemas/TxnOrPublishRevocationsResult'
       x-codegen-request-body-name: body
       operationId: publish_revocations
   /revocation/registries/created:
@@ -3438,8 +3438,8 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/RevRegResult'
-                  - $ref: '#/components/schemas/TxnOrRevRegResult'
+                - $ref: '#/components/schemas/RevRegResult'
+                - $ref: '#/components/schemas/TxnOrRevRegResult'
       operationId: publish_rev_reg_def
   /revocation/registry/{rev_reg_id}/entry:
     post:
@@ -3617,8 +3617,8 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/SchemaSendResult'
-                  - $ref: '#/components/schemas/TxnOrSchemaSendResult'
+                - $ref: '#/components/schemas/SchemaSendResult'
+                - $ref: '#/components/schemas/TxnOrSchemaSendResult'
       x-codegen-request-body-name: body
       operationId: publish_schema
   /schemas/created:
@@ -5054,7 +5054,7 @@ components:
           example: tag
         type:
           enum:
-            - CL
+          - CL
           description: 'Signature type: CL for Camenisch-Lysyanskaya'
           example: CL
         value:
@@ -5872,14 +5872,12 @@ components:
       type: object
       properties:
         from:
-          maximum: 18446744073709551615
           minimum: 0
           type: integer
           description: Earliest time of interest in non-revocation interval
           format: int32
           example: 1640995199
         to:
-          maximum: 18446744073709551615
           minimum: 0
           type: integer
           description: Latest time of interest in non-revocation interval
@@ -6041,7 +6039,6 @@ components:
           description: Schema identifier
           example: WgWxqztrNooG92RXvxSTWv:2:schema_name:1.0
         timestamp:
-          maximum: 18446744073709551615
           minimum: 0
           type: integer
           description: Timestamp epoch
@@ -6315,7 +6312,6 @@ components:
             a UUID)
           example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
         timestamp:
-          maximum: 18446744073709551615
           minimum: 0
           type: integer
           description: Epoch timestamp of interest for non-revocation proof
