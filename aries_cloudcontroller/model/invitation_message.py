@@ -32,7 +32,7 @@ class InvitationMessage(BaseModel):
     requestsattach: Optional[List[AttachDecorator]] = Field(
         None, alias="requests~attach"
     )
-    services: Optional[List[Dict]] = None
+    services: Optional[List[Union[Dict, str]]] = None
 
     def __init__(
         self,
@@ -42,7 +42,7 @@ class InvitationMessage(BaseModel):
         handshake_protocols: Optional[List[str]] = None,
         label: Optional[str] = None,
         requestsattach: Optional[List[AttachDecorator]] = None,
-        services: Optional[List[Dict]] = None,
+        services: Optional[List[Union[Dict, str]]] = None,
         **kwargs,
     ):
         super().__init__(

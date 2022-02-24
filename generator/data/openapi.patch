@@ -1,5 +1,5 @@
 diff --git a/generator/data/openapi.yml b/generator/data/openapi.yml
-index 29a1393..c86cd31 100644
+index 29a1393..7fea529 100644
 --- a/generator/data/openapi.yml
 +++ b/generator/data/openapi.yml
 @@ -710,7 +710,9 @@ paths:
@@ -157,7 +157,22 @@ index 29a1393..c86cd31 100644
            example: 1640995199
      IndyRevRegDef:
        type: object
-@@ -7652,6 +7646,8 @@ components:
+@@ -6705,9 +6699,11 @@ components:
+             type: string
+           - did:sov:WgWxqztrNooG92RXvxSTWv
+           items:
+-            type: object
+-            description: Either a DIDComm service object (as per RFC0067) or a DID
+-              string.
++            oneOf:
++              - type: object
++                description: Either a DIDComm service object (as per RFC0067) or a DID
++                  string.
++              - type: string
+     InvitationRecord:
+       type: object
+       properties:
+@@ -7652,6 +7648,8 @@ components:
            example: 0
      RevRegResult:
        type: object
@@ -166,7 +181,7 @@ index 29a1393..c86cd31 100644
        properties:
          result:
            $ref: '#/components/schemas/IssuerRevRegRecord'
-@@ -7819,6 +7815,7 @@ components:
+@@ -7819,6 +7817,7 @@ components:
      SchemaSendResult:
        required:
        - schema_id
@@ -174,7 +189,7 @@ index 29a1393..c86cd31 100644
        type: object
        properties:
          schema:
-@@ -7969,10 +7966,7 @@ components:
+@@ -7969,10 +7968,7 @@ components:
          mechanism:
            type: string
          time:
@@ -185,7 +200,7 @@ index 29a1393..c86cd31 100644
            example: 1640995199
      TAAInfo:
        type: object
-@@ -8127,6 +8121,7 @@ components:
+@@ -8127,6 +8123,7 @@ components:
            example: 2021-12-31 23:59:59+00:00
      TxnOrCredentialDefinitionSendResult:
        type: object
@@ -193,7 +208,7 @@ index 29a1393..c86cd31 100644
        properties:
          sent:
            $ref: '#/components/schemas/CredentialDefinitionSendResult'
-@@ -8137,6 +8132,7 @@ components:
+@@ -8137,6 +8134,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrPublishRevocationsResult:
        type: object
@@ -201,7 +216,7 @@ index 29a1393..c86cd31 100644
        properties:
          sent:
            $ref: '#/components/schemas/PublishRevocations'
-@@ -8147,6 +8143,7 @@ components:
+@@ -8147,6 +8145,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrRevRegResult:
        type: object
@@ -209,7 +224,7 @@ index 29a1393..c86cd31 100644
        properties:
          sent:
            $ref: '#/components/schemas/RevRegResult'
-@@ -8157,6 +8154,7 @@ components:
+@@ -8157,6 +8156,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrSchemaSendResult:
        type: object
