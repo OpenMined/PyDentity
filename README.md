@@ -2,7 +2,7 @@
   <br />
   <img
     alt="Hyperledger Aries logo"
-    src="https://raw.githubusercontent.com/didx-xyz/aries-cloudcontroller-python/main/images/aries-logo.png"
+    src="https://raw.githubusercontent.com/didx-xyz/aries-cloudcontroller-python/main/assets/aries-logo.png"
     height="250px"
   />
 </p>
