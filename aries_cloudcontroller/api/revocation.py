@@ -133,16 +133,10 @@ class RevocationApi(Consumer):
         )
 
     async def publish_revocations(
-        self,
-        *,
-        conn_id: Optional[str] = None,
-        create_transaction_for_endorser: Optional[bool] = None,
-        body: Optional[PublishRevocations] = None
+        self, *, body: Optional[PublishRevocations] = None
     ) -> Union[PublishRevocations, TxnOrPublishRevocationsResult]:
         """Publish pending revocations to ledger"""
         return await self.__publish_revocations(
-            conn_id=conn_id,
-            create_transaction_for_endorser=bool_query(create_transaction_for_endorser),
             body=body,
         )
 
@@ -255,11 +249,7 @@ class RevocationApi(Consumer):
     @json
     @post("/revocation/publish-revocations")
     def __publish_revocations(
-        self,
-        *,
-        conn_id: Query = None,
-        create_transaction_for_endorser: Query = None,
-        body: Body(type=PublishRevocations) = {}
+        self, *, body: Body(type=PublishRevocations) = {}
     ) -> Union[PublishRevocations, TxnOrPublishRevocationsResult]:
         """Internal uplink method for publish_revocations"""
 

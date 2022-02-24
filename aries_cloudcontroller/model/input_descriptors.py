@@ -9,7 +9,9 @@ from typing import Any, Dict, List, Optional, Union, Literal  # noqa: F401
 
 from pydantic import AnyUrl, BaseModel, EmailStr, validator, Field, Extra  # noqa: F401
 from aries_cloudcontroller.model.constraints import Constraints
-from aries_cloudcontroller.model.schema_input_descriptor import SchemaInputDescriptor
+from aries_cloudcontroller.model.schemas_input_descriptor_filter import (
+    SchemasInputDescriptorFilter,
+)
 
 
 class InputDescriptors(BaseModel):
@@ -24,7 +26,7 @@ class InputDescriptors(BaseModel):
         metadata: Metadata dictionary [Optional].
         name: Name [Optional].
         purpose: Purpose [Optional].
-        schema_: The schema_ of this InputDescriptors [Optional].
+        schema_: Accepts a list of schema or a dict containing filters like oneof_filter. [Optional].
     """
 
     constraints: Optional[Constraints] = None
@@ -33,7 +35,7 @@ class InputDescriptors(BaseModel):
     metadata: Optional[Dict[str, Any]] = None
     name: Optional[str] = None
     purpose: Optional[str] = None
-    schema_: Optional[List[SchemaInputDescriptor]] = Field(None, alias="schema")
+    schema_: Optional[SchemasInputDescriptorFilter] = Field(None, alias="schema")
 
     def __init__(
         self,
@@ -44,7 +46,7 @@ class InputDescriptors(BaseModel):
         metadata: Optional[Dict[str, Any]] = None,
         name: Optional[str] = None,
         purpose: Optional[str] = None,
-        schema_: Optional[List[SchemaInputDescriptor]] = None,
+        schema_: Optional[SchemasInputDescriptorFilter] = None,
         **kwargs,
     ):
         super().__init__(

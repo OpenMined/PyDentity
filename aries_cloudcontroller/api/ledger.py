@@ -20,11 +20,13 @@ from aries_cloudcontroller.uplink_util import bool_query
 from aries_cloudcontroller.model.get_did_endpoint_response import GetDIDEndpointResponse
 from aries_cloudcontroller.model.get_did_verkey_response import GetDIDVerkeyResponse
 from aries_cloudcontroller.model.get_nym_role_response import GetNymRoleResponse
+from aries_cloudcontroller.model.ledger_config_list import LedgerConfigList
 from aries_cloudcontroller.model.register_ledger_nym_response import (
     RegisterLedgerNymResponse,
 )
 from aries_cloudcontroller.model.taa_accept import TAAAccept
 from aries_cloudcontroller.model.taa_result import TAAResult
+from aries_cloudcontroller.model.write_ledger_request import WriteLedgerRequest
 
 
 class LedgerApi(Consumer):
@@ -58,6 +60,14 @@ class LedgerApi(Consumer):
         return await self.__get_did_verkey(
             did=did,
         )
+
+    async def ledger_multiple_config_get(self) -> LedgerConfigList:
+        """Fetch the multiple ledger configuration currently in use"""
+        return await self.__ledger_multiple_config_get()
+
+    async def ledger_multiple_get_write_ledger_get(self) -> WriteLedgerRequest:
+        """Fetch the current write ledger"""
+        return await self.__ledger_multiple_get_write_ledger_get()
 
     async def register_nym(
         self,
@@ -106,6 +116,16 @@ class LedgerApi(Consumer):
     @get("/ledger/did-verkey")
     def __get_did_verkey(self, *, did: Query) -> GetDIDVerkeyResponse:
         """Internal uplink method for get_did_verkey"""
+
+    @returns.json
+    @get("/ledger/multiple/config")
+    def __ledger_multiple_config_get(self) -> LedgerConfigList:
+        """Internal uplink method for ledger_multiple_config_get"""
+
+    @returns.json
+    @get("/ledger/multiple/get-write-ledger")
+    def __ledger_multiple_get_write_ledger_get(self) -> WriteLedgerRequest:
+        """Internal uplink method for ledger_multiple_get_write_ledger_get"""
 
     @returns.json
     @post("/ledger/register-nym")

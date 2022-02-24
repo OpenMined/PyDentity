@@ -16,33 +16,62 @@ class RevokeRequest(BaseModel):
     Do not edit the class manually.
 
     RevokeRequest - a model defined in OpenAPI
+        comment: Optional comment to include in revocation notification [Optional].
+        connection_id: Connection ID to which the revocation notification will be sent; required if notify is true [Optional].
         cred_ex_id: Credential exchange identifier [Optional].
         cred_rev_id: Credential revocation identifier [Optional].
+        notify: Send a notification to the credential recipient [Optional].
         publish: (True) publish revocation to ledger immediately, or (default, False) mark it pending [Optional].
         rev_reg_id: Revocation registry identifier [Optional].
+        thread_id: Thread ID of the credential exchange message thread resulting in the credential now being revoked; required if notify is true [Optional].
     """
 
+    comment: Optional[str] = None
+    connection_id: Optional[str] = None
     cred_ex_id: Optional[str] = None
     cred_rev_id: Optional[str] = None
+    notify: Optional[bool] = None
     publish: Optional[bool] = None
     rev_reg_id: Optional[str] = None
+    thread_id: Optional[str] = None
 
     def __init__(
         self,
         *,
+        comment: Optional[str] = None,
+        connection_id: Optional[str] = None,
         cred_ex_id: Optional[str] = None,
         cred_rev_id: Optional[str] = None,
+        notify: Optional[bool] = None,
         publish: Optional[bool] = None,
         rev_reg_id: Optional[str] = None,
+        thread_id: Optional[str] = None,
         **kwargs,
     ):
         super().__init__(
+            comment=comment,
+            connection_id=connection_id,
             cred_ex_id=cred_ex_id,
             cred_rev_id=cred_rev_id,
+            notify=notify,
             publish=publish,
             rev_reg_id=rev_reg_id,
+            thread_id=thread_id,
             **kwargs,
         )
+
+    @validator("connection_id")
+    def connection_id_pattern(cls, value):
+        # Property is optional
+        if value is None:
+            return
+
+        pattern = r"[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+        if not re.match(pattern, value):
+            raise ValueError(
+                f"Value of connection_id does not match regex pattern ('{pattern}')"
+            )
+        return value
 
     @validator("cred_ex_id")
     def cred_ex_id_pattern(cls, value):

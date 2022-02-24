@@ -73,6 +73,7 @@ class V20CredExRecord(BaseModel):
             "credential-issued",
             "credential-received",
             "done",
+            "credential-revoked",
         ]
     ] = None
     thread_id: Optional[str] = None
@@ -109,6 +110,7 @@ class V20CredExRecord(BaseModel):
                 "credential-issued",
                 "credential-received",
                 "done",
+                "credential-revoked",
             ]
         ] = None,
         thread_id: Optional[str] = None,

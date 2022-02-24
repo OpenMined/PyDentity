@@ -54,6 +54,7 @@ class DidExchangeApi(Consumer):
         self,
         *,
         their_public_did: str,
+        alias: Optional[str] = None,
         mediation_id: Optional[str] = None,
         my_endpoint: Optional[str] = None,
         my_label: Optional[str] = None,
@@ -62,6 +63,7 @@ class DidExchangeApi(Consumer):
         """Create and send a request against public DID's implicit invitation"""
         return await self.__create_request(
             their_public_did=their_public_did,
+            alias=alias,
             mediation_id=mediation_id,
             my_endpoint=my_endpoint,
             my_label=my_label,
@@ -106,6 +108,7 @@ class DidExchangeApi(Consumer):
         self,
         *,
         their_public_did: Query,
+        alias: Query = None,
         mediation_id: Query = None,
         my_endpoint: Query = None,
         my_label: Query = None,

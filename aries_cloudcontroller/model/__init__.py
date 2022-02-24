@@ -91,6 +91,8 @@ from aries_cloudcontroller.model.dif_pres_spec import DIFPresSpec
 from aries_cloudcontroller.model.dif_proof_proposal import DIFProofProposal
 from aries_cloudcontroller.model.dif_proof_request import DIFProofRequest
 from aries_cloudcontroller.model.date import Date
+from aries_cloudcontroller.model.disclose import Disclose
+from aries_cloudcontroller.model.disclosures import Disclosures
 from aries_cloudcontroller.model.doc import Doc
 from aries_cloudcontroller.model.endorser_info import EndorserInfo
 from aries_cloudcontroller.model.endpoints_result import EndpointsResult
@@ -191,6 +193,8 @@ from aries_cloudcontroller.model.ld_proof_vc_detail import LDProofVCDetail
 from aries_cloudcontroller.model.ld_proof_vc_detail_options import (
     LDProofVCDetailOptions,
 )
+from aries_cloudcontroller.model.ledger_config_instance import LedgerConfigInstance
+from aries_cloudcontroller.model.ledger_config_list import LedgerConfigList
 from aries_cloudcontroller.model.linked_data_proof import LinkedDataProof
 from aries_cloudcontroller.model.mediation_create_request import MediationCreateRequest
 from aries_cloudcontroller.model.mediation_deny import MediationDeny
@@ -209,8 +213,11 @@ from aries_cloudcontroller.model.ping_request_response import PingRequestRespons
 from aries_cloudcontroller.model.presentation_definition import PresentationDefinition
 from aries_cloudcontroller.model.presentation_proposal import PresentationProposal
 from aries_cloudcontroller.model.presentation_request import PresentationRequest
+from aries_cloudcontroller.model.protocol_descriptor import ProtocolDescriptor
 from aries_cloudcontroller.model.publish_revocations import PublishRevocations
-from aries_cloudcontroller.model.query_result import QueryResult
+from aries_cloudcontroller.model.queries import Queries
+from aries_cloudcontroller.model.query import Query
+from aries_cloudcontroller.model.query_item import QueryItem
 from aries_cloudcontroller.model.raw_encoded import RawEncoded
 from aries_cloudcontroller.model.receive_invitation_request import (
     ReceiveInvitationRequest,
@@ -234,6 +241,9 @@ from aries_cloudcontroller.model.schema_input_descriptor import SchemaInputDescr
 from aries_cloudcontroller.model.schema_send_request import SchemaSendRequest
 from aries_cloudcontroller.model.schema_send_result import SchemaSendResult
 from aries_cloudcontroller.model.schemas_created_result import SchemasCreatedResult
+from aries_cloudcontroller.model.schemas_input_descriptor_filter import (
+    SchemasInputDescriptorFilter,
+)
 from aries_cloudcontroller.model.send_menu import SendMenu
 from aries_cloudcontroller.model.send_message import SendMessage
 from aries_cloudcontroller.model.sign_request import SignRequest
@@ -287,6 +297,13 @@ from aries_cloudcontroller.model.v10_credential_proposal_request_opt import (
 from aries_cloudcontroller.model.v10_credential_store_request import (
     V10CredentialStoreRequest,
 )
+from aries_cloudcontroller.model.v10_discovery_exchange_list_result import (
+    V10DiscoveryExchangeListResult,
+)
+from aries_cloudcontroller.model.v10_discovery_exchange_result import (
+    V10DiscoveryExchangeResult,
+)
+from aries_cloudcontroller.model.v10_discovery_record import V10DiscoveryRecord
 from aries_cloudcontroller.model.v10_presentation_create_request_request import (
     V10PresentationCreateRequestRequest,
 )
@@ -342,6 +359,13 @@ from aries_cloudcontroller.model.v20_cred_request import V20CredRequest
 from aries_cloudcontroller.model.v20_cred_request_free import V20CredRequestFree
 from aries_cloudcontroller.model.v20_cred_request_request import V20CredRequestRequest
 from aries_cloudcontroller.model.v20_cred_store_request import V20CredStoreRequest
+from aries_cloudcontroller.model.v20_discovery_exchange_list_result import (
+    V20DiscoveryExchangeListResult,
+)
+from aries_cloudcontroller.model.v20_discovery_exchange_result import (
+    V20DiscoveryExchangeResult,
+)
+from aries_cloudcontroller.model.v20_discovery_record import V20DiscoveryRecord
 from aries_cloudcontroller.model.v20_issue_cred_schema_core import (
     V20IssueCredSchemaCore,
 )
@@ -382,6 +406,7 @@ from aries_cloudcontroller.model.w3_c_credentials_list_request import (
 )
 from aries_cloudcontroller.model.wallet_list import WalletList
 from aries_cloudcontroller.model.wallet_record import WalletRecord
+from aries_cloudcontroller.model.write_ledger_request import WriteLedgerRequest
 
 __all__ = [
     "AMLRecord",
@@ -447,6 +472,8 @@ __all__ = [
     "DIFProofProposal",
     "DIFProofRequest",
     "Date",
+    "Disclose",
+    "Disclosures",
     "Doc",
     "EndorserInfo",
     "EndpointsResult",
@@ -511,6 +538,8 @@ __all__ = [
     "KeylistUpdateRule",
     "LDProofVCDetail",
     "LDProofVCDetailOptions",
+    "LedgerConfigInstance",
+    "LedgerConfigList",
     "LinkedDataProof",
     "MediationCreateRequest",
     "MediationDeny",
@@ -529,8 +558,11 @@ __all__ = [
     "PresentationDefinition",
     "PresentationProposal",
     "PresentationRequest",
+    "ProtocolDescriptor",
     "PublishRevocations",
-    "QueryResult",
+    "Queries",
+    "Query",
+    "QueryItem",
     "RawEncoded",
     "ReceiveInvitationRequest",
     "RegisterLedgerNymResponse",
@@ -548,6 +580,7 @@ __all__ = [
     "SchemaSendRequest",
     "SchemaSendResult",
     "SchemasCreatedResult",
+    "SchemasInputDescriptorFilter",
     "SendMenu",
     "SendMessage",
     "SignRequest",
@@ -579,6 +612,9 @@ __all__ = [
     "V10CredentialProposalRequestMand",
     "V10CredentialProposalRequestOpt",
     "V10CredentialStoreRequest",
+    "V10DiscoveryExchangeListResult",
+    "V10DiscoveryExchangeResult",
+    "V10DiscoveryRecord",
     "V10PresentationCreateRequestRequest",
     "V10PresentationExchange",
     "V10PresentationExchangeList",
@@ -610,6 +646,9 @@ __all__ = [
     "V20CredRequestFree",
     "V20CredRequestRequest",
     "V20CredStoreRequest",
+    "V20DiscoveryExchangeListResult",
+    "V20DiscoveryExchangeResult",
+    "V20DiscoveryRecord",
     "V20IssueCredSchemaCore",
     "V20Pres",
     "V20PresCreateRequestRequest",
@@ -632,4 +671,5 @@ __all__ = [
     "W3CCredentialsListRequest",
     "WalletList",
     "WalletRecord",
+    "WriteLedgerRequest",
 ]

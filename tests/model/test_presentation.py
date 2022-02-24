@@ -39,7 +39,7 @@ valid_presentation = {
     "presentation_proposal_dict": {
         "presentation_proposal": {"attributes": [], "predicates": []}
     },
-    "presentation_request": {},
+    "presentation_request": {"requested_attributes": {}, "requested_predicates": {}},
     "presentation_request_dict": {"request_presentations~attach": [{"data": {}}]},
     "role": "prover",
     "state": "verified",

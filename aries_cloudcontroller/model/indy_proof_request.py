@@ -21,29 +21,29 @@ class IndyProofRequest(BaseModel):
     Do not edit the class manually.
 
     IndyProofRequest - a model defined in OpenAPI
+        requested_attributes: Requested attribute specifications of proof request.
+        requested_predicates: Requested predicate specifications of proof request.
         name: Proof request name [Optional].
         non_revoked: The non_revoked of this IndyProofRequest [Optional].
         nonce: Nonce [Optional].
-        requested_attributes: Requested attribute specifications of proof request [Optional].
-        requested_predicates: Requested predicate specifications of proof request [Optional].
         version: Proof request version [Optional].
     """
 
+    requested_attributes: Dict[str, IndyProofReqAttrSpec]
+    requested_predicates: Dict[str, IndyProofReqPredSpec]
     name: Optional[str] = None
     non_revoked: Optional[IndyProofRequestNonRevoked] = None
     nonce: Optional[str] = None
-    requested_attributes: Optional[Dict[str, IndyProofReqAttrSpec]] = None
-    requested_predicates: Optional[Dict[str, IndyProofReqPredSpec]] = None
     version: Optional[str] = None
 
     def __init__(
         self,
         *,
+        requested_attributes: Dict[str, IndyProofReqAttrSpec] = None,
+        requested_predicates: Dict[str, IndyProofReqPredSpec] = None,
         name: Optional[str] = None,
         non_revoked: Optional[IndyProofRequestNonRevoked] = None,
         nonce: Optional[str] = None,
-        requested_attributes: Optional[Dict[str, IndyProofReqAttrSpec]] = None,
-        requested_predicates: Optional[Dict[str, IndyProofReqPredSpec]] = None,
         version: Optional[str] = None,
         **kwargs,
     ):

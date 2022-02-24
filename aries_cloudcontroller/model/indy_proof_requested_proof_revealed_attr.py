@@ -46,7 +46,7 @@ class IndyProofRequestedProofRevealedAttr(BaseModel):
         if value is None:
             return
 
-        pattern = r"^[0-9]*$"
+        pattern = r"^-?[0-9]*$"
         if not re.match(pattern, value):
             raise ValueError(
                 f"Value of encoded does not match regex pattern ('{pattern}')"

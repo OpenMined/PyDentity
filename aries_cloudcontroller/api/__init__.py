@@ -5,7 +5,10 @@ from aries_cloudcontroller.api.basicmessage import BasicmessageApi
 from aries_cloudcontroller.api.connection import ConnectionApi
 from aries_cloudcontroller.api.credential_definition import CredentialDefinitionApi
 from aries_cloudcontroller.api.credentials import CredentialsApi
+from aries_cloudcontroller.api.default import DefaultApi
 from aries_cloudcontroller.api.did_exchange import DidExchangeApi
+from aries_cloudcontroller.api.discover_features import DiscoverFeaturesApi
+from aries_cloudcontroller.api.discover_features_v2_0 import DiscoverFeaturesV20Api
 from aries_cloudcontroller.api.endorse_transaction import EndorseTransactionApi
 from aries_cloudcontroller.api.introduction import IntroductionApi
 from aries_cloudcontroller.api.issue_credential_v1_0 import IssueCredentialV10Api
@@ -30,7 +33,10 @@ __all__ = [
     "ConnectionApi",
     "CredentialDefinitionApi",
     "CredentialsApi",
+    "DefaultApi",
     "DidExchangeApi",
+    "DiscoverFeaturesApi",
+    "DiscoverFeaturesV20Api",
     "EndorseTransactionApi",
     "IntroductionApi",
     "IssueCredentialV10Api",

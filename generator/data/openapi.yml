@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Aries Cloud Agent
-  version: v0.7.1
+  version: v0.7.3
 servers:
 - url: /
 security:
@@ -34,6 +34,16 @@ tags:
   externalDocs:
     description: Specification
     url: https://github.com/hyperledger/aries-rfcs/tree/25464a5c8f8a17b14edaa4310393df6094ace7b0/features/0023-did-exchange
+- name: discover-features
+  description: Feature discovery
+  externalDocs:
+    description: Specification
+    url: https://github.com/hyperledger/aries-rfcs/tree/b3a3942ef052039e73cd23d847f42947f8287da2/features/0031-discover-features
+- name: discover-features v2.0
+  description: Feature discovery v2
+  externalDocs:
+    description: Specification
+    url: https://github.com/hyperledger/aries-rfcs/tree/b3a3942ef052039e73cd23d847f42947f8287da2/features/0557-discover-features-v2
 - name: endorse-transaction
   description: Endorse a Transaction
 - name: introduction
@@ -95,11 +105,6 @@ tags:
   externalDocs:
     description: Specification
     url: https://github.com/hyperledger/indy-node/blob/master/design/anoncreds.md#schema
-- name: server
-  description: Feature discovery
-  externalDocs:
-    description: Specification
-    url: https://github.com/hyperledger/aries-rfcs/tree/9b7ab9814f2e7d1108f74aca6f3d2e5d62899473/features/0031-discover-features
 - name: trustping
   description: Trust-ping over connection
   externalDocs:
@@ -262,15 +267,15 @@ paths:
         schema:
           type: string
           enum:
-          - error
-          - completed
-          - active
-          - abandoned
-          - start
-          - request
           - invitation
-          - response
           - init
+          - active
+          - error
+          - start
+          - abandoned
+          - response
+          - completed
+          - request
       - name: their_did
         in: query
         description: Their DID
@@ -1014,6 +1019,11 @@ paths:
         schema:
           pattern: ^(did:sov:)?[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}$|^did:([a-zA-Z0-9_]+):([a-zA-Z0-9_.%-]+(:[a-zA-Z0-9_.%-]+)*)((;[a-zA-Z0-9_.:%-]+=[a-zA-Z0-9_.:%-]*)*)(\/[^#?]*)?([?][^#]*)?(\#.*)?$$
           type: string
+      - name: alias
+        in: query
+        description: Alias for connection
+        schema:
+          type: string
       - name: mediation_id
         in: query
         description: Identifier for active mediation record to be used
@@ -1150,15 +1160,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/ConnRecord'
       operationId: accept_request
-  /features:
+  /discover-features-2.0/queries:
     get:
       tags:
-      - server
+      - discover-features v2.0
       summary: Query supported features
       parameters:
-      - name: query
+      - name: connection_id
         in: query
-        description: Query
+        description: Connection identifier, if none specified, then the query will
+          provide features for this agent.
+        schema:
+          type: string
+      - name: query_goal_code
+        in: query
+        description: Goal-code feature-type query
+        schema:
+          type: string
+      - name: query_protocol
+        in: query
+        description: Protocol feature-type query
         schema:
           type: string
       responses:
@@ -1167,8 +1188,72 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QueryResult'
-      operationId: get_features
+                $ref: '#/components/schemas/V20DiscoveryExchangeResult'
+  /discover-features-2.0/records:
+    get:
+      tags:
+      - discover-features v2.0
+      summary: Discover Features v2.0 records
+      parameters:
+      - name: connection_id
+        in: query
+        description: Connection identifier
+        schema:
+          type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V20DiscoveryExchangeListResult'
+  /discover-features/query:
+    get:
+      tags:
+      - discover-features
+      summary: Query supported features
+      parameters:
+      - name: comment
+        in: query
+        description: Comment
+        schema:
+          type: string
+      - name: connection_id
+        in: query
+        description: Connection identifier, if none specified, then the query will
+          provide features for this agent.
+        schema:
+          type: string
+      - name: query
+        in: query
+        description: Protocol feature query
+        schema:
+          type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V10DiscoveryExchangeResult'
+  /discover-features/records:
+    get:
+      tags:
+      - discover-features
+      summary: Discover Features records
+      parameters:
+      - name: connection_id
+        in: query
+        description: Connection identifier
+        schema:
+          type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V10DiscoveryExchangeListResult'
   /issue-credential-2.0/create:
     post:
       tags:
@@ -1243,6 +1328,7 @@ paths:
           - credential-issued
           - credential-received
           - done
+          - credential-revoked
       - name: thread_id
         in: query
         description: Thread identifier
@@ -1594,6 +1680,7 @@ paths:
           - credential_issued
           - credential_received
           - credential_acked
+          - credential_revoked
       - name: thread_id
         in: query
         description: Thread identifier
@@ -1954,6 +2041,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetNymRoleResponse'
       operationId: get_did_nym_role
+  /ledger/multiple/config:
+    get:
+      tags:
+      - ledger
+      summary: Fetch the multiple ledger configuration currently in use
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LedgerConfigList'
+  /ledger/multiple/get-write-ledger:
+    get:
+      tags:
+      - ledger
+      summary: Fetch the current write ledger
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteLedgerRequest'
   /ledger/register-nym:
     post:
       tags:
@@ -3301,17 +3412,6 @@ paths:
       tags:
       - revocation
       summary: Publish pending revocations to ledger
-      parameters:
-      - name: conn_id
-        in: query
-        description: Connection identifier
-        schema:
-          type: string
-      - name: create_transaction_for_endorser
-        in: query
-        description: Create Transaction For Endorser's signature
-        schema:
-          type: boolean
       requestBody:
         content:
           application/json:
@@ -4170,6 +4270,9 @@ paths:
                 $ref: '#/components/schemas/WalletModuleResponse'
       x-codegen-request-body-name: body
       operationId: set_did_endpoint
+  /features:
+    get:
+      operationId: get_features
 components:
   schemas:
     AMLRecord:
@@ -4655,19 +4758,14 @@ components:
           description: Remote verification key
     ConnectionStaticResult:
       required:
-      - mv_verkey
       - my_did
       - my_endpoint
+      - my_verkey
       - record
       - their_did
       - their_verkey
       type: object
       properties:
-        mv_verkey:
-          pattern: ^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{43,44}$
-          type: string
-          description: My verification key
-          example: H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV
         my_did:
           pattern: ^(did:sov:)?[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}$
           type: string
@@ -4678,6 +4776,11 @@ components:
           type: string
           description: My URL endpoint
           example: https://myhost:8021
+        my_verkey:
+          pattern: ^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{43,44}$
+          type: string
+          description: My verification key
+          example: H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV
         record:
           $ref: '#/components/schemas/ConnRecord'
         their_did:
@@ -5413,6 +5516,29 @@ components:
             - <record id_2>
             <input descriptor id_2>:
             - <record id>
+        reveal_doc:
+          type: object
+          properties: {}
+          description: reveal doc [JSON-LD frame] dict used to derive the credential
+            when selective disclosure is required
+          example:
+            '@context':
+            - https://www.w3.org/2018/credentials/v1
+            - https://w3id.org/security/bbs/v1
+            '@explicit': true
+            '@requireAll': true
+            credentialSubject:
+              '@explicit': true
+              '@requireAll': true
+              Observation:
+              - effectiveDateTime: {}
+                '@explicit': true
+                '@requireAll': true
+            issuanceDate: {}
+            issuer: {}
+            type:
+            - VerifiableCredential
+            - LabReport
     DIFProofProposal:
       type: object
       properties:
@@ -5439,6 +5565,44 @@ components:
           description: Expiry Date
           format: date-time
           example: 2021-03-29 05:22:19+00:00
+    Disclose:
+      required:
+      - protocols
+      type: object
+      properties:
+        '@id':
+          type: string
+          description: Message identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        '@type':
+          type: string
+          description: Message type
+          readOnly: true
+          example: https://didcomm.org/my-family/1.0/my-message-type
+        protocols:
+          type: array
+          description: List of protocol descriptors
+          items:
+            $ref: '#/components/schemas/ProtocolDescriptor'
+    Disclosures:
+      required:
+      - disclosures
+      type: object
+      properties:
+        '@id':
+          type: string
+          description: Message identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        '@type':
+          type: string
+          description: Message type
+          readOnly: true
+          example: https://didcomm.org/my-family/1.0/my-message-type
+        disclosures:
+          type: array
+          description: List of protocol or goal_code descriptors
+          items:
+            type: object
     Doc:
       required:
       - credential
@@ -5580,10 +5744,10 @@ components:
       type: object
       properties:
         encoded:
-          pattern: ^[0-9]*$
+          pattern: ^-?[0-9]*$
           type: string
           description: Attribute encoded value
-          example: '0'
+          example: -1
         raw:
           type: string
           description: Attribute raw value
@@ -5775,9 +5939,9 @@ components:
         revealed_attrs:
           type: object
           additionalProperties:
-            pattern: ^[0-9]*$
+            pattern: ^-?[0-9]*$
             type: string
-            example: '0'
+            example: -1
         v:
           pattern: ^[0-9]*$
           type: string
@@ -6182,6 +6346,9 @@ components:
           description: Latest time of interest in non-revocation interval
           example: 1640995199
     IndyProofRequest:
+      required:
+      - requested_attributes
+      - requested_predicates
       type: object
       properties:
         name:
@@ -6265,10 +6432,10 @@ components:
       type: object
       properties:
         encoded:
-          pattern: ^[0-9]*$
+          pattern: ^-?[0-9]*$
           type: string
           description: Encoded value
-          example: '0'
+          example: -1
         raw:
           type: string
           description: Raw value
@@ -6315,7 +6482,6 @@ components:
           minimum: 0
           type: integer
           description: Epoch timestamp of interest for non-revocation proof
-          format: int32
           example: 1640995199
     IndyRevRegDef:
       type: object
@@ -6443,9 +6609,18 @@ components:
           type: string
           description: Purpose
         schema:
-          type: array
-          items:
-            $ref: '#/components/schemas/SchemaInputDescriptor'
+          type: object
+          description: Accepts a list of schema or a dict containing filters like
+            oneof_filter.
+          example:
+            oneOf:
+            - - uri: https://www.w3.org/Test1#Test1
+              - uri: https://www.w3.org/Test2#Test2
+            - oneof_filter:
+              - - uri: https://www.w3.org/Test1#Test1
+              - - uri: https://www.w3.org/Test2#Test2
+          allOf:
+          - $ref: '#/components/schemas/SchemasInputDescriptorFilter'
     IntroModuleResponse:
       type: object
     InvitationCreateRequest:
@@ -6868,6 +7043,33 @@ components:
           description: The proof type used for the proof. Should match suites registered
             in the Linked Data Cryptographic Suite Registry
           example: Ed25519Signature2018
+    LedgerConfigInstance:
+      type: object
+      properties:
+        genesis_file:
+          type: string
+          description: genesis_file
+        genesis_transactions:
+          type: string
+          description: genesis_transactions
+        genesis_url:
+          type: string
+          description: genesis_url
+        id:
+          type: string
+          description: ledger_id
+        is_production:
+          type: boolean
+          description: is_production
+    LedgerConfigList:
+      required:
+      - ledger_config_list
+      type: object
+      properties:
+        ledger_config_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/LedgerConfigInstance'
     LedgerModulesResult:
       type: object
     LinkedDataProof:
@@ -7253,6 +7455,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AttachDecorator'
+    ProtocolDescriptor:
+      required:
+      - pid
+      type: object
+      properties:
+        pid:
+          type: string
+        roles:
+          type: array
+          description: List of roles
+          nullable: true
+          items:
+            type: string
+            description: 'Role: requester or responder'
+            example: requester
     PublishRevocations:
       type: object
       properties:
@@ -7266,24 +7483,64 @@ components:
               description: Credential revocation identifier
               example: '12345'
           description: Credential revocation ids by revocation registry id
-    QueryResult:
+    Queries:
       type: object
       properties:
-        results:
-          type: object
-          additionalProperties:
-            type: object
-            properties: {}
-            description: Protocol descriptor
-          description: Query results keyed by protocol
+        '@id':
+          type: string
+          description: Message identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        '@type':
+          type: string
+          description: Message type
+          readOnly: true
+          example: https://didcomm.org/my-family/1.0/my-message-type
+        queries:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryItem'
+    Query:
+      required:
+      - query
+      type: object
+      properties:
+        '@id':
+          type: string
+          description: Message identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        '@type':
+          type: string
+          description: Message type
+          readOnly: true
+          example: https://didcomm.org/my-family/1.0/my-message-type
+        comment:
+          type: string
+          nullable: true
+        query:
+          type: string
+    QueryItem:
+      required:
+      - feature-type
+      - match
+      type: object
+      properties:
+        feature-type:
+          type: string
+          description: feature type
+          enum:
+          - protocol
+          - goal-code
+        match:
+          type: string
+          description: match
     RawEncoded:
       type: object
       properties:
         encoded:
-          pattern: ^[0-9]*$
+          pattern: ^-?[0-9]*$
           type: string
           description: Encoded value
-          example: '0'
+          example: -1
         raw:
           type: string
           description: Raw value
@@ -7419,6 +7676,15 @@ components:
     RevokeRequest:
       type: object
       properties:
+        comment:
+          type: string
+          description: Optional comment to include in revocation notification
+        connection_id:
+          pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+          type: string
+          description: Connection ID to which the revocation notification will be
+            sent; required if notify is true
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
         cred_ex_id:
           pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
           type: string
@@ -7429,6 +7695,9 @@ components:
           type: string
           description: Credential revocation identifier
           example: '12345'
+        notify:
+          type: boolean
+          description: Send a notification to the credential recipient
         publish:
           type: boolean
           description: (True) publish revocation to ledger immediately, or (default,
@@ -7438,6 +7707,10 @@ components:
           type: string
           description: Revocation registry identifier
           example: WgWxqztrNooG92RXvxSTWv:4:WgWxqztrNooG92RXvxSTWv:3:CL:20:tag:CL_ACCUM:0
+        thread_id:
+          type: string
+          description: Thread ID of the credential exchange message thread resulting
+            in the credential now being revoked; required if notify is true
     RouteRecord:
       required:
       - recipient_key
@@ -7565,6 +7838,18 @@ components:
             type: string
             description: Schema identifiers
             example: WgWxqztrNooG92RXvxSTWv:2:schema_name:1.0
+    SchemasInputDescriptorFilter:
+      type: object
+      properties:
+        oneof_filter:
+          type: boolean
+          description: oneOf
+        uri_groups:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/SchemaInputDescriptor'
     SendMenu:
       required:
       - menu
@@ -7778,17 +8063,27 @@ components:
                   {"mechanism": "manual","taaDigest": "f50fe2c2ab977006761d36bd6f23e4c6a7e0fc2feb9f62","time":
                   1597708800,}}'
               mime-type: application/json
+        meta_data:
+          type: object
+          properties: {}
+          example:
+            context:
+              param1: param1_value
+              param2: param2_value
+            post_process:
+            - topic: topic_value
+              other: other_value
         signature_request:
           type: array
           items:
             type: object
             properties: {}
             example:
-              author_goal_code: transaction.ledger.write
+              author_goal_code: aries.transaction.ledger.write
               context: did:sov
               method: add-signature
               signature_type: <requested signature type>
-              signer_goal_code: transaction.endorse
+              signer_goal_code: aries.transaction.endorse
         signature_response:
           type: array
           items:
@@ -7798,7 +8093,7 @@ components:
               context: did:sov
               message_id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
               method: add-signature
-              signer_goal_code: transaction.refuse
+              signer_goal_code: aries.transaction.refuse
         state:
           type: string
           description: Current record state
@@ -8272,6 +8567,66 @@ components:
       properties:
         credential_id:
           type: string
+    V10DiscoveryExchangeListResult:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            description: Discover Features v1.0 exchange record
+            allOf:
+            - $ref: '#/components/schemas/V10DiscoveryRecord'
+    V10DiscoveryExchangeResult:
+      type: object
+      properties:
+        results:
+          type: object
+          description: Discover Features v1.0 exchange record
+          allOf:
+          - $ref: '#/components/schemas/V10DiscoveryRecord'
+    V10DiscoveryRecord:
+      type: object
+      properties:
+        connection_id:
+          type: string
+          description: Connection identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        created_at:
+          pattern: ^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(?:\:(?:\d\d(?:\.\d{1,6})?))?(?:[+-]\d\d:?\d\d|Z|)$
+          type: string
+          description: Time of record creation
+          example: 2021-12-31 23:59:59+00:00
+        disclose:
+          type: object
+          description: Disclose message
+          allOf:
+          - $ref: '#/components/schemas/Disclose'
+        discovery_exchange_id:
+          type: string
+          description: Credential exchange identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        query_msg:
+          type: object
+          description: Query message
+          allOf:
+          - $ref: '#/components/schemas/Query'
+        state:
+          type: string
+          description: Current record state
+          example: active
+        thread_id:
+          type: string
+          description: Thread identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        trace:
+          type: boolean
+          description: Record trace information, based on agent configuration
+        updated_at:
+          pattern: ^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(?:\:(?:\d\d(?:\.\d{1,6})?))?(?:[+-]\d\d:?\d\d|Z|)$
+          type: string
+          description: Time of last record update
+          example: 2021-12-31 23:59:59+00:00
     V10PresentProofModuleResponse:
       type: object
     V10PresentationCreateRequestRequest:
@@ -8586,6 +8941,7 @@ components:
           - credential-issued
           - credential-received
           - done
+          - credential-revoked
         thread_id:
           type: string
           description: Thread identifier
@@ -9038,6 +9394,66 @@ components:
       properties:
         credential_id:
           type: string
+    V20DiscoveryExchangeListResult:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            description: Discover Features v2.0 exchange record
+            allOf:
+            - $ref: '#/components/schemas/V20DiscoveryRecord'
+    V20DiscoveryExchangeResult:
+      type: object
+      properties:
+        results:
+          type: object
+          description: Discover Features v2.0 exchange record
+          allOf:
+          - $ref: '#/components/schemas/V20DiscoveryRecord'
+    V20DiscoveryRecord:
+      type: object
+      properties:
+        connection_id:
+          type: string
+          description: Connection identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        created_at:
+          pattern: ^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(?:\:(?:\d\d(?:\.\d{1,6})?))?(?:[+-]\d\d:?\d\d|Z|)$
+          type: string
+          description: Time of record creation
+          example: 2021-12-31 23:59:59+00:00
+        disclosures:
+          type: object
+          description: Disclosures message
+          allOf:
+          - $ref: '#/components/schemas/Disclosures'
+        discovery_exchange_id:
+          type: string
+          description: Credential exchange identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        queries_msg:
+          type: object
+          description: Queries message
+          allOf:
+          - $ref: '#/components/schemas/Queries'
+        state:
+          type: string
+          description: Current record state
+          example: active
+        thread_id:
+          type: string
+          description: Thread identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        trace:
+          type: boolean
+          description: Record trace information, based on agent configuration
+        updated_at:
+          pattern: ^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(?:\:(?:\d\d(?:\.\d{1,6})?))?(?:[+-]\d\d:?\d\d|Z|)$
+          type: string
+          description: Time of last record update
+          example: 2021-12-31 23:59:59+00:00
     V20IssueCredSchemaCore:
       required:
       - filter
@@ -9564,6 +9980,11 @@ components:
           type: string
           description: Wallet record ID
           example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+    WriteLedgerRequest:
+      type: object
+      properties:
+        ledger_id:
+          type: string
   securitySchemes:
     AuthorizationHeader:
       type: apiKey

@@ -20,11 +20,13 @@ class DIFPresSpec(BaseModel):
         issuer_id: Issuer identifier to sign the presentation, if different from current public DID [Optional].
         presentation_definition: The presentation_definition of this DIFPresSpec [Optional].
         record_ids: Mapping of input_descriptor id to list of stored W3C credential record_id [Optional].
+        reveal_doc: reveal doc [JSON-LD frame] dict used to derive the credential when selective disclosure is required [Optional].
     """
 
     issuer_id: Optional[str] = None
     presentation_definition: Optional[PresentationDefinition] = None
     record_ids: Optional[Dict[str, Any]] = None
+    reveal_doc: Optional[Dict[str, Any]] = None
 
     def __init__(
         self,
@@ -32,12 +34,14 @@ class DIFPresSpec(BaseModel):
         issuer_id: Optional[str] = None,
         presentation_definition: Optional[PresentationDefinition] = None,
         record_ids: Optional[Dict[str, Any]] = None,
+        reveal_doc: Optional[Dict[str, Any]] = None,
         **kwargs,
     ):
         super().__init__(
             issuer_id=issuer_id,
             presentation_definition=presentation_definition,
             record_ids=record_ids,
+            reveal_doc=reveal_doc,
             **kwargs,
         )
 

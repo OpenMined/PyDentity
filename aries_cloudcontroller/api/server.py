@@ -22,7 +22,6 @@ from aries_cloudcontroller.model.admin_modules import AdminModules
 from aries_cloudcontroller.model.admin_status import AdminStatus
 from aries_cloudcontroller.model.admin_status_liveliness import AdminStatusLiveliness
 from aries_cloudcontroller.model.admin_status_readiness import AdminStatusReadiness
-from aries_cloudcontroller.model.query_result import QueryResult
 
 
 class ServerApi(Consumer):
@@ -33,12 +32,6 @@ class ServerApi(Consumer):
     async def get_config(self) -> AdminConfig:
         """Fetch the server configuration"""
         return await self.__get_config()
-
-    async def get_features(self, *, query: Optional[str] = None) -> QueryResult:
-        """Query supported features"""
-        return await self.__get_features(
-            query=query,
-        )
 
     async def get_plugins(self) -> AdminModules:
         """Fetch the list of loaded plugins"""
@@ -69,11 +62,6 @@ class ServerApi(Consumer):
     @get("/status/config")
     def __get_config(self) -> AdminConfig:
         """Internal uplink method for get_config"""
-
-    @returns.json
-    @get("/features")
-    def __get_features(self, *, query: Query = None) -> QueryResult:
-        """Internal uplink method for get_features"""
 
     @returns.json
     @get("/plugins")

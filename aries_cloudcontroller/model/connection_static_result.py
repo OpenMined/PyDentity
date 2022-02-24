@@ -17,17 +17,17 @@ class ConnectionStaticResult(BaseModel):
     Do not edit the class manually.
 
     ConnectionStaticResult - a model defined in OpenAPI
-        mv_verkey: My verification key.
         my_did: Local DID.
         my_endpoint: My URL endpoint.
+        my_verkey: My verification key.
         record: The record of this ConnectionStaticResult.
         their_did: Remote DID.
         their_verkey: Remote verification key.
     """
 
-    mv_verkey: str
     my_did: str
     my_endpoint: str
+    my_verkey: str
     record: ConnRecord
     their_did: str
     their_verkey: str
@@ -35,35 +35,23 @@ class ConnectionStaticResult(BaseModel):
     def __init__(
         self,
         *,
-        mv_verkey: str = None,
         my_did: str = None,
         my_endpoint: str = None,
+        my_verkey: str = None,
         record: ConnRecord = None,
         their_did: str = None,
         their_verkey: str = None,
         **kwargs,
     ):
         super().__init__(
-            mv_verkey=mv_verkey,
             my_did=my_did,
             my_endpoint=my_endpoint,
+            my_verkey=my_verkey,
             record=record,
             their_did=their_did,
             their_verkey=their_verkey,
             **kwargs,
         )
-
-    @validator("mv_verkey")
-    def mv_verkey_pattern(cls, value):
-
-        pattern = (
-            r"^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{43,44}$"
-        )
-        if not re.match(pattern, value):
-            raise ValueError(
-                f"Value of mv_verkey does not match regex pattern ('{pattern}')"
-            )
-        return value
 
     @validator("my_did")
     def my_did_pattern(cls, value):
@@ -82,6 +70,18 @@ class ConnectionStaticResult(BaseModel):
         if not re.match(pattern, value):
             raise ValueError(
                 f"Value of my_endpoint does not match regex pattern ('{pattern}')"
+            )
+        return value
+
+    @validator("my_verkey")
+    def my_verkey_pattern(cls, value):
+
+        pattern = (
+            r"^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{43,44}$"
+        )
+        if not re.match(pattern, value):
+            raise ValueError(
+                f"Value of my_verkey does not match regex pattern ('{pattern}')"
             )
         return value
 

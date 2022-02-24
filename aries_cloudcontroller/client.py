@@ -9,7 +9,10 @@ from aries_cloudcontroller.api import (
     ConnectionApi,
     CredentialDefinitionApi,
     CredentialsApi,
+    DefaultApi,
     DidExchangeApi,
+    DiscoverFeaturesApi,
+    DiscoverFeaturesV20Api,
     EndorseTransactionApi,
     IntroductionApi,
     IssueCredentialV10Api,
@@ -36,7 +39,10 @@ class Client(AbstractAsyncContextManager):
     connection: ConnectionApi
     credential_definition: CredentialDefinitionApi
     credentials: CredentialsApi
+    default: DefaultApi
     did_exchange: DidExchangeApi
+    discover_features: DiscoverFeaturesApi
+    discover_features_v2_0: DiscoverFeaturesV20Api
     endorse_transaction: EndorseTransactionApi
     introduction: IntroductionApi
     issue_credential_v1_0: IssueCredentialV10Api
@@ -74,7 +80,10 @@ class Client(AbstractAsyncContextManager):
         self.connection = ConnectionApi(**service_params)
         self.credential_definition = CredentialDefinitionApi(**service_params)
         self.credentials = CredentialsApi(**service_params)
+        self.default = DefaultApi(**service_params)
         self.did_exchange = DidExchangeApi(**service_params)
+        self.discover_features = DiscoverFeaturesApi(**service_params)
+        self.discover_features_v2_0 = DiscoverFeaturesV20Api(**service_params)
         self.endorse_transaction = EndorseTransactionApi(**service_params)
         self.introduction = IntroductionApi(**service_params)
         self.issue_credential_v1_0 = IssueCredentialV10Api(**service_params)
