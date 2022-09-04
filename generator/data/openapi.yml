@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Aries Cloud Agent
-  version: v0.7.3
+  version: v0.7.4
 servers:
 - url: /
 security:
@@ -255,6 +255,12 @@ paths:
         schema:
           pattern: ^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{43,44}$
           type: string
+      - name: invitation_msg_id
+        in: query
+        description: Identifier of the associated Invitation Mesage
+        schema:
+          type: string
+          format: uuid
       - name: my_did
         in: query
         description: My DID
@@ -267,18 +273,24 @@ paths:
         schema:
           type: string
           enum:
-          - invitation
-          - init
-          - active
-          - error
+          - request
           - start
+          - error
+          - active
           - abandoned
+          - init
+          - invitation
           - response
           - completed
-          - request
       - name: their_did
         in: query
         description: Their DID
+        schema:
+          pattern: ^(did:sov:)?[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}$
+          type: string
+      - name: their_public_did
+        in: query
+        description: Their Public DID
         schema:
           pattern: ^(did:sov:)?[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}$
           type: string
@@ -1329,6 +1341,7 @@ paths:
           - credential-received
           - done
           - credential-revoked
+          - abandoned
       - name: thread_id
         in: query
         description: Thread identifier
@@ -1681,6 +1694,7 @@ paths:
           - credential_received
           - credential_acked
           - credential_revoked
+          - abandoned
       - name: thread_id
         in: query
         description: Thread identifier
@@ -2090,6 +2104,16 @@ paths:
         description: Alias
         schema:
           type: string
+      - name: conn_id
+        in: query
+        description: Connection identifier
+        schema:
+          type: string
+      - name: create_transaction_for_endorser
+        in: query
+        description: Create Transaction For Endorser's signature
+        schema:
+          type: boolean
       - name: role
         in: query
         description: Role
@@ -2107,7 +2131,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegisterLedgerNymResponse'
+                $ref: '#/components/schemas/TxnOrRegisterLedgerNymResponse'
       operationId: register_nym
   /ledger/rotate-public-did-keypair:
     patch:
@@ -2921,7 +2945,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AdminAPIMessageTracing'
+              $ref: '#/components/schemas/V20PresentationSendRequestToProposal'
         required: false
       responses:
         200:
@@ -3047,6 +3071,7 @@ paths:
           - presentation_received
           - verified
           - presentation_acked
+          - abandoned
       - name: thread_id
         in: query
         description: Thread identifier
@@ -3221,7 +3246,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AdminAPIMessageTracing'
+              $ref: '#/components/schemas/V10PresentationSendRequestToProposal'
         required: false
       responses:
         200:
@@ -3572,6 +3597,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/RevRegResult'
       operationId: publish_rev_reg_entry
+  /revocation/registry/{rev_reg_id}/fix-revocation-entry-state:
+    put:
+      tags:
+      - revocation
+      summary: Fix revocation state in wallet and return number of updated entries
+      parameters:
+      - name: rev_reg_id
+        in: path
+        description: Revocation Registry identifier
+        required: true
+        schema:
+          pattern: ^([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}):4:([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}):3:CL:(([1-9][0-9]*)|([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}:2:.+:[0-9.]+))(:.+)?:CL_ACCUM:(.+$)
+          type: string
+      - name: apply_ledger_update
+        in: query
+        description: Apply updated accumulator transaction to ledger
+        required: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevRegWalletUpdatedResult'
   /revocation/registry/{rev_reg_id}/issued:
     get:
       tags:
@@ -3593,6 +3644,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/RevRegIssuedResult'
       operationId: get_registry_issued_credentials_count
+  /revocation/registry/{rev_reg_id}/issued/details:
+    get:
+      tags:
+      - revocation
+      summary: Get details of credentials issued against revocation registry
+      parameters:
+      - name: rev_reg_id
+        in: path
+        description: Revocation Registry identifier
+        required: true
+        schema:
+          pattern: ^([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}):4:([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}):3:CL:(([1-9][0-9]*)|([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}:2:.+:[0-9.]+))(:.+)?:CL_ACCUM:(.+$)
+          type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredRevRecordDetailsResult'
+  /revocation/registry/{rev_reg_id}/issued/indy_recs:
+    get:
+      tags:
+      - revocation
+      summary: Get details of revoked credentials from ledger
+      parameters:
+      - name: rev_reg_id
+        in: path
+        description: Revocation Registry identifier
+        required: true
+        schema:
+          pattern: ^([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}):4:([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}):3:CL:(([1-9][0-9]*)|([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}:2:.+:[0-9.]+))(:.+)?:CL_ACCUM:(.+$)
+          type: string
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredRevIndyRecordsResult'
   /revocation/registry/{rev_reg_id}/set-state:
     patch:
       tags:
@@ -4055,6 +4146,11 @@ paths:
         required: true
         schema:
           type: string
+      - name: endorser_did
+        in: query
+        description: Endorser DID
+        schema:
+          type: string
       responses:
         200:
           description: ''
@@ -4221,6 +4317,16 @@ paths:
         schema:
           pattern: ^(did:sov:)?[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}$
           type: string
+      - name: conn_id
+        in: query
+        description: Connection identifier
+        schema:
+          type: string
+      - name: create_transaction_for_endorser
+        in: query
+        description: Create Transaction For Endorser's signature
+        schema:
+          type: boolean
       responses:
         200:
           description: ''
@@ -4255,6 +4361,17 @@ paths:
       tags:
       - wallet
       summary: Update endpoint in wallet and on ledger if posted to it
+      parameters:
+      - name: conn_id
+        in: query
+        description: Connection identifier
+        schema:
+          type: string
+      - name: create_transaction_for_endorser
+        in: query
+        description: Create Transaction For Endorser's signature
+        schema:
+          type: boolean
       requestBody:
         content:
           application/json:
@@ -4296,12 +4413,6 @@ components:
           - $ref: '#/components/schemas/Menu'
     ActionMenuModulesResult:
       type: object
-    AdminAPIMessageTracing:
-      type: object
-      properties:
-        trace:
-          type: boolean
-          description: Record trace information, based on agent configuration
     AdminConfig:
       type: object
       properties:
@@ -4902,6 +5013,14 @@ components:
           type: string
           description: Master key used for key derivation.
           example: MySecretKey123
+        wallet_key_derivation:
+          type: string
+          description: Key derivation
+          example: RAW
+          enum:
+          - ARGON2I_MOD
+          - ARGON2I_INT
+          - RAW
         wallet_name:
           type: string
           description: Wallet name
@@ -5070,6 +5189,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IndyCredInfo'
+    CredRevIndyRecordsResult:
+      type: object
+      properties:
+        rev_reg_delta:
+          type: object
+          properties: {}
+          description: Indy revocation registry delta
+    CredRevRecordDetailsResult:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssuerCredRevRecord'
     CredRevRecordResult:
       type: object
       properties:
@@ -5546,6 +5679,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InputDescriptors'
+        options:
+          $ref: '#/components/schemas/DIFOptions'
     DIFProofRequest:
       required:
       - presentation_definition
@@ -6613,7 +6748,7 @@ components:
           description: Accepts a list of schema or a dict containing filters like
             oneof_filter.
           example:
-            oneOf:
+            oneof_filter:
             - - uri: https://www.w3.org/Test1#Test1
               - uri: https://www.w3.org/Test2#Test2
             - oneof_filter:
@@ -6729,6 +6864,10 @@ components:
           type: string
           description: Invitation message URL
           example: https://example.com/endpoint?c_i=eyJAdHlwZSI6ICIuLi4iLCAiLi4uIjogIi4uLiJ9XX0=
+        oob_id:
+          type: string
+          description: Out of band record identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
         state:
           type: string
           description: Out of band message exchange state
@@ -7593,13 +7732,6 @@ components:
           type: string
           description: Service endpoint at which to reach this agent
           example: http://192.168.56.101:8020
-    RegisterLedgerNymResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Success of nym registration operation
-          example: true
     RemoveWalletRequest:
       type: object
       properties:
@@ -7663,6 +7795,21 @@ components:
           description: Public URI to the tails file
           format: url
           example: http://192.168.56.133:6543/revocation/registry/WgWxqztrNooG92RXvxSTWv:4:WgWxqztrNooG92RXvxSTWv:3:CL:20:tag:CL_ACCUM:0/tails-file
+    RevRegWalletUpdatedResult:
+      type: object
+      properties:
+        accum_calculated:
+          type: object
+          properties: {}
+          description: Calculated accumulator for phantom revocations
+        accum_fixed:
+          type: object
+          properties: {}
+          description: Applied ledger transaction to fix revocations
+        rev_reg_delta:
+          type: object
+          properties: {}
+          description: Indy revocation registry delta
     RevRegsCreated:
       type: object
       properties:
@@ -7700,6 +7847,13 @@ components:
         notify:
           type: boolean
           description: Send a notification to the credential recipient
+        notify_version:
+          type: string
+          description: Specify which version of the revocation notification should
+            be sent
+          enum:
+          - v1_0
+          - v2_0
         publish:
           type: boolean
           description: (True) publish revocation to ledger immediately, or (default,
@@ -8141,6 +8295,18 @@ components:
         txn:
           type: object
           description: Revocation registry revocations transaction to endorse
+          allOf:
+          - $ref: '#/components/schemas/TransactionRecord'
+    TxnOrRegisterLedgerNymResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Success of nym registration operation
+          example: true
+        txn:
+          type: object
+          description: DID transaction to endorse
           allOf:
           - $ref: '#/components/schemas/TransactionRecord'
     TxnOrRevRegResult:
@@ -8636,6 +8802,10 @@ components:
       - proof_request
       type: object
       properties:
+        auto_verify:
+          type: boolean
+          description: Verifier choice to auto-verify proof presentation
+          example: false
         comment:
           type: string
           nullable: true
@@ -8652,6 +8822,9 @@ components:
           type: boolean
           description: Prover choice to auto-present proof as verifier requests
           example: false
+        auto_verify:
+          type: boolean
+          description: Verifier choice to auto-verify proof presentation
         connection_id:
           type: string
           description: Connection identifier
@@ -8772,6 +8945,10 @@ components:
       - proof_request
       type: object
       properties:
+        auto_verify:
+          type: boolean
+          description: Verifier choice to auto-verify proof presentation
+          example: false
         comment:
           type: string
           nullable: true
@@ -8782,6 +8959,17 @@ components:
           example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
         proof_request:
           $ref: '#/components/schemas/IndyProofRequest'
+        trace:
+          type: boolean
+          description: Whether to trace event (default false)
+          example: false
+    V10PresentationSendRequestToProposal:
+      type: object
+      properties:
+        auto_verify:
+          type: boolean
+          description: Verifier choice to auto-verify proof presentation
+          example: false
         trace:
           type: boolean
           description: Whether to trace event (default false)
@@ -8944,6 +9132,7 @@ components:
           - credential-received
           - done
           - credential-revoked
+          - abandoned
         thread_id:
           type: string
           description: Thread identifier
@@ -9514,6 +9703,10 @@ components:
       - presentation_request
       type: object
       properties:
+        auto_verify:
+          type: boolean
+          description: Verifier choice to auto-verify proof presentation
+          example: false
         comment:
           type: string
           nullable: true
@@ -9530,6 +9723,9 @@ components:
           type: boolean
           description: Prover choice to auto-present proof as verifier requests
           example: false
+        auto_verify:
+          type: boolean
+          description: Verifier choice to auto-verify proof presentation
         by_format:
           type: object
           description: Attachment content by format for proposal, request, and presentation
@@ -9767,6 +9963,10 @@ components:
       - presentation_request
       type: object
       properties:
+        auto_verify:
+          type: boolean
+          description: Verifier choice to auto-verify proof presentation
+          example: false
         comment:
           type: string
           nullable: true
@@ -9800,6 +10000,17 @@ components:
           description: Record trace information, based on agent configuration
     V20PresentProofModuleResponse:
       type: object
+    V20PresentationSendRequestToProposal:
+      type: object
+      properties:
+        auto_verify:
+          type: boolean
+          description: Verifier choice to auto-verify proof presentation
+          example: false
+        trace:
+          type: boolean
+          description: Whether to trace event (default false)
+          example: false
     VCRecord:
       type: object
       properties:
