@@ -45,10 +45,13 @@ class EndorseTransactionApi(Consumer):
             body=body,
         )
 
-    async def endorse_transaction(self, *, tran_id: str) -> TransactionRecord:
+    async def endorse_transaction(
+        self, *, tran_id: str, endorser_did: Optional[str] = None
+    ) -> TransactionRecord:
         """For Endorser to endorse a particular transaction record"""
         return await self.__endorse_transaction(
             tran_id=tran_id,
+            endorser_did=endorser_did,
         )
 
     async def get_records(self) -> TransactionList:
@@ -117,7 +120,9 @@ class EndorseTransactionApi(Consumer):
 
     @returns.json
     @post("/transactions/{tran_id}/endorse")
-    def __endorse_transaction(self, *, tran_id: str) -> TransactionRecord:
+    def __endorse_transaction(
+        self, *, tran_id: str, endorser_did: Query = None
+    ) -> TransactionRecord:
         """Internal uplink method for endorse_transaction"""
 
     @returns.json

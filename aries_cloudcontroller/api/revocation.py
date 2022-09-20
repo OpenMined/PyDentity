@@ -20,6 +20,12 @@ from aries_cloudcontroller.uplink_util import bool_query
 from aries_cloudcontroller.model.clear_pending_revocations_request import (
     ClearPendingRevocationsRequest,
 )
+from aries_cloudcontroller.model.cred_rev_indy_records_result import (
+    CredRevIndyRecordsResult,
+)
+from aries_cloudcontroller.model.cred_rev_record_details_result import (
+    CredRevRecordDetailsResult,
+)
 from aries_cloudcontroller.model.cred_rev_record_result import CredRevRecordResult
 from aries_cloudcontroller.model.publish_revocations import PublishRevocations
 from aries_cloudcontroller.model.rev_reg_create_request import RevRegCreateRequest
@@ -27,6 +33,9 @@ from aries_cloudcontroller.model.rev_reg_issued_result import RevRegIssuedResult
 from aries_cloudcontroller.model.rev_reg_result import RevRegResult
 from aries_cloudcontroller.model.rev_reg_update_tails_file_uri import (
     RevRegUpdateTailsFileUri,
+)
+from aries_cloudcontroller.model.rev_reg_wallet_updated_result import (
+    RevRegWalletUpdatedResult,
 )
 from aries_cloudcontroller.model.rev_regs_created import RevRegsCreated
 from aries_cloudcontroller.model.revoke_request import RevokeRequest
@@ -138,6 +147,33 @@ class RevocationApi(Consumer):
         """Publish pending revocations to ledger"""
         return await self.__publish_revocations(
             body=body,
+        )
+
+    async def revocation_registry_rev_reg_id_fix_revocation_entry_state_put(
+        self, *, rev_reg_id: str, apply_ledger_update: bool
+    ) -> RevRegWalletUpdatedResult:
+        """Fix revocation state in wallet and return number of updated entries"""
+        return (
+            await self.__revocation_registry_rev_reg_id_fix_revocation_entry_state_put(
+                rev_reg_id=rev_reg_id,
+                apply_ledger_update=bool_query(apply_ledger_update),
+            )
+        )
+
+    async def revocation_registry_rev_reg_id_issued_details_get(
+        self, *, rev_reg_id: str
+    ) -> CredRevRecordDetailsResult:
+        """Get details of credentials issued against revocation registry"""
+        return await self.__revocation_registry_rev_reg_id_issued_details_get(
+            rev_reg_id=rev_reg_id,
+        )
+
+    async def revocation_registry_rev_reg_id_issued_indy_recs_get(
+        self, *, rev_reg_id: str
+    ) -> CredRevIndyRecordsResult:
+        """Get details of revoked credentials from ledger"""
+        return await self.__revocation_registry_rev_reg_id_issued_indy_recs_get(
+            rev_reg_id=rev_reg_id,
         )
 
     async def revoke_credential(self, *, body: Optional[RevokeRequest] = None) -> Dict:
@@ -252,6 +288,27 @@ class RevocationApi(Consumer):
         self, *, body: Body(type=PublishRevocations) = {}
     ) -> Union[PublishRevocations, TxnOrPublishRevocationsResult]:
         """Internal uplink method for publish_revocations"""
+
+    @returns.json
+    @put("/revocation/registry/{rev_reg_id}/fix-revocation-entry-state")
+    def __revocation_registry_rev_reg_id_fix_revocation_entry_state_put(
+        self, *, rev_reg_id: str, apply_ledger_update: Query
+    ) -> RevRegWalletUpdatedResult:
+        """Internal uplink method for revocation_registry_rev_reg_id_fix_revocation_entry_state_put"""
+
+    @returns.json
+    @get("/revocation/registry/{rev_reg_id}/issued/details")
+    def __revocation_registry_rev_reg_id_issued_details_get(
+        self, *, rev_reg_id: str
+    ) -> CredRevRecordDetailsResult:
+        """Internal uplink method for revocation_registry_rev_reg_id_issued_details_get"""
+
+    @returns.json
+    @get("/revocation/registry/{rev_reg_id}/issued/indy_recs")
+    def __revocation_registry_rev_reg_id_issued_indy_recs_get(
+        self, *, rev_reg_id: str
+    ) -> CredRevIndyRecordsResult:
+        """Internal uplink method for revocation_registry_rev_reg_id_issued_indy_recs_get"""
 
     @returns.json
     @json

@@ -23,6 +23,7 @@ class V20PresExRecord(BaseModel):
 
     V20PresExRecord - a model defined in OpenAPI
         auto_present: Prover choice to auto-present proof as verifier requests [Optional].
+        auto_verify: Verifier choice to auto-verify proof presentation [Optional].
         by_format: Attachment content by format for proposal, request, and presentation [Optional].
         connection_id: Connection identifier [Optional].
         created_at: Time of record creation [Optional].
@@ -41,6 +42,7 @@ class V20PresExRecord(BaseModel):
     """
 
     auto_present: Optional[bool] = None
+    auto_verify: Optional[bool] = None
     by_format: Optional[V20PresExRecordByFormat] = None
     connection_id: Optional[str] = None
     created_at: Optional[str] = None
@@ -72,6 +74,7 @@ class V20PresExRecord(BaseModel):
         self,
         *,
         auto_present: Optional[bool] = None,
+        auto_verify: Optional[bool] = None,
         by_format: Optional[V20PresExRecordByFormat] = None,
         connection_id: Optional[str] = None,
         created_at: Optional[str] = None,
@@ -102,6 +105,7 @@ class V20PresExRecord(BaseModel):
     ):
         super().__init__(
             auto_present=auto_present,
+            auto_verify=auto_verify,
             by_format=by_format,
             connection_id=connection_id,
             created_at=created_at,

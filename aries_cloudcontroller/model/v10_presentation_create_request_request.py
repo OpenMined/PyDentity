@@ -18,11 +18,13 @@ class V10PresentationCreateRequestRequest(BaseModel):
 
     V10PresentationCreateRequestRequest - a model defined in OpenAPI
         proof_request: The proof_request of this V10PresentationCreateRequestRequest.
+        auto_verify: Verifier choice to auto-verify proof presentation [Optional].
         comment: The comment of this V10PresentationCreateRequestRequest [Optional].
         trace: Whether to trace event (default false) [Optional].
     """
 
     proof_request: IndyProofRequest
+    auto_verify: Optional[bool] = None
     comment: Optional[str] = None
     trace: Optional[bool] = None
 
@@ -30,11 +32,13 @@ class V10PresentationCreateRequestRequest(BaseModel):
         self,
         *,
         proof_request: IndyProofRequest = None,
+        auto_verify: Optional[bool] = None,
         comment: Optional[str] = None,
         trace: Optional[bool] = None,
         **kwargs,
     ):
         super().__init__(
+            auto_verify=auto_verify,
             comment=comment,
             proof_request=proof_request,
             trace=trace,

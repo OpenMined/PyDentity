@@ -21,6 +21,7 @@ class V10PresentationExchange(BaseModel):
 
     V10PresentationExchange - a model defined in OpenAPI
         auto_present: Prover choice to auto-present proof as verifier requests [Optional].
+        auto_verify: Verifier choice to auto-verify proof presentation [Optional].
         connection_id: Connection identifier [Optional].
         created_at: Time of record creation [Optional].
         error_msg: Error message [Optional].
@@ -39,6 +40,7 @@ class V10PresentationExchange(BaseModel):
     """
 
     auto_present: Optional[bool] = None
+    auto_verify: Optional[bool] = None
     connection_id: Optional[str] = None
     created_at: Optional[str] = None
     error_msg: Optional[str] = None
@@ -59,6 +61,7 @@ class V10PresentationExchange(BaseModel):
         self,
         *,
         auto_present: Optional[bool] = None,
+        auto_verify: Optional[bool] = None,
         connection_id: Optional[str] = None,
         created_at: Optional[str] = None,
         error_msg: Optional[str] = None,
@@ -78,6 +81,7 @@ class V10PresentationExchange(BaseModel):
     ):
         super().__init__(
             auto_present=auto_present,
+            auto_verify=auto_verify,
             connection_id=connection_id,
             created_at=created_at,
             error_msg=error_msg,

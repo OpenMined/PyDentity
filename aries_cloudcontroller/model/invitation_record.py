@@ -22,6 +22,7 @@ class InvitationRecord(BaseModel):
         invitation: Out of band invitation message [Optional].
         invitation_id: Invitation record identifier [Optional].
         invitation_url: Invitation message URL [Optional].
+        oob_id: Out of band record identifier [Optional].
         state: Out of band message exchange state [Optional].
         trace: Record trace information, based on agent configuration [Optional].
         updated_at: Time of last record update [Optional].
@@ -32,6 +33,7 @@ class InvitationRecord(BaseModel):
     invitation: Optional[InvitationMessage] = None
     invitation_id: Optional[str] = None
     invitation_url: Optional[str] = None
+    oob_id: Optional[str] = None
     state: Optional[str] = None
     trace: Optional[bool] = None
     updated_at: Optional[str] = None
@@ -44,6 +46,7 @@ class InvitationRecord(BaseModel):
         invitation: Optional[InvitationMessage] = None,
         invitation_id: Optional[str] = None,
         invitation_url: Optional[str] = None,
+        oob_id: Optional[str] = None,
         state: Optional[str] = None,
         trace: Optional[bool] = None,
         updated_at: Optional[str] = None,
@@ -55,6 +58,7 @@ class InvitationRecord(BaseModel):
             invitation=invitation,
             invitation_id=invitation_id,
             invitation_url=invitation_url,
+            oob_id=oob_id,
             state=state,
             trace=trace,
             updated_at=updated_at,

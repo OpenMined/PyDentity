@@ -21,6 +21,7 @@ class CreateWalletRequest(BaseModel):
         label: Label for this wallet. This label is publicized            (self-attested) to other agents as part of forming a connection. [Optional].
         wallet_dispatch_type: Webhook target dispatch type for this wallet.             default - Dispatch only to webhooks associated with this wallet.             base - Dispatch only to webhooks associated with the base wallet.             both - Dispatch to both webhook targets. [Optional].
         wallet_key: Master key used for key derivation. [Optional].
+        wallet_key_derivation: Key derivation [Optional].
         wallet_name: Wallet name [Optional].
         wallet_type: Type of the wallet to create [Optional].
         wallet_webhook_urls: List of Webhook URLs associated with this subwallet [Optional].
@@ -31,6 +32,7 @@ class CreateWalletRequest(BaseModel):
     label: Optional[str] = None
     wallet_dispatch_type: Optional[Literal["default", "both", "base"]] = None
     wallet_key: Optional[str] = None
+    wallet_key_derivation: Optional[Literal["ARGON2I_MOD", "ARGON2I_INT", "RAW"]] = None
     wallet_name: Optional[str] = None
     wallet_type: Optional[Literal["askar", "in_memory", "indy"]] = None
     wallet_webhook_urls: Optional[List[str]] = None
@@ -43,6 +45,9 @@ class CreateWalletRequest(BaseModel):
         label: Optional[str] = None,
         wallet_dispatch_type: Optional[Literal["default", "both", "base"]] = None,
         wallet_key: Optional[str] = None,
+        wallet_key_derivation: Optional[
+            Literal["ARGON2I_MOD", "ARGON2I_INT", "RAW"]
+        ] = None,
         wallet_name: Optional[str] = None,
         wallet_type: Optional[Literal["askar", "in_memory", "indy"]] = None,
         wallet_webhook_urls: Optional[List[str]] = None,
@@ -54,6 +59,7 @@ class CreateWalletRequest(BaseModel):
             label=label,
             wallet_dispatch_type=wallet_dispatch_type,
             wallet_key=wallet_key,
+            wallet_key_derivation=wallet_key_derivation,
             wallet_name=wallet_name,
             wallet_type=wallet_type,
             wallet_webhook_urls=wallet_webhook_urls,

@@ -17,7 +17,6 @@ from typing import Dict, List, Optional, Union  # noqa: F401
 
 from aries_cloudcontroller.uplink_util import bool_query
 
-from aries_cloudcontroller.model.admin_api_message_tracing import AdminAPIMessageTracing
 from aries_cloudcontroller.model.indy_cred_precis import IndyCredPrecis
 from aries_cloudcontroller.model.v20_pres_create_request_request import (
     V20PresCreateRequestRequest,
@@ -33,6 +32,9 @@ from aries_cloudcontroller.model.v20_pres_send_request_request import (
 )
 from aries_cloudcontroller.model.v20_pres_spec_by_format_request import (
     V20PresSpecByFormatRequest,
+)
+from aries_cloudcontroller.model.v20_presentation_send_request_to_proposal import (
+    V20PresentationSendRequestToProposal,
 )
 
 
@@ -118,7 +120,10 @@ class PresentProofV20Api(Consumer):
         )
 
     async def send_request(
-        self, *, pres_ex_id: str, body: Optional[AdminAPIMessageTracing] = None
+        self,
+        *,
+        pres_ex_id: str,
+        body: Optional[V20PresentationSendRequestToProposal] = None
     ) -> V20PresExRecord:
         """Sends a presentation request in reference to a proposal"""
         return await self.__send_request(
@@ -211,7 +216,10 @@ class PresentProofV20Api(Consumer):
     @json
     @post("/present-proof-2.0/records/{pres_ex_id}/send-request")
     def __send_request(
-        self, *, pres_ex_id: str, body: Body(type=AdminAPIMessageTracing) = {}
+        self,
+        *,
+        pres_ex_id: str,
+        body: Body(type=V20PresentationSendRequestToProposal) = {}
     ) -> V20PresExRecord:
         """Internal uplink method for send_request"""
 

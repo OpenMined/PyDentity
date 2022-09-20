@@ -19,12 +19,14 @@ class V10PresentationSendRequestRequest(BaseModel):
     V10PresentationSendRequestRequest - a model defined in OpenAPI
         connection_id: Connection identifier.
         proof_request: The proof_request of this V10PresentationSendRequestRequest.
+        auto_verify: Verifier choice to auto-verify proof presentation [Optional].
         comment: The comment of this V10PresentationSendRequestRequest [Optional].
         trace: Whether to trace event (default false) [Optional].
     """
 
     connection_id: str
     proof_request: IndyProofRequest
+    auto_verify: Optional[bool] = None
     comment: Optional[str] = None
     trace: Optional[bool] = None
 
@@ -33,11 +35,13 @@ class V10PresentationSendRequestRequest(BaseModel):
         *,
         connection_id: str = None,
         proof_request: IndyProofRequest = None,
+        auto_verify: Optional[bool] = None,
         comment: Optional[str] = None,
         trace: Optional[bool] = None,
         **kwargs,
     ):
         super().__init__(
+            auto_verify=auto_verify,
             comment=comment,
             connection_id=connection_id,
             proof_request=proof_request,

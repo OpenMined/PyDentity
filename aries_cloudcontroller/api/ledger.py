@@ -21,11 +21,11 @@ from aries_cloudcontroller.model.get_did_endpoint_response import GetDIDEndpoint
 from aries_cloudcontroller.model.get_did_verkey_response import GetDIDVerkeyResponse
 from aries_cloudcontroller.model.get_nym_role_response import GetNymRoleResponse
 from aries_cloudcontroller.model.ledger_config_list import LedgerConfigList
-from aries_cloudcontroller.model.register_ledger_nym_response import (
-    RegisterLedgerNymResponse,
-)
 from aries_cloudcontroller.model.taa_accept import TAAAccept
 from aries_cloudcontroller.model.taa_result import TAAResult
+from aries_cloudcontroller.model.txn_or_register_ledger_nym_response import (
+    TxnOrRegisterLedgerNymResponse,
+)
 from aries_cloudcontroller.model.write_ledger_request import WriteLedgerRequest
 
 
@@ -75,13 +75,17 @@ class LedgerApi(Consumer):
         did: str,
         verkey: str,
         alias: Optional[str] = None,
+        conn_id: Optional[str] = None,
+        create_transaction_for_endorser: Optional[bool] = None,
         role: Optional[str] = None
-    ) -> RegisterLedgerNymResponse:
+    ) -> TxnOrRegisterLedgerNymResponse:
         """Send a NYM registration to the ledger."""
         return await self.__register_nym(
             did=did,
             verkey=verkey,
             alias=alias,
+            conn_id=conn_id,
+            create_transaction_for_endorser=bool_query(create_transaction_for_endorser),
             role=role,
         )
 
@@ -130,8 +134,15 @@ class LedgerApi(Consumer):
     @returns.json
     @post("/ledger/register-nym")
     def __register_nym(
-        self, *, did: Query, verkey: Query, alias: Query = None, role: Query = None
-    ) -> RegisterLedgerNymResponse:
+        self,
+        *,
+        did: Query,
+        verkey: Query,
+        alias: Query = None,
+        conn_id: Query = None,
+        create_transaction_for_endorser: Query = None,
+        role: Query = None
+    ) -> TxnOrRegisterLedgerNymResponse:
         """Internal uplink method for register_nym"""
 
     @returns.json

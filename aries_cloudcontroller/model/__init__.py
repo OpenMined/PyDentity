@@ -2,7 +2,6 @@
 
 from aries_cloudcontroller.model.aml_record import AMLRecord
 from aries_cloudcontroller.model.action_menu_fetch_result import ActionMenuFetchResult
-from aries_cloudcontroller.model.admin_api_message_tracing import AdminAPIMessageTracing
 from aries_cloudcontroller.model.admin_config import AdminConfig
 from aries_cloudcontroller.model.admin_mediation_deny import AdminMediationDeny
 from aries_cloudcontroller.model.admin_modules import AdminModules
@@ -54,6 +53,12 @@ from aries_cloudcontroller.model.cred_def_value import CredDefValue
 from aries_cloudcontroller.model.cred_def_value_primary import CredDefValuePrimary
 from aries_cloudcontroller.model.cred_def_value_revocation import CredDefValueRevocation
 from aries_cloudcontroller.model.cred_info_list import CredInfoList
+from aries_cloudcontroller.model.cred_rev_indy_records_result import (
+    CredRevIndyRecordsResult,
+)
+from aries_cloudcontroller.model.cred_rev_record_details_result import (
+    CredRevRecordDetailsResult,
+)
 from aries_cloudcontroller.model.cred_rev_record_result import CredRevRecordResult
 from aries_cloudcontroller.model.cred_revoked_result import CredRevokedResult
 from aries_cloudcontroller.model.credential import Credential
@@ -222,9 +227,6 @@ from aries_cloudcontroller.model.raw_encoded import RawEncoded
 from aries_cloudcontroller.model.receive_invitation_request import (
     ReceiveInvitationRequest,
 )
-from aries_cloudcontroller.model.register_ledger_nym_response import (
-    RegisterLedgerNymResponse,
-)
 from aries_cloudcontroller.model.remove_wallet_request import RemoveWalletRequest
 from aries_cloudcontroller.model.resolution_result import ResolutionResult
 from aries_cloudcontroller.model.rev_reg_create_request import RevRegCreateRequest
@@ -232,6 +234,9 @@ from aries_cloudcontroller.model.rev_reg_issued_result import RevRegIssuedResult
 from aries_cloudcontroller.model.rev_reg_result import RevRegResult
 from aries_cloudcontroller.model.rev_reg_update_tails_file_uri import (
     RevRegUpdateTailsFileUri,
+)
+from aries_cloudcontroller.model.rev_reg_wallet_updated_result import (
+    RevRegWalletUpdatedResult,
 )
 from aries_cloudcontroller.model.rev_regs_created import RevRegsCreated
 from aries_cloudcontroller.model.revoke_request import RevokeRequest
@@ -264,6 +269,9 @@ from aries_cloudcontroller.model.txn_or_credential_definition_send_result import
 )
 from aries_cloudcontroller.model.txn_or_publish_revocations_result import (
     TxnOrPublishRevocationsResult,
+)
+from aries_cloudcontroller.model.txn_or_register_ledger_nym_response import (
+    TxnOrRegisterLedgerNymResponse,
 )
 from aries_cloudcontroller.model.txn_or_rev_reg_result import TxnOrRevRegResult
 from aries_cloudcontroller.model.txn_or_schema_send_result import TxnOrSchemaSendResult
@@ -321,6 +329,9 @@ from aries_cloudcontroller.model.v10_presentation_proposal_request import (
 )
 from aries_cloudcontroller.model.v10_presentation_send_request_request import (
     V10PresentationSendRequestRequest,
+)
+from aries_cloudcontroller.model.v10_presentation_send_request_to_proposal import (
+    V10PresentationSendRequestToProposal,
 )
 from aries_cloudcontroller.model.v20_cred_attr_spec import V20CredAttrSpec
 from aries_cloudcontroller.model.v20_cred_bound_offer_request import (
@@ -397,6 +408,9 @@ from aries_cloudcontroller.model.v20_pres_send_request_request import (
 from aries_cloudcontroller.model.v20_pres_spec_by_format_request import (
     V20PresSpecByFormatRequest,
 )
+from aries_cloudcontroller.model.v20_presentation_send_request_to_proposal import (
+    V20PresentationSendRequestToProposal,
+)
 from aries_cloudcontroller.model.vc_record import VCRecord
 from aries_cloudcontroller.model.vc_record_list import VCRecordList
 from aries_cloudcontroller.model.verify_request import VerifyRequest
@@ -411,7 +425,6 @@ from aries_cloudcontroller.model.write_ledger_request import WriteLedgerRequest
 __all__ = [
     "AMLRecord",
     "ActionMenuFetchResult",
-    "AdminAPIMessageTracing",
     "AdminConfig",
     "AdminMediationDeny",
     "AdminModules",
@@ -445,6 +458,8 @@ __all__ = [
     "CredDefValuePrimary",
     "CredDefValueRevocation",
     "CredInfoList",
+    "CredRevIndyRecordsResult",
+    "CredRevRecordDetailsResult",
     "CredRevRecordResult",
     "CredRevokedResult",
     "Credential",
@@ -565,13 +580,13 @@ __all__ = [
     "QueryItem",
     "RawEncoded",
     "ReceiveInvitationRequest",
-    "RegisterLedgerNymResponse",
     "RemoveWalletRequest",
     "ResolutionResult",
     "RevRegCreateRequest",
     "RevRegIssuedResult",
     "RevRegResult",
     "RevRegUpdateTailsFileUri",
+    "RevRegWalletUpdatedResult",
     "RevRegsCreated",
     "RevokeRequest",
     "RouteRecord",
@@ -598,6 +613,7 @@ __all__ = [
     "TransactionRecord",
     "TxnOrCredentialDefinitionSendResult",
     "TxnOrPublishRevocationsResult",
+    "TxnOrRegisterLedgerNymResponse",
     "TxnOrRevRegResult",
     "TxnOrSchemaSendResult",
     "UpdateWalletRequest",
@@ -621,6 +637,7 @@ __all__ = [
     "V10PresentationProblemReportRequest",
     "V10PresentationProposalRequest",
     "V10PresentationSendRequestRequest",
+    "V10PresentationSendRequestToProposal",
     "V20CredAttrSpec",
     "V20CredBoundOfferRequest",
     "V20CredExFree",
@@ -664,6 +681,7 @@ __all__ = [
     "V20PresRequestByFormat",
     "V20PresSendRequestRequest",
     "V20PresSpecByFormatRequest",
+    "V20PresentationSendRequestToProposal",
     "VCRecord",
     "VCRecordList",
     "VerifyRequest",

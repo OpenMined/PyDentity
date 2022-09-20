@@ -120,9 +120,11 @@ class ConnectionApi(Consumer):
         alias: Optional[str] = None,
         connection_protocol: Optional[str] = None,
         invitation_key: Optional[str] = None,
+        invitation_msg_id: Optional[str] = None,
         my_did: Optional[str] = None,
         state: Optional[str] = None,
         their_did: Optional[str] = None,
+        their_public_did: Optional[str] = None,
         their_role: Optional[str] = None
     ) -> ConnectionList:
         """Query agent-to-agent connections"""
@@ -130,9 +132,11 @@ class ConnectionApi(Consumer):
             alias=alias,
             connection_protocol=connection_protocol,
             invitation_key=invitation_key,
+            invitation_msg_id=invitation_msg_id,
             my_did=my_did,
             state=state,
             their_did=their_did,
+            their_public_did=their_public_did,
             their_role=their_role,
         )
 
@@ -239,9 +243,11 @@ class ConnectionApi(Consumer):
         alias: Query = None,
         connection_protocol: Query = None,
         invitation_key: Query = None,
+        invitation_msg_id: Query = None,
         my_did: Query = None,
         state: Query = None,
         their_did: Query = None,
+        their_public_did: Query = None,
         their_role: Query = None
     ) -> ConnectionList:
         """Internal uplink method for get_connections"""
