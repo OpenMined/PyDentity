@@ -21,6 +21,7 @@ class RevokeRequest(BaseModel):
         cred_ex_id: Credential exchange identifier [Optional].
         cred_rev_id: Credential revocation identifier [Optional].
         notify: Send a notification to the credential recipient [Optional].
+        notify_version: Specify which version of the revocation notification should be sent [Optional].
         publish: (True) publish revocation to ledger immediately, or (default, False) mark it pending [Optional].
         rev_reg_id: Revocation registry identifier [Optional].
         thread_id: Thread ID of the credential exchange message thread resulting in the credential now being revoked; required if notify is true [Optional].
@@ -31,6 +32,7 @@ class RevokeRequest(BaseModel):
     cred_ex_id: Optional[str] = None
     cred_rev_id: Optional[str] = None
     notify: Optional[bool] = None
+    notify_version: Optional[Literal["v1_0", "v2_0"]] = None
     publish: Optional[bool] = None
     rev_reg_id: Optional[str] = None
     thread_id: Optional[str] = None
@@ -43,6 +45,7 @@ class RevokeRequest(BaseModel):
         cred_ex_id: Optional[str] = None,
         cred_rev_id: Optional[str] = None,
         notify: Optional[bool] = None,
+        notify_version: Optional[Literal["v1_0", "v2_0"]] = None,
         publish: Optional[bool] = None,
         rev_reg_id: Optional[str] = None,
         thread_id: Optional[str] = None,
@@ -54,6 +57,7 @@ class RevokeRequest(BaseModel):
             cred_ex_id=cred_ex_id,
             cred_rev_id=cred_rev_id,
             notify=notify,
+            notify_version=notify_version,
             publish=publish,
             rev_reg_id=rev_reg_id,
             thread_id=thread_id,

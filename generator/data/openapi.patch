@@ -1,8 +1,8 @@
 diff --git a/generator/data/openapi.yml b/generator/data/openapi.yml
-index 29a1393..7fea529 100644
+index b438b6c..12ed983 100644
 --- a/generator/data/openapi.yml
 +++ b/generator/data/openapi.yml
-@@ -710,7 +710,9 @@ paths:
+@@ -722,7 +722,9 @@ paths:
            content:
              application/json:
                schema:
@@ -13,7 +13,7 @@ index 29a1393..7fea529 100644
        x-codegen-request-body-name: body
        operationId: publish_cred_def
    /credential-definitions/created:
-@@ -3422,7 +3424,9 @@ paths:
+@@ -3447,7 +3449,9 @@ paths:
            content:
              application/json:
                schema:
@@ -24,7 +24,7 @@ index 29a1393..7fea529 100644
        x-codegen-request-body-name: body
        operationId: publish_revocations
    /revocation/registries/created:
-@@ -3533,7 +3537,9 @@ paths:
+@@ -3558,7 +3562,9 @@ paths:
            content:
              application/json:
                schema:
@@ -35,7 +35,7 @@ index 29a1393..7fea529 100644
        operationId: publish_rev_reg_def
    /revocation/registry/{rev_reg_id}/entry:
      post:
-@@ -3710,7 +3716,9 @@ paths:
+@@ -3801,7 +3807,9 @@ paths:
            content:
              application/json:
                schema:
@@ -46,7 +46,7 @@ index 29a1393..7fea529 100644
        x-codegen-request-body-name: body
        operationId: publish_schema
    /schemas/created:
-@@ -5148,7 +5156,8 @@ components:
+@@ -5281,7 +5289,8 @@ components:
            description: Tag within credential definition identifier
            example: tag
          type:
@@ -56,7 +56,7 @@ index 29a1393..7fea529 100644
            description: 'Signature type: CL for Camenisch-Lysyanskaya'
            example: CL
          value:
-@@ -5190,6 +5199,8 @@ components:
+@@ -5323,6 +5332,8 @@ components:
            example: default
      CredentialDefinitionSendResult:
        type: object
@@ -65,7 +65,7 @@ index 29a1393..7fea529 100644
        properties:
          credential_definition_id:
            pattern: ^([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}):3:CL:(([1-9][0-9]*)|([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{21,22}:2:.+:[0-9.]+)):(.+)?$
-@@ -6025,14 +6036,12 @@ components:
+@@ -6160,14 +6171,12 @@ components:
        type: object
        properties:
          from:
@@ -80,7 +80,7 @@ index 29a1393..7fea529 100644
            minimum: 0
            type: integer
            description: Latest time of interest in non-revocation interval
-@@ -6194,7 +6203,6 @@ components:
+@@ -6329,7 +6338,6 @@ components:
            description: Schema identifier
            example: WgWxqztrNooG92RXvxSTWv:2:schema_name:1.0
          timestamp:
@@ -88,7 +88,7 @@ index 29a1393..7fea529 100644
            minimum: 0
            type: integer
            description: Timestamp epoch
-@@ -6275,18 +6283,14 @@ components:
+@@ -6410,18 +6418,14 @@ components:
        type: object
        properties:
          from:
@@ -107,7 +107,7 @@ index 29a1393..7fea529 100644
            example: 1640995199
      IndyProofReqPredSpec:
        required:
-@@ -6332,18 +6336,14 @@ components:
+@@ -6467,18 +6471,14 @@ components:
        type: object
        properties:
          from:
@@ -126,7 +126,7 @@ index 29a1393..7fea529 100644
            example: 1640995199
      IndyProofRequest:
        required:
-@@ -6384,18 +6384,14 @@ components:
+@@ -6519,18 +6519,14 @@ components:
        type: object
        properties:
          from:
@@ -145,7 +145,7 @@ index 29a1393..7fea529 100644
            example: 1640995199
      IndyProofRequestedProof:
        type: object
-@@ -6483,11 +6479,9 @@ components:
+@@ -6618,11 +6614,9 @@ components:
              a UUID)
            example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
          timestamp:
@@ -157,7 +157,7 @@ index 29a1393..7fea529 100644
            example: 1640995199
      IndyRevRegDef:
        type: object
-@@ -6705,9 +6699,11 @@ components:
+@@ -6840,9 +6834,11 @@ components:
              type: string
            - did:sov:WgWxqztrNooG92RXvxSTWv
            items:
@@ -172,7 +172,7 @@ index 29a1393..7fea529 100644
      InvitationRecord:
        type: object
        properties:
-@@ -7652,6 +7648,8 @@ components:
+@@ -7784,6 +7780,8 @@ components:
            example: 0
      RevRegResult:
        type: object
@@ -181,7 +181,7 @@ index 29a1393..7fea529 100644
        properties:
          result:
            $ref: '#/components/schemas/IssuerRevRegRecord'
-@@ -7819,6 +7817,7 @@ components:
+@@ -7973,6 +7971,7 @@ components:
      SchemaSendResult:
        required:
        - schema_id
@@ -189,7 +189,7 @@ index 29a1393..7fea529 100644
        type: object
        properties:
          schema:
-@@ -7969,10 +7968,7 @@ components:
+@@ -8123,10 +8122,7 @@ components:
          mechanism:
            type: string
          time:
@@ -200,7 +200,7 @@ index 29a1393..7fea529 100644
            example: 1640995199
      TAAInfo:
        type: object
-@@ -8127,6 +8123,7 @@ components:
+@@ -8281,6 +8277,7 @@ components:
            example: 2021-12-31 23:59:59+00:00
      TxnOrCredentialDefinitionSendResult:
        type: object
@@ -208,7 +208,7 @@ index 29a1393..7fea529 100644
        properties:
          sent:
            $ref: '#/components/schemas/CredentialDefinitionSendResult'
-@@ -8137,6 +8134,7 @@ components:
+@@ -8291,6 +8288,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrPublishRevocationsResult:
        type: object
@@ -216,7 +216,7 @@ index 29a1393..7fea529 100644
        properties:
          sent:
            $ref: '#/components/schemas/PublishRevocations'
-@@ -8147,6 +8145,7 @@ components:
+@@ -8313,6 +8311,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrRevRegResult:
        type: object
@@ -224,7 +224,7 @@ index 29a1393..7fea529 100644
        properties:
          sent:
            $ref: '#/components/schemas/RevRegResult'
-@@ -8157,6 +8156,7 @@ components:
+@@ -8323,6 +8322,7 @@ components:
            - $ref: '#/components/schemas/TransactionRecord'
      TxnOrSchemaSendResult:
        type: object

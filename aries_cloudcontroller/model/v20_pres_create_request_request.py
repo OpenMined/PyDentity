@@ -20,11 +20,13 @@ class V20PresCreateRequestRequest(BaseModel):
 
     V20PresCreateRequestRequest - a model defined in OpenAPI
         presentation_request: The presentation_request of this V20PresCreateRequestRequest.
+        auto_verify: Verifier choice to auto-verify proof presentation [Optional].
         comment: The comment of this V20PresCreateRequestRequest [Optional].
         trace: Whether to trace event (default false) [Optional].
     """
 
     presentation_request: V20PresRequestByFormat
+    auto_verify: Optional[bool] = None
     comment: Optional[str] = None
     trace: Optional[bool] = None
 
@@ -32,11 +34,13 @@ class V20PresCreateRequestRequest(BaseModel):
         self,
         *,
         presentation_request: V20PresRequestByFormat = None,
+        auto_verify: Optional[bool] = None,
         comment: Optional[str] = None,
         trace: Optional[bool] = None,
         **kwargs,
     ):
         super().__init__(
+            auto_verify=auto_verify,
             comment=comment,
             presentation_request=presentation_request,
             trace=trace,

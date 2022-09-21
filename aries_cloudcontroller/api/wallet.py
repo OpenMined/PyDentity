@@ -66,17 +66,31 @@ class WalletApi(Consumer):
         )
 
     async def set_did_endpoint(
-        self, *, body: Optional[DIDEndpointWithType] = None
+        self,
+        *,
+        conn_id: Optional[str] = None,
+        create_transaction_for_endorser: Optional[bool] = None,
+        body: Optional[DIDEndpointWithType] = None
     ) -> Dict:
         """Update endpoint in wallet and on ledger if posted to it"""
         return await self.__set_did_endpoint(
+            conn_id=conn_id,
+            create_transaction_for_endorser=bool_query(create_transaction_for_endorser),
             body=body,
         )
 
-    async def set_public_did(self, *, did: str) -> DIDResult:
+    async def set_public_did(
+        self,
+        *,
+        did: str,
+        conn_id: Optional[str] = None,
+        create_transaction_for_endorser: Optional[bool] = None
+    ) -> DIDResult:
         """Assign the current public DID"""
         return await self.__set_public_did(
             did=did,
+            conn_id=conn_id,
+            create_transaction_for_endorser=bool_query(create_transaction_for_endorser),
         )
 
     @returns.json
@@ -116,10 +130,22 @@ class WalletApi(Consumer):
     @returns.json
     @json
     @post("/wallet/set-did-endpoint")
-    def __set_did_endpoint(self, *, body: Body(type=DIDEndpointWithType) = {}) -> Dict:
+    def __set_did_endpoint(
+        self,
+        *,
+        conn_id: Query = None,
+        create_transaction_for_endorser: Query = None,
+        body: Body(type=DIDEndpointWithType) = {}
+    ) -> Dict:
         """Internal uplink method for set_did_endpoint"""
 
     @returns.json
     @post("/wallet/did/public")
-    def __set_public_did(self, *, did: Query) -> DIDResult:
+    def __set_public_did(
+        self,
+        *,
+        did: Query,
+        conn_id: Query = None,
+        create_transaction_for_endorser: Query = None
+    ) -> DIDResult:
         """Internal uplink method for set_public_did"""

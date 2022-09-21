@@ -8,6 +8,7 @@ import re  # noqa: F401
 from typing import Any, Dict, List, Optional, Union, Literal  # noqa: F401
 
 from pydantic import AnyUrl, BaseModel, EmailStr, validator, Field, Extra  # noqa: F401
+from aries_cloudcontroller.model.dif_options import DIFOptions
 from aries_cloudcontroller.model.input_descriptors import InputDescriptors
 
 
@@ -18,18 +19,22 @@ class DIFProofProposal(BaseModel):
 
     DIFProofProposal - a model defined in OpenAPI
         input_descriptors: The input_descriptors of this DIFProofProposal [Optional].
+        options: The options of this DIFProofProposal [Optional].
     """
 
     input_descriptors: Optional[List[InputDescriptors]] = None
+    options: Optional[DIFOptions] = None
 
     def __init__(
         self,
         *,
         input_descriptors: Optional[List[InputDescriptors]] = None,
+        options: Optional[DIFOptions] = None,
         **kwargs,
     ):
         super().__init__(
             input_descriptors=input_descriptors,
+            options=options,
             **kwargs,
         )
 
