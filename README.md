@@ -44,7 +44,7 @@ Each Cloud Controller version maps to a specific ACA-Py version, which is outlin
 | Aries Cloud Controller Version | Aries Cloud Agent Python Version |
 | ------------------------------ | -------------------------------- |
 | 0.5.1-0.5.2                    | 0.7.3                            |
-| 0.6.0-0.6.2                    | 0.7.4                            |
+| 0.6.0-0.6.3                    | 0.7.4                            |
 
 ## Features
 

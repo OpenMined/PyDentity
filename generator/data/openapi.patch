@@ -1,5 +1,5 @@
 diff --git a/generator/data/openapi.yml b/generator/data/openapi.yml
-index b438b6c..12ed983 100644
+index 6a013a3..3a6608a 100644
 --- a/generator/data/openapi.yml
 +++ b/generator/data/openapi.yml
 @@ -722,7 +722,9 @@ paths:
@@ -165,10 +165,10 @@ index b438b6c..12ed983 100644
 -            description: Either a DIDComm service object (as per RFC0067) or a DID
 -              string.
 +            oneOf:
-+              - type: object
-+                description: Either a DIDComm service object (as per RFC0067) or a DID
-+                  string.
-+              - type: string
++            - type: object
++              description: Either a DIDComm service object (as per RFC0067) or a DID
++                string.
++            - type: string
      InvitationRecord:
        type: object
        properties:

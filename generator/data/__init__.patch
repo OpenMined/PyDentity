@@ -15,4 +15,4 @@ index 6a771f1..bef48bc 100644
 +    "AcaPyClient",
      "AMLRecord",
      "ActionMenuFetchResult",
-     "AdminAPIMessageTracing",
+     "AdminConfig",

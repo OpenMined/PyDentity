@@ -274,13 +274,13 @@ paths:
           type: string
           enum:
           - request
-          - start
+          - response
+          - invitation
           - error
-          - active
           - abandoned
           - init
-          - invitation
-          - response
+          - active
+          - start
           - completed
       - name: their_did
         in: query
@@ -6835,10 +6835,10 @@ components:
           - did:sov:WgWxqztrNooG92RXvxSTWv
           items:
             oneOf:
-              - type: object
-                description: Either a DIDComm service object (as per RFC0067) or a DID
-                  string.
-              - type: string
+            - type: object
+              description: Either a DIDComm service object (as per RFC0067) or a DID
+                string.
+            - type: string
     InvitationRecord:
       type: object
       properties:
