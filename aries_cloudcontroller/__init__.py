@@ -1,3 +1,5 @@
+from aries_cloudcontroller.acapy_client import AcaPyClient
+
 from aries_cloudcontroller.api import (
     ActionMenuApi,
     BasicmessageApi,
@@ -298,6 +300,7 @@ from aries_cloudcontroller.model import (
 )
 
 __all__ = [
+    "AcaPyClient",
     "AMLRecord",
     "ActionMenuFetchResult",
     "AdminConfig",
