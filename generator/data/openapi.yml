@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Aries Cloud Agent
-  version: v0.7.4
+  version: v0.7.5-rc0
 servers:
 - url: /
 security:
@@ -275,13 +275,13 @@ paths:
           enum:
           - request
           - response
-          - invitation
+          - completed
+          - init
+          - start
           - error
           - abandoned
-          - init
+          - invitation
           - active
-          - start
-          - completed
       - name: their_did
         in: query
         description: Their DID
@@ -2701,7 +2701,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConnRecord'
+                $ref: '#/components/schemas/OobRecord'
       x-codegen-request-body-name: body
       operationId: receive_invitation
   /plugins:
@@ -6761,6 +6761,15 @@ components:
     InvitationCreateRequest:
       type: object
       properties:
+        accept:
+          type: array
+          description: List of mime type in order of preference that should be use
+            in responding to the message
+          example:
+          - didcomm/aip1
+          - didcomm/aip2;env=rfc19
+          items:
+            type: string
         alias:
           type: string
           description: Alias for connection
@@ -6790,6 +6799,10 @@ components:
           type: string
           description: Label for connection invitation
           example: Invitation to Barry
+        protocol_version:
+          type: string
+          description: OOB protocol version
+          example: '1.1'
         use_public_did:
           type: boolean
           description: Whether to use public DID in invitation
@@ -6804,8 +6817,15 @@ components:
         '@type':
           type: string
           description: Message type
-          readOnly: true
           example: https://didcomm.org/my-family/1.0/my-message-type
+        accept:
+          type: array
+          description: List of mime type in order of preference
+          example:
+          - didcomm/aip1
+          - didcomm/aip2;env=rfc19
+          items:
+            type: string
         handshake_protocols:
           type: array
           items:
@@ -7502,6 +7522,62 @@ components:
           example: Window Preferences
     MultitenantModuleResponse:
       type: object
+    OobRecord:
+      required:
+      - invi_msg_id
+      - invitation
+      - oob_id
+      - state
+      type: object
+      properties:
+        attach_thread_id:
+          type: string
+          description: Connection record identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        connection_id:
+          type: string
+          description: Connection record identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        created_at:
+          pattern: ^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(?:\:(?:\d\d(?:\.\d{1,6})?))?(?:[+-]\d\d:?\d\d|Z|)$
+          type: string
+          description: Time of record creation
+          example: 2021-12-31 23:59:59+00:00
+        invi_msg_id:
+          type: string
+          description: Invitation message identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        invitation:
+          type: object
+          description: Out of band invitation message
+          allOf:
+          - $ref: '#/components/schemas/InvitationMessage'
+        oob_id:
+          type: string
+          description: Oob record identifier
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        our_recipient_key:
+          type: string
+          description: Recipient key used for oob invitation
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        role:
+          type: string
+          description: OOB Role
+          example: receiver
+        state:
+          type: string
+          description: Out of band message exchange state
+          example: await-response
+        their_service:
+          $ref: '#/components/schemas/ServiceDecorator'
+        trace:
+          type: boolean
+          description: Record trace information, based on agent configuration
+        updated_at:
+          pattern: ^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(?:\:(?:\d\d(?:\.\d{1,6})?))?(?:[+-]\d\d:?\d\d|Z|)$
+          type: string
+          description: Time of last record update
+          example: 2021-12-31 23:59:59+00:00
     PerformRequest:
       type: object
       properties:
@@ -8023,6 +8099,32 @@ components:
           type: string
           description: Message content
           example: Hello
+    ServiceDecorator:
+      required:
+      - recipientKeys
+      - serviceEndpoint
+      type: object
+      properties:
+        recipientKeys:
+          type: array
+          description: List of recipient keys
+          items:
+            pattern: ^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{43,44}$
+            type: string
+            description: Recipient public key
+            example: H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV
+        routingKeys:
+          type: array
+          description: List of routing keys
+          items:
+            pattern: ^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{43,44}$
+            type: string
+            description: Routing key
+            example: H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV
+        serviceEndpoint:
+          type: string
+          description: Service endpoint at which to reach this agent
+          example: http://192.168.56.101:8020
     SignRequest:
       required:
       - doc
